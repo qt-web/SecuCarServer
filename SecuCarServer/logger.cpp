@@ -70,8 +70,8 @@ Logger::Logger(EMessageType msgType, const char* fileName, const char* functionN
         case EMessageType::WARNING:
             s = "\e[93mWARNING: ";
             break;
-        case EMessageType::CRITICAL:
-            s = "\e[31mCRITICAL: ";
+        case EMessageType::ERROR :
+            s = "\e[31mERROR: ";
             break;
         case EMessageType::FATAL:
             s = "\e[31mFatal: ";

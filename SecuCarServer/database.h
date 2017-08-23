@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QSqlRecord>
 
 class CDatabase : public QObject
 {
@@ -10,6 +11,13 @@ class CDatabase : public QObject
 public:
     static CDatabase* GetInstance();
 
+    bool Insert(std::string tableName, std::string record);
+
+    bool Delete(std::string tablename, std::string where = "");
+
+    QSqlRecord Select(std::string tableName, std::string fields, std::string where = "");
+
+    QSqlRecord Join(std::string tableNames, std::string where = "");
 
 signals:
 

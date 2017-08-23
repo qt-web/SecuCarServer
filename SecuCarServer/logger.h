@@ -25,7 +25,7 @@ public:
         DEBUG,
         INFO,
         WARNING,
-        CRITICAL,
+        ERROR,
         FATAL
     };
 
@@ -57,7 +57,7 @@ private:
 #define LOG_DBG(...)           LOG(Logger::EMessageType::DEBUG, __VA_ARGS__ )
 #define LOG_INFO(...)          LOG(Logger::EMessageType::INFO, __VA_ARGS__)
 #define LOG_WARNING(...)       LOG(Logger::EMessageType::WARNING, __VA_ARGS__ )
-#define LOG_CRITICAL(...)      LOG(Logger::EMessageType::CRITICAL, __VA_ARGS__ )
+#define LOG_ERROR(...)         LOG(Logger::EMessageType::ERROR, __VA_ARGS__ )
 #define LOG_FATAL(...)         LOG(Logger::EMessageType::FATAL, __VA_ARGS__ )
 
 #define LOG(msgType, ...)  Logger(msgType, __FILENAME__, __FUNCTION__, __LINE__, __VA_ARGS__ )
