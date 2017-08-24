@@ -48,7 +48,15 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../QttpServer/src/action.cpp \
+SOURCES       = ../SecuCarServer/main.cpp \
+		../SecuCarServer/database.cpp \
+		../SecuCarServer/myhttpserver.cpp \
+		../SecuCarServer/logger.cpp \
+		../SecuCarServer/DBRecords/userrecord.cpp \
+		../SecuCarServer/DBRecords/devicerecord.cpp \
+		../SecuCarServer/DBRecords/samplerecord.cpp \
+		../SecuCarServer/DBRecords/trackrecord.cpp \
+		../QttpServer/src/action.cpp \
 		../QttpServer/src/httpdata.cpp \
 		../QttpServer/src/httpevent.cpp \
 		../QttpServer/src/httpserver.cpp \
@@ -70,15 +78,19 @@ SOURCES       = ../QttpServer/src/action.cpp \
 		../QttpServer/lib/http/src/net.cc \
 		../QttpServer/lib/http/src/stream.cc \
 		../QttpServer/lib/http/src/tcp.cc \
-		../QttpServer/lib/http-parser/http_parser.c \
-		../SecuCarServer/main.cpp \
-		../SecuCarServer/database.cpp \
-		../SecuCarServer/myhttpserver.cpp \
-		../SecuCarServer/logger.cpp moc_httpserver.cpp \
-		moc_utils.cpp \
-		moc_database.cpp \
-		moc_myhttpserver.cpp
-OBJECTS       = action.o \
+		../QttpServer/lib/http-parser/http_parser.c moc_database.cpp \
+		moc_myhttpserver.cpp \
+		moc_httpserver.cpp \
+		moc_utils.cpp
+OBJECTS       = main.o \
+		database.o \
+		myhttpserver.o \
+		logger.o \
+		userrecord.o \
+		devicerecord.o \
+		samplerecord.o \
+		trackrecord.o \
+		action.o \
 		httpdata.o \
 		httpevent.o \
 		httpserver.o \
@@ -101,14 +113,10 @@ OBJECTS       = action.o \
 		stream.o \
 		tcp.o \
 		http_parser.o \
-		main.o \
-		database.o \
-		myhttpserver.o \
-		logger.o \
-		moc_httpserver.o \
-		moc_utils.o \
 		moc_database.o \
-		moc_myhttpserver.o
+		moc_myhttpserver.o \
+		moc_httpserver.o \
+		moc_utils.o
 DIST          = ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/common/unix.conf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/common/linux.conf \
@@ -277,7 +285,14 @@ DIST          = ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/exceptions.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/yacc.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/lex.prf \
-		../SecuCarServer/SecuCarServer.pro ../QttpServer/lib/libuv/src/uv-common.h \
+		../SecuCarServer/SecuCarServer.pro ../SecuCarServer/database.h \
+		../SecuCarServer/myhttpserver.h \
+		../SecuCarServer/logger.h \
+		../SecuCarServer/DBRecords/userrecord.h \
+		../SecuCarServer/DBRecords/devicerecord.h \
+		../SecuCarServer/DBRecords/samplerecord.h \
+		../SecuCarServer/DBRecords/trackrecord.h \
+		../QttpServer/lib/libuv/src/uv-common.h \
 		../QttpServer/src/action.h \
 		../QttpServer/src/httpdata.h \
 		../QttpServer/src/httpevent.h \
@@ -332,10 +347,15 @@ DIST          = ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../QttpServer/lib/libuv/src/unix/pthread-barrier.c \
 		../QttpServer/lib/libuv/src/unix/pthread-fixes.c \
 		../QttpServer/lib/libuv/src/unix/spinlock.h \
-		../QttpServer/lib/libuv/src/unix/thread.c \
-		../SecuCarServer/database.h \
-		../SecuCarServer/myhttpserver.h \
-		../SecuCarServer/logger.h ../QttpServer/src/action.cpp \
+		../QttpServer/lib/libuv/src/unix/thread.c ../SecuCarServer/main.cpp \
+		../SecuCarServer/database.cpp \
+		../SecuCarServer/myhttpserver.cpp \
+		../SecuCarServer/logger.cpp \
+		../SecuCarServer/DBRecords/userrecord.cpp \
+		../SecuCarServer/DBRecords/devicerecord.cpp \
+		../SecuCarServer/DBRecords/samplerecord.cpp \
+		../SecuCarServer/DBRecords/trackrecord.cpp \
+		../QttpServer/src/action.cpp \
 		../QttpServer/src/httpdata.cpp \
 		../QttpServer/src/httpevent.cpp \
 		../QttpServer/src/httpserver.cpp \
@@ -357,11 +377,7 @@ DIST          = ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../QttpServer/lib/http/src/net.cc \
 		../QttpServer/lib/http/src/stream.cc \
 		../QttpServer/lib/http/src/tcp.cc \
-		../QttpServer/lib/http-parser/http_parser.c \
-		../SecuCarServer/main.cpp \
-		../SecuCarServer/database.cpp \
-		../SecuCarServer/myhttpserver.cpp \
-		../SecuCarServer/logger.cpp
+		../QttpServer/lib/http-parser/http_parser.c
 QMAKE_TARGET  = SecuCarServer
 DESTDIR       = 
 TARGET        = SecuCarServer
@@ -733,8 +749,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../QttpServer/lib/libuv/src/uv-common.h ../QttpServer/src/action.h ../QttpServer/src/httpdata.h ../QttpServer/src/httpevent.h ../QttpServer/src/httpserver.h ../QttpServer/src/utils.h ../QttpServer/src/httprequest.h ../QttpServer/src/qttp_global.h ../QttpServer/src/httpresponse.h ../QttpServer/src/defaults.h ../QttpServer/src/fileutils.h ../QttpServer/src/httproute.h ../QttpServer/src/httpurl.h ../QttpServer/src/swagger.h ../QttpServer/lib/http/qttp/qttp.h ../QttpServer/lib/http/include/native/base.h ../QttpServer/lib/http/include/native/callback.h ../QttpServer/lib/http/include/native/crypto.h ../QttpServer/lib/http/include/native/dev.h ../QttpServer/lib/http/include/native/error.h ../QttpServer/lib/http/include/native/events.h ../QttpServer/lib/http/include/native/fs.h ../QttpServer/lib/http/include/native/handle.h ../QttpServer/lib/http/include/native/http.h ../QttpServer/lib/http/include/native/loop.h ../QttpServer/lib/http/include/native/native.h ../QttpServer/lib/http/include/native/net.h ../QttpServer/lib/http/include/native/stream.h ../QttpServer/lib/http/include/native/tcp.h ../QttpServer/lib/http/include/native/text.h ../QttpServer/lib/http/include/native/utility.h ../QttpServer/lib/http-parser/http_parser.h ../QttpServer/lib/libuv/include/android-ifaddrs.h ../QttpServer/lib/libuv/include/pthread-barrier.h ../QttpServer/lib/libuv/include/stdint-msvc2008.h ../QttpServer/lib/libuv/include/tree.h ../QttpServer/lib/libuv/include/uv-aix.h ../QttpServer/lib/libuv/include/uv-bsd.h ../QttpServer/lib/libuv/include/uv-darwin.h ../QttpServer/lib/libuv/include/uv-errno.h ../QttpServer/lib/libuv/include/uv.h ../QttpServer/lib/libuv/include/uv-linux.h ../QttpServer/lib/libuv/include/uv-os390.h ../QttpServer/lib/libuv/include/uv-sunos.h ../QttpServer/lib/libuv/include/uv-threadpool.h ../QttpServer/lib/libuv/include/uv-unix.h ../QttpServer/lib/libuv/include/uv-version.h ../QttpServer/lib/libuv/include/uv-win.h ../QttpServer/lib/libuv/src/unix/atomic-ops.h ../QttpServer/lib/libuv/src/unix/internal.h ../QttpServer/lib/libuv/src/unix/linux-syscalls.h ../QttpServer/lib/libuv/src/unix/loop-watcher.c ../QttpServer/lib/libuv/src/unix/pthread-barrier.c ../QttpServer/lib/libuv/src/unix/pthread-fixes.c ../QttpServer/lib/libuv/src/unix/spinlock.h ../QttpServer/lib/libuv/src/unix/thread.c ../SecuCarServer/database.h ../SecuCarServer/myhttpserver.h ../SecuCarServer/logger.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../QttpServer/src/action.cpp ../QttpServer/src/httpdata.cpp ../QttpServer/src/httpevent.cpp ../QttpServer/src/httpserver.cpp ../QttpServer/src/utils.cpp ../QttpServer/src/httprequest.cpp ../QttpServer/src/qttp_global.cpp ../QttpServer/src/httpresponse.cpp ../QttpServer/src/defaults.cpp ../QttpServer/src/fileutils.cpp ../QttpServer/src/httproute.cpp ../QttpServer/src/httpurl.cpp ../QttpServer/src/swagger.cpp ../QttpServer/lib/http/qttp/qttp.cc ../QttpServer/lib/http/src/crypto.cc ../QttpServer/lib/http/src/fs.cc ../QttpServer/lib/http/src/handle.cc ../QttpServer/lib/http/src/http.cc ../QttpServer/lib/http/src/loop.cc ../QttpServer/lib/http/src/net.cc ../QttpServer/lib/http/src/stream.cc ../QttpServer/lib/http/src/tcp.cc ../QttpServer/lib/http-parser/http_parser.c ../SecuCarServer/main.cpp ../SecuCarServer/database.cpp ../SecuCarServer/myhttpserver.cpp ../SecuCarServer/logger.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SecuCarServer/database.h ../SecuCarServer/myhttpserver.h ../SecuCarServer/logger.h ../SecuCarServer/DBRecords/userrecord.h ../SecuCarServer/DBRecords/devicerecord.h ../SecuCarServer/DBRecords/samplerecord.h ../SecuCarServer/DBRecords/trackrecord.h ../QttpServer/lib/libuv/src/uv-common.h ../QttpServer/src/action.h ../QttpServer/src/httpdata.h ../QttpServer/src/httpevent.h ../QttpServer/src/httpserver.h ../QttpServer/src/utils.h ../QttpServer/src/httprequest.h ../QttpServer/src/qttp_global.h ../QttpServer/src/httpresponse.h ../QttpServer/src/defaults.h ../QttpServer/src/fileutils.h ../QttpServer/src/httproute.h ../QttpServer/src/httpurl.h ../QttpServer/src/swagger.h ../QttpServer/lib/http/qttp/qttp.h ../QttpServer/lib/http/include/native/base.h ../QttpServer/lib/http/include/native/callback.h ../QttpServer/lib/http/include/native/crypto.h ../QttpServer/lib/http/include/native/dev.h ../QttpServer/lib/http/include/native/error.h ../QttpServer/lib/http/include/native/events.h ../QttpServer/lib/http/include/native/fs.h ../QttpServer/lib/http/include/native/handle.h ../QttpServer/lib/http/include/native/http.h ../QttpServer/lib/http/include/native/loop.h ../QttpServer/lib/http/include/native/native.h ../QttpServer/lib/http/include/native/net.h ../QttpServer/lib/http/include/native/stream.h ../QttpServer/lib/http/include/native/tcp.h ../QttpServer/lib/http/include/native/text.h ../QttpServer/lib/http/include/native/utility.h ../QttpServer/lib/http-parser/http_parser.h ../QttpServer/lib/libuv/include/android-ifaddrs.h ../QttpServer/lib/libuv/include/pthread-barrier.h ../QttpServer/lib/libuv/include/stdint-msvc2008.h ../QttpServer/lib/libuv/include/tree.h ../QttpServer/lib/libuv/include/uv-aix.h ../QttpServer/lib/libuv/include/uv-bsd.h ../QttpServer/lib/libuv/include/uv-darwin.h ../QttpServer/lib/libuv/include/uv-errno.h ../QttpServer/lib/libuv/include/uv.h ../QttpServer/lib/libuv/include/uv-linux.h ../QttpServer/lib/libuv/include/uv-os390.h ../QttpServer/lib/libuv/include/uv-sunos.h ../QttpServer/lib/libuv/include/uv-threadpool.h ../QttpServer/lib/libuv/include/uv-unix.h ../QttpServer/lib/libuv/include/uv-version.h ../QttpServer/lib/libuv/include/uv-win.h ../QttpServer/lib/libuv/src/unix/atomic-ops.h ../QttpServer/lib/libuv/src/unix/internal.h ../QttpServer/lib/libuv/src/unix/linux-syscalls.h ../QttpServer/lib/libuv/src/unix/loop-watcher.c ../QttpServer/lib/libuv/src/unix/pthread-barrier.c ../QttpServer/lib/libuv/src/unix/pthread-fixes.c ../QttpServer/lib/libuv/src/unix/spinlock.h ../QttpServer/lib/libuv/src/unix/thread.c $(DISTDIR)/
+	$(COPY_FILE) --parents ../SecuCarServer/main.cpp ../SecuCarServer/database.cpp ../SecuCarServer/myhttpserver.cpp ../SecuCarServer/logger.cpp ../SecuCarServer/DBRecords/userrecord.cpp ../SecuCarServer/DBRecords/devicerecord.cpp ../SecuCarServer/DBRecords/samplerecord.cpp ../SecuCarServer/DBRecords/trackrecord.cpp ../QttpServer/src/action.cpp ../QttpServer/src/httpdata.cpp ../QttpServer/src/httpevent.cpp ../QttpServer/src/httpserver.cpp ../QttpServer/src/utils.cpp ../QttpServer/src/httprequest.cpp ../QttpServer/src/qttp_global.cpp ../QttpServer/src/httpresponse.cpp ../QttpServer/src/defaults.cpp ../QttpServer/src/fileutils.cpp ../QttpServer/src/httproute.cpp ../QttpServer/src/httpurl.cpp ../QttpServer/src/swagger.cpp ../QttpServer/lib/http/qttp/qttp.cc ../QttpServer/lib/http/src/crypto.cc ../QttpServer/lib/http/src/fs.cc ../QttpServer/lib/http/src/handle.cc ../QttpServer/lib/http/src/http.cc ../QttpServer/lib/http/src/loop.cc ../QttpServer/lib/http/src/net.cc ../QttpServer/lib/http/src/stream.cc ../QttpServer/lib/http/src/tcp.cc ../QttpServer/lib/http-parser/http_parser.c $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -766,9 +782,371 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_httpserver.cpp moc_utils.cpp moc_database.cpp moc_myhttpserver.cpp
+compiler_moc_header_make_all: moc_database.cpp moc_myhttpserver.cpp moc_httpserver.cpp moc_utils.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_httpserver.cpp moc_utils.cpp moc_database.cpp moc_myhttpserver.cpp
+	-$(DEL_FILE) moc_database.cpp moc_myhttpserver.cpp moc_httpserver.cpp moc_utils.cpp
+moc_database.cpp: ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlDatabase \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqldatabase.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qtsqlglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlRecord \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlrecord.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlResult \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlresult.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../SecuCarServer/database.h \
+		moc_predefs.h \
+		../../../IDEs/Qt/5.8/gcc_64/bin/moc
+	/home/konrad/IDEs/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/konrad/IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/konrad/Qt_Workspace/SecuCarServer/SecuCarServer -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/qttp -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include/native -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http-parser -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src/unix -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/IDEs/Qt/5.8/gcc_64/include -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtSql -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtNetwork -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SecuCarServer/database.h -o moc_database.cpp
+
+moc_myhttpserver.cpp: ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
+		../QttpServer/src/qttpserver \
+		../QttpServer/src/httpserver.h \
+		../QttpServer/src/qttp_global.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCore \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCoreDepends \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventloop.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractproxymodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractstate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracttransition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qanimationgroup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydataops.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasictimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbitarray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbuffer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraymatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcollator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineoption.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineparser.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatastream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatetime.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdeadlinetimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdir.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfiledevice.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdiriterator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeasingcurve.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qendian.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventtransition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qexception.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfactoryinterface.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileselector.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QStringList \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfinalstate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuture.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfutureinterface.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrunnable.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresultstore.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturewatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhistorystate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qidentityproxymodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qisenum.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonarray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsondocument.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibrary.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibraryinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversionnumber.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qline.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlinkedlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlockfile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qloggingcategory.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmargins.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmath.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetaobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedatabase.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimetype.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpauseanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qplugin.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpluginloader.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocess.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpropertyanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariantanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qqueue.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qreadwritelock.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrect.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsize.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregularexpression.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresource.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsavefile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsemaphore.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsettings.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedmemory.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignalmapper.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignaltransition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsocketnotifier.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstack.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstandardpaths.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstatemachine.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstorageinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemsemaphore.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporarydir.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QScopedPointer \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporaryfile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextcodec.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthread.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadpool.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadstorage.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimeline.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimezone.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtranslator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurlquery.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/quuid.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwaitcondition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwineventnotifier.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qxmlstream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcoreversion.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetwork \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetworkDepends \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractnetworkcache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QString \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QUrl \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QVariant \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qauthenticator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qdnslookup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhttpmultipart.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QByteArray \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QIODevice \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFlags \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QMetaType \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfigmanager.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfiguration.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookie.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QList \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookiejar.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdatagram.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdiskcache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkinterface.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkproxy.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworksession.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificateextension.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcipher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssldiffiehellmanparameters.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslellipticcurve.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QHash \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslkey.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkversion.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFile \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonDocument \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QEvent \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDateTime \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QProcessEnvironment \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonObject \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSet \
+		../QttpServer/lib/http/qttp/qttp.h \
+		../QttpServer/lib/http-parser/http_parser.h \
+		../QttpServer/lib/http/include/native/base.h \
+		../QttpServer/lib/libuv/include/uv.h \
+		../QttpServer/lib/libuv/include/uv-errno.h \
+		../QttpServer/lib/libuv/include/uv-version.h \
+		../QttpServer/lib/libuv/include/stdint-msvc2008.h \
+		../QttpServer/lib/libuv/include/uv-win.h \
+		../QttpServer/lib/libuv/include/tree.h \
+		../QttpServer/lib/libuv/include/uv-threadpool.h \
+		../QttpServer/lib/libuv/include/uv-unix.h \
+		../QttpServer/lib/libuv/include/uv-linux.h \
+		../QttpServer/lib/libuv/include/uv-aix.h \
+		../QttpServer/lib/libuv/include/uv-sunos.h \
+		../QttpServer/lib/libuv/include/uv-darwin.h \
+		../QttpServer/lib/libuv/include/uv-bsd.h \
+		../QttpServer/lib/libuv/include/pthread-barrier.h \
+		../QttpServer/lib/http/include/native/handle.h \
+		../QttpServer/lib/http/include/native/callback.h \
+		../QttpServer/lib/http/include/native/net.h \
+		../QttpServer/lib/http/include/native/tcp.h \
+		../QttpServer/lib/http/include/native/loop.h \
+		../QttpServer/lib/http/include/native/error.h \
+		../QttpServer/lib/http/include/native/stream.h \
+		../QttpServer/lib/http/include/native/text.h \
+		../QttpServer/lib/http/include/native/http.h \
+		../QttpServer/src/utils.h \
+		../QttpServer/src/httproute.h \
+		../QttpServer/src/action.h \
+		../QttpServer/src/httpdata.h \
+		../QttpServer/src/httprequest.h \
+		../QttpServer/src/httpurl.h \
+		../QttpServer/src/httpresponse.h \
+		../QttpServer/src/httpevent.h \
+		../QttpServer/src/fileutils.h \
+		../SecuCarServer/myhttpserver.h \
+		moc_predefs.h \
+		../../../IDEs/Qt/5.8/gcc_64/bin/moc
+	/home/konrad/IDEs/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/konrad/IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/konrad/Qt_Workspace/SecuCarServer/SecuCarServer -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/qttp -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include/native -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http-parser -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src/unix -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/IDEs/Qt/5.8/gcc_64/include -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtSql -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtNetwork -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SecuCarServer/myhttpserver.h -o moc_myhttpserver.cpp
+
 moc_httpserver.cpp: ../QttpServer/src/qttp_global.h \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCore \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCoreDepends \
@@ -1333,7 +1711,319 @@ moc_utils.cpp: ../QttpServer/src/qttp_global.h \
 		../../../IDEs/Qt/5.8/gcc_64/bin/moc
 	/home/konrad/IDEs/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/konrad/IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/konrad/Qt_Workspace/SecuCarServer/SecuCarServer -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/qttp -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include/native -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http-parser -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src/unix -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/IDEs/Qt/5.8/gcc_64/include -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtSql -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtNetwork -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../QttpServer/src/utils.h -o moc_utils.cpp
 
-moc_database.cpp: ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
+compiler_moc_source_make_all:
+compiler_moc_source_clean:
+compiler_yacc_decl_make_all:
+compiler_yacc_decl_clean:
+compiler_yacc_impl_make_all:
+compiler_yacc_impl_clean:
+compiler_lex_make_all:
+compiler_lex_clean:
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
+
+####### Compile
+
+main.o: ../SecuCarServer/main.cpp ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QCoreApplication \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventloop.h \
+		../SecuCarServer/myhttpserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
+		../QttpServer/src/qttpserver \
+		../QttpServer/src/httpserver.h \
+		../QttpServer/src/qttp_global.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCore \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCoreDepends \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractproxymodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractstate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracttransition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qanimationgroup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydataops.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasictimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbitarray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbuffer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraymatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcollator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineoption.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineparser.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatastream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatetime.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdeadlinetimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdir.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfiledevice.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdiriterator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeasingcurve.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qendian.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventtransition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qexception.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfactoryinterface.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileselector.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QStringList \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfinalstate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuture.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfutureinterface.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrunnable.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresultstore.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturewatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhistorystate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qidentityproxymodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qisenum.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonarray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsondocument.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibrary.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibraryinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversionnumber.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qline.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlinkedlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlockfile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qloggingcategory.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmargins.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmath.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetaobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedatabase.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimetype.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpauseanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qplugin.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpluginloader.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocess.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpropertyanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariantanimation.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qqueue.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qreadwritelock.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrect.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsize.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregularexpression.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresource.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsavefile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsemaphore.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsettings.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedmemory.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignalmapper.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignaltransition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsocketnotifier.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstack.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstandardpaths.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstatemachine.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstorageinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemsemaphore.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporarydir.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QScopedPointer \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporaryfile.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextcodec.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthread.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadpool.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadstorage.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimeline.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimezone.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtranslator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurlquery.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/quuid.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwaitcondition.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwineventnotifier.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qxmlstream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcoreversion.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetwork \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetworkDepends \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractnetworkcache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QString \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QUrl \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QVariant \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qauthenticator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qdnslookup.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhttpmultipart.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QByteArray \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QIODevice \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFlags \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QMetaType \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfigmanager.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfiguration.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookie.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QList \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookiejar.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdatagram.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdiskcache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkinterface.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkproxy.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworksession.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificateextension.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcipher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssldiffiehellmanparameters.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslellipticcurve.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QHash \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslkey.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkversion.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFile \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonDocument \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QEvent \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDateTime \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QProcessEnvironment \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonObject \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSet \
+		../QttpServer/lib/http/qttp/qttp.h \
+		../QttpServer/lib/http-parser/http_parser.h \
+		../QttpServer/lib/http/include/native/base.h \
+		../QttpServer/lib/libuv/include/uv.h \
+		../QttpServer/lib/libuv/include/uv-errno.h \
+		../QttpServer/lib/libuv/include/uv-version.h \
+		../QttpServer/lib/libuv/include/stdint-msvc2008.h \
+		../QttpServer/lib/libuv/include/uv-win.h \
+		../QttpServer/lib/libuv/include/tree.h \
+		../QttpServer/lib/libuv/include/uv-threadpool.h \
+		../QttpServer/lib/libuv/include/uv-unix.h \
+		../QttpServer/lib/libuv/include/uv-linux.h \
+		../QttpServer/lib/libuv/include/uv-aix.h \
+		../QttpServer/lib/libuv/include/uv-sunos.h \
+		../QttpServer/lib/libuv/include/uv-darwin.h \
+		../QttpServer/lib/libuv/include/uv-bsd.h \
+		../QttpServer/lib/libuv/include/pthread-barrier.h \
+		../QttpServer/lib/http/include/native/handle.h \
+		../QttpServer/lib/http/include/native/callback.h \
+		../QttpServer/lib/http/include/native/net.h \
+		../QttpServer/lib/http/include/native/tcp.h \
+		../QttpServer/lib/http/include/native/loop.h \
+		../QttpServer/lib/http/include/native/error.h \
+		../QttpServer/lib/http/include/native/stream.h \
+		../QttpServer/lib/http/include/native/text.h \
+		../QttpServer/lib/http/include/native/http.h \
+		../QttpServer/src/utils.h \
+		../QttpServer/src/httproute.h \
+		../QttpServer/src/action.h \
+		../QttpServer/src/httpdata.h \
+		../QttpServer/src/httprequest.h \
+		../QttpServer/src/httpurl.h \
+		../QttpServer/src/httpresponse.h \
+		../QttpServer/src/httpevent.h \
+		../QttpServer/src/fileutils.h \
+		../SecuCarServer/database.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlDatabase \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqldatabase.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qtsqlglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlRecord \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlrecord.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlResult \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlresult.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlQuery \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlquery.h \
+		../SecuCarServer/logger.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SecuCarServer/main.cpp
+
+database.o: ../SecuCarServer/database.cpp ../SecuCarServer/database.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
@@ -1384,12 +2074,35 @@ moc_database.cpp: ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlDatabase \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqldatabase.h \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qtsqlglobal.h \
-		../SecuCarServer/database.h \
-		moc_predefs.h \
-		../../../IDEs/Qt/5.8/gcc_64/bin/moc
-	/home/konrad/IDEs/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/konrad/IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/konrad/Qt_Workspace/SecuCarServer/SecuCarServer -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/qttp -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include/native -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http-parser -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src/unix -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/IDEs/Qt/5.8/gcc_64/include -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtSql -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtNetwork -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SecuCarServer/database.h -o moc_database.cpp
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlRecord \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlrecord.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlResult \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlresult.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../SecuCarServer/logger.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QStringList \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlQuery \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlquery.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlError \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlerror.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o database.o ../SecuCarServer/database.cpp
 
-moc_myhttpserver.cpp: ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
+myhttpserver.o: ../SecuCarServer/myhttpserver.cpp ../SecuCarServer/myhttpserver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
@@ -1671,23 +2384,87 @@ moc_myhttpserver.cpp: ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
 		../QttpServer/src/httpurl.h \
 		../QttpServer/src/httpresponse.h \
 		../QttpServer/src/httpevent.h \
-		../QttpServer/src/fileutils.h \
-		../SecuCarServer/myhttpserver.h \
-		moc_predefs.h \
-		../../../IDEs/Qt/5.8/gcc_64/bin/moc
-	/home/konrad/IDEs/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/konrad/IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/konrad/Qt_Workspace/SecuCarServer/SecuCarServer -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/qttp -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http/include/native -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/http-parser -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/include -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/lib/libuv/src/unix -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/Qt_Workspace/SecuCarServer/QttpServer/build/out/Debug -I/home/konrad/IDEs/Qt/5.8/gcc_64/include -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtSql -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtNetwork -I/home/konrad/IDEs/Qt/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SecuCarServer/myhttpserver.h -o moc_myhttpserver.cpp
+		../QttpServer/src/fileutils.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o myhttpserver.o ../SecuCarServer/myhttpserver.cpp
 
-compiler_moc_source_make_all:
-compiler_moc_source_clean:
-compiler_yacc_decl_make_all:
-compiler_yacc_decl_clean:
-compiler_yacc_impl_make_all:
-compiler_yacc_impl_clean:
-compiler_lex_make_all:
-compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
+logger.o: ../SecuCarServer/logger.cpp ../SecuCarServer/logger.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QTime \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatetime.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o logger.o ../SecuCarServer/logger.cpp
 
-####### Compile
+userrecord.o: ../SecuCarServer/DBRecords/userrecord.cpp ../SecuCarServer/DBRecords/userrecord.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o userrecord.o ../SecuCarServer/DBRecords/userrecord.cpp
+
+devicerecord.o: ../SecuCarServer/DBRecords/devicerecord.cpp ../SecuCarServer/DBRecords/devicerecord.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o devicerecord.o ../SecuCarServer/DBRecords/devicerecord.cpp
+
+samplerecord.o: ../SecuCarServer/DBRecords/samplerecord.cpp ../SecuCarServer/DBRecords/samplerecord.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o samplerecord.o ../SecuCarServer/DBRecords/samplerecord.cpp
+
+trackrecord.o: ../SecuCarServer/DBRecords/trackrecord.cpp ../SecuCarServer/DBRecords/trackrecord.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o trackrecord.o ../SecuCarServer/DBRecords/trackrecord.cpp
 
 action.o: ../QttpServer/src/action.cpp ../QttpServer/src/action.h \
 		../QttpServer/src/qttp_global.h \
@@ -5687,727 +6464,17 @@ tcp.o: ../QttpServer/lib/http/src/tcp.cc ../QttpServer/lib/http/include/native/t
 http_parser.o: ../QttpServer/lib/http-parser/http_parser.c ../QttpServer/lib/http-parser/http_parser.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o http_parser.o ../QttpServer/lib/http-parser/http_parser.c
 
-main.o: ../SecuCarServer/main.cpp ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QCoreApplication \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventloop.h \
-		../SecuCarServer/myhttpserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
-		../QttpServer/src/qttpserver \
-		../QttpServer/src/httpserver.h \
-		../QttpServer/src/qttp_global.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCore \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCoreDepends \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracteventdispatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractproxymodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractstate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracttransition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qanimationgroup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydataops.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydatapointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasictimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbitarray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbuffer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraymatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcollator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineoption.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineparser.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcryptographichash.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatastream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatetime.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdeadlinetimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdir.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfiledevice.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdiriterator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeasingcurve.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qendian.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventtransition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qexception.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfactoryinterface.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileselector.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QStringList \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfilesystemwatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfinalstate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuture.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfutureinterface.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrunnable.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresultstore.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturesynchronizer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturewatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhistorystate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qidentityproxymodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qisenum.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qitemselectionmodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonarray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonvalue.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsondocument.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibrary.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibraryinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversionnumber.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qline.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlinkedlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlockfile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qloggingcategory.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmargins.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmath.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmessageauthenticationcode.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetaobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedatabase.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimetype.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectcleanuphandler.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qparallelanimationgroup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpauseanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qplugin.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpluginloader.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocess.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpropertyanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariantanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qqueue.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qreadwritelock.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrect.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsize.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregularexpression.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresource.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsavefile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedvaluerollback.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsemaphore.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsequentialanimationgroup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsettings.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedmemory.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignalmapper.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignaltransition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsocketnotifier.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsortfilterproxymodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstack.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstandardpaths.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstatemachine.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstorageinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlistmodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemsemaphore.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporarydir.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QScopedPointer \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporaryfile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextboundaryfinder.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextcodec.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthread.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadpool.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadstorage.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimeline.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimezone.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtranslator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurlquery.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/quuid.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwaitcondition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwineventnotifier.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qxmlstream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcoreversion.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetwork \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetworkDepends \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractnetworkcache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkrequest.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSharedDataPointer \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QString \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QUrl \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QVariant \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qauthenticator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qdnslookup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhttpmultipart.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QByteArray \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QIODevice \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkRequest \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslConfiguration \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslconfiguration.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslerror.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFlags \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QMetaType \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfigmanager.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfiguration.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookie.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QList \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookiejar.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdatagram.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdiskcache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkinterface.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkproxy.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkreply.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkAccessManager \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworksession.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificateextension.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcipher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssldiffiehellmanparameters.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslellipticcurve.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QHash \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslkey.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkversion.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFile \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonDocument \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QEvent \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDateTime \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QProcessEnvironment \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonObject \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSet \
-		../QttpServer/lib/http/qttp/qttp.h \
-		../QttpServer/lib/http-parser/http_parser.h \
-		../QttpServer/lib/http/include/native/base.h \
-		../QttpServer/lib/libuv/include/uv.h \
-		../QttpServer/lib/libuv/include/uv-errno.h \
-		../QttpServer/lib/libuv/include/uv-version.h \
-		../QttpServer/lib/libuv/include/stdint-msvc2008.h \
-		../QttpServer/lib/libuv/include/uv-win.h \
-		../QttpServer/lib/libuv/include/tree.h \
-		../QttpServer/lib/libuv/include/uv-threadpool.h \
-		../QttpServer/lib/libuv/include/uv-unix.h \
-		../QttpServer/lib/libuv/include/uv-linux.h \
-		../QttpServer/lib/libuv/include/uv-aix.h \
-		../QttpServer/lib/libuv/include/uv-sunos.h \
-		../QttpServer/lib/libuv/include/uv-darwin.h \
-		../QttpServer/lib/libuv/include/uv-bsd.h \
-		../QttpServer/lib/libuv/include/pthread-barrier.h \
-		../QttpServer/lib/http/include/native/handle.h \
-		../QttpServer/lib/http/include/native/callback.h \
-		../QttpServer/lib/http/include/native/net.h \
-		../QttpServer/lib/http/include/native/tcp.h \
-		../QttpServer/lib/http/include/native/loop.h \
-		../QttpServer/lib/http/include/native/error.h \
-		../QttpServer/lib/http/include/native/stream.h \
-		../QttpServer/lib/http/include/native/text.h \
-		../QttpServer/lib/http/include/native/http.h \
-		../QttpServer/src/utils.h \
-		../QttpServer/src/httproute.h \
-		../QttpServer/src/action.h \
-		../QttpServer/src/httpdata.h \
-		../QttpServer/src/httprequest.h \
-		../QttpServer/src/httpurl.h \
-		../QttpServer/src/httpresponse.h \
-		../QttpServer/src/httpevent.h \
-		../QttpServer/src/fileutils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SecuCarServer/main.cpp
+moc_database.o: moc_database.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_database.o moc_database.cpp
 
-database.o: ../SecuCarServer/database.cpp ../SecuCarServer/database.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlDatabase \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqldatabase.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qtsqlglobal.h \
-		../SecuCarServer/logger.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o database.o ../SecuCarServer/database.cpp
-
-myhttpserver.o: ../SecuCarServer/myhttpserver.cpp ../SecuCarServer/myhttpserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QObject \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
-		../QttpServer/src/qttpserver \
-		../QttpServer/src/httpserver.h \
-		../QttpServer/src/qttp_global.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCore \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QtCoreDepends \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracteventdispatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventloop.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractproxymodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstractstate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qabstracttransition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qanimationgroup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydataops.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydatapointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasictimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbitarray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbuffer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraymatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcollator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineoption.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcommandlineparser.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcryptographichash.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatastream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatetime.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdeadlinetimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdir.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfiledevice.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdiriterator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeasingcurve.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qendian.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qeventtransition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qexception.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfactoryinterface.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfileselector.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QStringList \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfilesystemwatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfinalstate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuture.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfutureinterface.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrunnable.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresultstore.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturesynchronizer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qfuturewatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhistorystate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qidentityproxymodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qisenum.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qitemselectionmodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonarray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonvalue.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsondocument.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qjsonobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibrary.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlibraryinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversionnumber.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qline.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlinkedlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlockfile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qloggingcategory.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmargins.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmath.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmessageauthenticationcode.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetaobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimedatabase.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmimetype.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectcleanuphandler.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qparallelanimationgroup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpauseanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qplugin.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpluginloader.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocess.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpropertyanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariantanimation.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qqueue.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qreadwritelock.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrect.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsize.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregularexpression.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qresource.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsavefile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedvaluerollback.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsemaphore.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsequentialanimationgroup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsettings.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedmemory.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignalmapper.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsignaltransition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsocketnotifier.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsortfilterproxymodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstack.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstandardpaths.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstatemachine.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstorageinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlistmodel.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemsemaphore.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporarydir.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QScopedPointer \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtemporaryfile.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextboundaryfinder.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextcodec.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthread.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadpool.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qthreadstorage.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimeline.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtimezone.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtranslator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qurlquery.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/quuid.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwaitcondition.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qwineventnotifier.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qxmlstream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcoreversion.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetwork \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QtNetworkDepends \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractnetworkcache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkrequest.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSharedDataPointer \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QString \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QUrl \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QVariant \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qauthenticator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qdnslookup.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhostinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qhttpmultipart.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QByteArray \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QIODevice \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkRequest \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qlocalsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslConfiguration \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslconfiguration.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslerror.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificate.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFlags \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QMetaType \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfigmanager.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfiguration.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookie.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QList \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkcookiejar.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdatagram.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkdiskcache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkinterface.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkproxy.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworkreply.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/QNetworkAccessManager \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qnetworksession.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtcpserver.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsctpsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcertificateextension.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslcipher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qssldiffiehellmanparameters.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslellipticcurve.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QHash \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qsslkey.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtNetwork/qtnetworkversion.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QFile \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonDocument \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QEvent \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDateTime \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QProcessEnvironment \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QJsonObject \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QSet \
-		../QttpServer/lib/http/qttp/qttp.h \
-		../QttpServer/lib/http-parser/http_parser.h \
-		../QttpServer/lib/http/include/native/base.h \
-		../QttpServer/lib/libuv/include/uv.h \
-		../QttpServer/lib/libuv/include/uv-errno.h \
-		../QttpServer/lib/libuv/include/uv-version.h \
-		../QttpServer/lib/libuv/include/stdint-msvc2008.h \
-		../QttpServer/lib/libuv/include/uv-win.h \
-		../QttpServer/lib/libuv/include/tree.h \
-		../QttpServer/lib/libuv/include/uv-threadpool.h \
-		../QttpServer/lib/libuv/include/uv-unix.h \
-		../QttpServer/lib/libuv/include/uv-linux.h \
-		../QttpServer/lib/libuv/include/uv-aix.h \
-		../QttpServer/lib/libuv/include/uv-sunos.h \
-		../QttpServer/lib/libuv/include/uv-darwin.h \
-		../QttpServer/lib/libuv/include/uv-bsd.h \
-		../QttpServer/lib/libuv/include/pthread-barrier.h \
-		../QttpServer/lib/http/include/native/handle.h \
-		../QttpServer/lib/http/include/native/callback.h \
-		../QttpServer/lib/http/include/native/net.h \
-		../QttpServer/lib/http/include/native/tcp.h \
-		../QttpServer/lib/http/include/native/loop.h \
-		../QttpServer/lib/http/include/native/error.h \
-		../QttpServer/lib/http/include/native/stream.h \
-		../QttpServer/lib/http/include/native/text.h \
-		../QttpServer/lib/http/include/native/http.h \
-		../QttpServer/src/utils.h \
-		../QttpServer/src/httproute.h \
-		../QttpServer/src/action.h \
-		../QttpServer/src/httpdata.h \
-		../QttpServer/src/httprequest.h \
-		../QttpServer/src/httpurl.h \
-		../QttpServer/src/httpresponse.h \
-		../QttpServer/src/httpevent.h \
-		../QttpServer/src/fileutils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o myhttpserver.o ../SecuCarServer/myhttpserver.cpp
-
-logger.o: ../SecuCarServer/logger.cpp ../SecuCarServer/logger.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdebug.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobal.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qconfig.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlogging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qflags.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmutex.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhash.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qchar.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiterator.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpair.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstring.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qregexp.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmap.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qlocale.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvariant.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qvector.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qpoint.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qset.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QTime \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/qdatetime.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o logger.o ../SecuCarServer/logger.cpp
+moc_myhttpserver.o: moc_myhttpserver.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_myhttpserver.o moc_myhttpserver.cpp
 
 moc_httpserver.o: moc_httpserver.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_httpserver.o moc_httpserver.cpp
 
 moc_utils.o: moc_utils.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_utils.o moc_utils.cpp
-
-moc_database.o: moc_database.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_database.o moc_database.cpp
-
-moc_myhttpserver.o: moc_myhttpserver.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_myhttpserver.o moc_myhttpserver.cpp
 
 ####### Install
 

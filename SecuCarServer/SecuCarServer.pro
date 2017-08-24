@@ -4,6 +4,7 @@ QT += network
 QT -= gui
 
 CONFIG += c++11
+QTPLUGIN += qsqlmysql
 
 TARGET = SecuCarServer
 CONFIG += console
@@ -11,6 +12,31 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
+SOURCES +=  main.cpp\
+            database.cpp\
+            myhttpserver.cpp\
+            logger.cpp\
+            DBRecords/userrecord.cpp \
+            DBRecords/devicerecord.cpp \
+            DBRecords/samplerecord.cpp \
+            DBRecords/trackrecord.cpp \
+    DBManagers/userarray.cpp
+
+
+
+HEADERS +=  database.h\
+            myhttpserver.h\
+            logger.h\
+            DBRecords/userrecord.h \
+            DBRecords/devicerecord.h \
+            DBRecords/samplerecord.h \
+            DBRecords/trackrecord.h \
+            DBRecords/crecord.h \
+            DBManagers/dbmanager.h \
+    DBManagers/userarray.h
+
+INCLUDEPATH += DBRecords
+INCLUDEPATH += DBManagers
 INCLUDEPATH += ../QttpServer/src
 INCLUDEPATH += ../QttpServer/lib/http/qttp
 INCLUDEPATH += ../QttpServer/lib/http/include
@@ -19,55 +45,40 @@ INCLUDEPATH += ../QttpServer/lib/http-parser
 INCLUDEPATH += ../QttpServer/lib/libuv/include
 INCLUDEPATH += ../QttpServer/lib/libuv/src
 INCLUDEPATH += ../QttpServer/lib/libuv/src/unix/
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lqttpserver
 
+LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lqttpserver
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libqttpserver.a
 
-
-
 LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock_main
-
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock_main.a
 
 LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock
-
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock.a
 
 LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgtest
-
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgtest.a
 
 LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lhttp_parser
-
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libhttp_parser.a
 
 LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lnode_native
-
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libnode_native.a
 
 LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -luv
-
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libuv.a
 
 SOURCES += ../QttpServer/src/action.cpp
@@ -160,17 +171,6 @@ HEADERS += ../QttpServer/lib/libuv/src/unix/spinlock.h
 HEADERS += ../QttpServer/lib/libuv/src/unix/thread.c
 
 
-
-SOURCES +=  main.cpp\
-            database.cpp\
-            myhttpserver.cpp\
-            logger.cpp
-
-
-
-HEADERS +=  database.h\
-            myhttpserver.h\
-            logger.h
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings

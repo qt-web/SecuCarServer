@@ -5,17 +5,18 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-#define DATABASE_HOST "Konrad-MSI"
+#define DATABASE_HOST   "localhost"
 #define DATABASE_PORT   3306
 
 CDatabase::CDatabase(QObject *parent) : QObject(parent)
 {
-    m_sqlDatabase = QSqlDatabase::addDatabase("QMYSQL");
-    m_sqlDatabase.setHostName(DATABASE_HOST);
-    m_sqlDatabase.setDatabaseName("secucar");
-    m_sqlDatabase.setUserName("Manager");
-    m_sqlDatabase.setPassword("zaq12WSX");
-    m_sqlDatabase.setPort(DATABASE_PORT);
+    m_sqlDatabase = QSqlDatabase::addDatabase("QSQLITE");
+
+//    m_sqlDatabase.setHostName(DATABASE_HOST);
+    m_sqlDatabase.setDatabaseName("/home/konrad/Qt_Workspace/SecuCarServer/DB/secucar.db");
+//    m_sqlDatabase.setUserName("root");
+//    m_sqlDatabase.setPassword("");
+//    m_sqlDatabase.setPort(DATABASE_PORT);
 
     QStringList databaseDrivers = m_sqlDatabase.drivers();
     int index = 0;
@@ -30,7 +31,7 @@ CDatabase::CDatabase(QObject *parent) : QObject(parent)
     }
     else
     {
-        LOG_FATAL("COULD NOT OPEN THE DATABASE. Aborting...");
+        LOG_ERROR("COULD NOT OPEN THE DATABASE. Aborting...");
         LOG_ERROR("Error message: %s", m_sqlDatabase.lastError().text().toStdString().c_str());
         abort();
     }
@@ -82,7 +83,7 @@ bool CDatabase::Delete(std::__cxx11::string tablename, std::__cxx11::string wher
     return true;
 }
 
-QSqlRecord CDatabase::Select(std::__cxx11::string tableName, std::__cxx11::string fields, std::__cxx11::string where)
+const QSqlQuery CDatabase::Select(std::__cxx11::string tableName, std::__cxx11::string fields, std::__cxx11::string where)
 {
     QString queryText = "SELECT " + QString::fromStdString(fields) + " FROM " + QString::fromStdString(tableName);
 
@@ -98,9 +99,9 @@ QSqlRecord CDatabase::Select(std::__cxx11::string tableName, std::__cxx11::strin
     if (!query.exec(queryText))
     {
         LOG_ERROR("Query did not succeed");
-        return query.record();
+        return query;
     }
 
     LOG_DBG("Query Succeeded. Returning %d records", query.size());
-    return query.record();
+    return query;
 }
