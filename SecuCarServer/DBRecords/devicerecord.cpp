@@ -18,6 +18,16 @@ CDeviceRecord::CDeviceRecord(int deviceId, int userId, int serialNumber, std::__
     LogRecord();
 }
 
+CDeviceRecord::CDeviceRecord(CDeviceRecord &rec)
+{
+    m_deviceId = rec.GetDeviceId();
+    m_userId = rec.GetUserId();
+    m_serialNumber = rec.GetSerialNumber();
+    m_lastLocation = rec.GetLastLocation();
+    m_deviceName = rec.GetDeviceName();
+    m_firmwareVersion = rec.GetFirmwareVersion();
+}
+
 int CDeviceRecord::GetDeviceId()
 {
     return m_deviceId;

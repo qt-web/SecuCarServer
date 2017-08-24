@@ -9,6 +9,8 @@ class CUserRecord : public Record
 public:
     CUserRecord(int id, std::string username, std::string name, std::string surname, std::string city, std::string street, int homeNumber, int flatNumber, std::string postalCode, std::string passwordHash);
 
+    CUserRecord(CUserRecord& rec);
+
     int GetUserId();
 
     std::string GetUserName();

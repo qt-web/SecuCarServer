@@ -20,6 +20,18 @@ CTrackRecord::CTrackRecord(int trackId, int deviceId, int startTimestmap, std::_
     LogRecord();
 }
 
+CTrackRecord::CTrackRecord(CTrackRecord &rec)
+{
+    m_trackId = rec.GetTrackId();
+    m_deviceId = rec.GetDeviceId();
+    m_startTimestamp = rec.GetStartTimestmap();
+    m_startLocation = rec.GetStartLocation();
+    m_endTimestamp = rec.GetEndTimestamp();
+    m_endLocation = rec.GetEndLocation();
+    m_distance = rec.GetDistance();
+    m_maneouverAssessment = rec.GetManeouverAssessment();
+}
+
 int CTrackRecord::GetTrackId()
 {
     return m_trackId;

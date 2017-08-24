@@ -22,6 +22,20 @@ CUserRecord::CUserRecord(int id, std::string username, std::__cxx11::string name
     LogRecord();
 }
 
+CUserRecord::CUserRecord(CUserRecord &rec)
+{
+    m_userId = rec.GetUserId();
+    m_username = rec.GetUserName();
+    m_name = rec.GetName();
+    m_surname = rec.GetSurname();
+    m_city = rec.GetCity();
+    m_street = rec.GetStreet();
+    m_homeNumber = rec.GetHomeNumber();
+    m_flatNumber = rec.GetFlatNumber();
+    m_postalCode = rec.GetPostalCode();
+    m_passwordHash = rec.GetPasswordHash();
+}
+
 int CUserRecord::GetUserId()
 {
     return m_userId;

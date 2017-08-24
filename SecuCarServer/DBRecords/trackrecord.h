@@ -10,6 +10,8 @@ public:
 
     CTrackRecord(int trackId, int deviceId, int startTimestmap, std::string startLocation, int endTimestamp, std::string endLocation, int distance, int maneouverAssessment);
 
+    CTrackRecord(CTrackRecord& rec);
+
     int GetTrackId();
 
     int GetDeviceId();

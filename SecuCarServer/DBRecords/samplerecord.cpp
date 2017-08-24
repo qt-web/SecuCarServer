@@ -19,6 +19,17 @@ CSampleRecord::CSampleRecord(int sampleId, int trackId, int timestamp, std::__cx
     LogRecord();
 }
 
+CSampleRecord::CSampleRecord(CSampleRecord &rec)
+{
+    m_sampleId = rec.GetSampleId();
+    m_trackId = rec.GetTrackId();
+    m_timestamp = rec.GetTimestamp();
+    m_coordinates = rec.GetCoordinates();
+    m_speed = rec.GetSpeed();
+    m_acceleration = rec.GetAcceleration();
+    m_azimuth = rec.GetAzimuth();
+}
+
 int CSampleRecord::GetSampleId()
 {
     return m_sampleId;

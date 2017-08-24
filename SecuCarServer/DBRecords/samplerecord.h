@@ -9,6 +9,8 @@ class CSampleRecord : public Record
 public:
     CSampleRecord(int sampleId, int trackId, int timestamp, std::string coordinates, int speed, int acceleration, int azimuth);
 
+    CSampleRecord(CSampleRecord& rec);
+
     int GetSampleId();
 
     int GetTrackId();
