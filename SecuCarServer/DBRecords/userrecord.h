@@ -9,27 +9,27 @@ class CUserRecord : public Record
 public:
     CUserRecord(int id, std::string username, std::string name, std::string surname, std::string city, std::string street, int homeNumber, int flatNumber, std::string postalCode, std::string passwordHash);
 
-    CUserRecord(CUserRecord& rec);
+    CUserRecord(const CUserRecord& rec);
 
-    int GetUserId();
+    int GetUserId()  const;
 
-    std::string GetUserName();
+    std::string GetUserName() const;
 
-    std::string GetName();
+    std::string GetName() const;
 
-    std::string GetSurname();
+    std::string GetSurname() const;
 
-    std::string GetCity();
+    std::string GetCity() const;
 
-    std::string GetStreet();
+    std::string GetStreet() const;
 
-    int GetHomeNumber();
+    int GetHomeNumber() const;
 
-    int GetFlatNumber();
+    int GetFlatNumber() const;
 
-    std::string GetPostalCode();
+    std::string GetPostalCode() const;
 
-    std::string GetPasswordHash();
+    std::string GetPasswordHash() const;
 
     void LogRecord();
 private:

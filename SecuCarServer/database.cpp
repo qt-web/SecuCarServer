@@ -55,13 +55,13 @@ bool CDatabase::Insert(std::__cxx11::string tableName, std::__cxx11::string reco
         return false;
     }
 
-    QString queryText = "INSERT " + QString::fromStdString(record) + " INTO " + QString::fromStdString(tableName) + ";";
+    QString queryText = "INSERT INTO " + QString::fromStdString(tableName) + " VALUES (" + QString::fromStdString(record) +  ");";
     QSqlQuery query(m_sqlDatabase);
     LOG_DBG("Querying: %s", queryText.toStdString().c_str());
 
     if (!query.exec(queryText))
     {
-        LOG_ERROR("Query did not succeed");
+        LOG_ERROR("Query did not succeed. Error message: %s", query.lastError().text().toStdString().c_str());
         return false;
     }
 
@@ -76,7 +76,7 @@ bool CDatabase::Delete(std::__cxx11::string tablename, std::__cxx11::string wher
 
     if (!query.exec(queryText))
     {
-        LOG_ERROR("Query did not succeed");
+        LOG_ERROR("Query did not succeed. Error message: %s", query.lastError().text().toStdString().c_str());
         return false;
     }
 
@@ -98,7 +98,7 @@ const QSqlQuery CDatabase::Select(std::__cxx11::string tableName, std::__cxx11::
 
     if (!query.exec(queryText))
     {
-        LOG_ERROR("Query did not succeed");
+        LOG_ERROR("Query did not succeed. Error message: %s", query.lastError().text().toStdString().c_str());
         return query;
     }
 

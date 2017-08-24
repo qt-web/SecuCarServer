@@ -9,19 +9,19 @@ class CDeviceRecord : public Record
 public:
     CDeviceRecord(int deviceId, int userId, int serialNumber, std::string lastLocation, std::string deviceName, int firmwareVersion);
 
-    CDeviceRecord(CDeviceRecord& rec);
+    CDeviceRecord(const CDeviceRecord& rec);
 
-    int GetDeviceId();
+    int GetDeviceId() const;
 
-    int GetUserId();
+    int GetUserId() const;
 
-    int GetSerialNumber();
+    int GetSerialNumber() const;
 
-    std::string GetLastLocation();
+    std::string GetLastLocation() const;
 
-    std::string GetDeviceName();
+    std::string GetDeviceName() const;
 
-    int GetFirmwareVersion();
+    int GetFirmwareVersion() const;
 
     void LogRecord();
 

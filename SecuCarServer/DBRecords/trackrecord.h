@@ -10,25 +10,25 @@ public:
 
     CTrackRecord(int trackId, int deviceId, int startTimestmap, std::string startLocation, int endTimestamp, std::string endLocation, int distance, int maneouverAssessment);
 
-    CTrackRecord(CTrackRecord& rec);
+    CTrackRecord(const CTrackRecord& rec);
 
-    int GetTrackId();
+    int GetTrackId() const;
 
-    int GetDeviceId();
+    int GetDeviceId() const;
 
-    int GetStartTimestmap();
+    int GetStartTimestmap() const;
 
-    std::string GetStartLocation();
+    std::string GetStartLocation() const;
 
-    int GetEndTimestamp();
+    int GetEndTimestamp() const;
 
-    std::string GetEndLocation();
+    std::string GetEndLocation() const;
 
-    int GetDistance();
+    int GetDistance() const;
 
-    int GetManeouverAssessment();
+    int GetManeouverAssessment() const;
 
-    LogRecord();
+    void LogRecord();
 
 private:
 

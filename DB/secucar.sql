@@ -30,7 +30,7 @@ CREATE TABLE `devices` (
 
 CREATE TABLE `users` (
   `idUser` INTEGER NOT NULL,
-  `userName` TEXT NOT NULL
+  `userName` TEXT NOT NULL,
   `name` TEXT NOT NULL,
   `surname` TEXT  NOT NULL,
   `city` TEXT NOT NULL,

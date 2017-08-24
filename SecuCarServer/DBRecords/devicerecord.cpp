@@ -18,7 +18,7 @@ CDeviceRecord::CDeviceRecord(int deviceId, int userId, int serialNumber, std::__
     LogRecord();
 }
 
-CDeviceRecord::CDeviceRecord(CDeviceRecord &rec)
+CDeviceRecord::CDeviceRecord(const CDeviceRecord &rec)
 {
     m_deviceId = rec.GetDeviceId();
     m_userId = rec.GetUserId();
@@ -28,32 +28,32 @@ CDeviceRecord::CDeviceRecord(CDeviceRecord &rec)
     m_firmwareVersion = rec.GetFirmwareVersion();
 }
 
-int CDeviceRecord::GetDeviceId()
+int CDeviceRecord::GetDeviceId() const
 {
     return m_deviceId;
 }
 
-int CDeviceRecord::GetUserId()
+int CDeviceRecord::GetUserId() const
 {
     return m_userId;
 }
 
-int CDeviceRecord::GetSerialNumber()
+int CDeviceRecord::GetSerialNumber() const
 {
     return m_serialNumber;
 }
 
-std::string CDeviceRecord::GetLastLocation()
+std::string CDeviceRecord::GetLastLocation() const
 {
     return m_lastLocation;
 }
 
-std::string CDeviceRecord::GetDeviceName()
+std::string CDeviceRecord::GetDeviceName() const
 {
     return m_deviceName;
 }
 
-int CDeviceRecord::GetFirmwareVersion()
+int CDeviceRecord::GetFirmwareVersion() const
 {
     return m_firmwareVersion;
 }

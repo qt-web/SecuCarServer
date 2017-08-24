@@ -7,13 +7,13 @@ class IDBManager
 {
 public:
 
-    virtual bool Insert(Record record) = 0;
+    virtual bool Insert(Record& record) = 0;
 
     virtual bool Delete(int recordId) = 0;
 
     virtual QList<Record> Select(int recordId) = 0;
 
-    virtual bool Update(Record record) = 0;
+    virtual bool Update(Record& record) = 0;
 
 };
 

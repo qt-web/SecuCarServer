@@ -15,9 +15,9 @@ CUserArray* CUserArray::GetInstance()
     return &s_instance;
 }
 
-bool CUserArray::Insert(Record record)
+bool CUserArray::Insert(Record& record)
 {
-    CUserRecord* rec = dynamic_cast<CUserRecord>(record);
+    CUserRecord* rec = dynamic_cast<CUserRecord*>(&record);
 
     if (rec == nullptr)
     {
@@ -25,22 +25,22 @@ bool CUserArray::Insert(Record record)
         return false;
     }
 
-    QString qQuery =    QString::number(rec->GetUserId()) + "," +
-                        QString::fromStdString(rec->GetUserName()) + "," +
-                        QString::fromStdString(rec->GetName()) + "," +
-                        QString::fromStdString(rec->GetSurname()) + "," +
-                        QString::fromStdString(rec->GetCity()) + "," +
-                        QString::fromStdString(rec->GetStreet()) + "," +
-                        QString::number(rec->GetHomeNumber()) + "," +
-                        QString::number(rec->GetFlatNumber()) + "," +
-                        QString::fromStdString(rec->GetPostalCode()) + "," +
-                        QString::fromStdString(rec->GetPasswordHash());
+    QString qQuery =    "'" + QString::number(rec->GetUserId()) + "'" + "," +
+                        "'" + QString::fromStdString(rec->GetUserName()) + "'" + "," +
+                        "'" + QString::fromStdString(rec->GetName()) + "'" + "," +
+                        "'" + QString::fromStdString(rec->GetSurname()) + "'" + "," +
+                        "'" + QString::fromStdString(rec->GetCity()) + "'" + "," +
+                        "'" + QString::fromStdString(rec->GetStreet()) + "'" + "," +
+                        "'" + QString::number(rec->GetHomeNumber()) + "'" + "," +
+                        "'" + QString::number(rec->GetFlatNumber()) + "'" + "," +
+                        "'" + QString::fromStdString(rec->GetPostalCode()) + "'" + "," +
+                        "'" + QString::fromStdString(rec->GetPasswordHash()) + "'" ;
 
     return CDatabase::GetInstance()->Insert("USERS", qQuery.toStdString());
 }
 
 
-bool CUserArray::Update(Record record)
+bool CUserArray::Update(Record &record)
 {
 
 }
@@ -53,8 +53,8 @@ bool CUserArray::Delete(int recordId)
 
 QList<Record> CUserArray::Select(int recordId)
 {
-    std::string where = "idUsers=" + QString::number(recordId).toStdString();
-    QSqlQuery ret = CDatabase::Select("USERS", "*", where);
+    std::string where = "idUser='" + QString::number(recordId).toStdString() + "'";
+    QSqlQuery ret = CDatabase::GetInstance()->Select("USERS", "*", where);
     QList<Record> foundRecordsList;
 
     while (ret.next())
@@ -77,5 +77,24 @@ QList<Record> CUserArray::Select(int recordId)
 
 QList<CUserRecord> CUserArray::Select(std::__cxx11::string username)
 {
+    std::string where = "username='" + username + "'";
+    QSqlQuery ret = CDatabase::GetInstance()->Select("USERS", "*", where);
+    QList<CUserRecord> foundRecordsList;
 
+    while (ret.next())
+    {
+        const CUserRecord record( ret.value("idUser").toInt(),
+                            ret.value("userName").toString().toStdString(),
+                            ret.value("name").toString().toStdString(),
+                            ret.value("surname").toString().toStdString(),
+                            ret.value("city").toString().toStdString(),
+                            ret.value("street").toString().toStdString(),
+                            ret.value("homeNumber").toInt(),
+                            ret.value("flatNumber").toInt(),
+                            ret.value("postalCode").toString().toStdString(),
+                            ret.value("passwordHash").toString().toStdString());
+        foundRecordsList.push_back(record);
+    }
+
+    return foundRecordsList;
 }

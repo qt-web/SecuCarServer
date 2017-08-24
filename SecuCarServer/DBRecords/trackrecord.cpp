@@ -20,7 +20,7 @@ CTrackRecord::CTrackRecord(int trackId, int deviceId, int startTimestmap, std::_
     LogRecord();
 }
 
-CTrackRecord::CTrackRecord(CTrackRecord &rec)
+CTrackRecord::CTrackRecord(const CTrackRecord &rec)
 {
     m_trackId = rec.GetTrackId();
     m_deviceId = rec.GetDeviceId();
@@ -32,41 +32,41 @@ CTrackRecord::CTrackRecord(CTrackRecord &rec)
     m_maneouverAssessment = rec.GetManeouverAssessment();
 }
 
-int CTrackRecord::GetTrackId()
+int CTrackRecord::GetTrackId() const
 {
     return m_trackId;
 }
 
-int CTrackRecord::GetDeviceId()
+int CTrackRecord::GetDeviceId() const
 {
     return m_deviceId;
 }
 
-int CTrackRecord::GetStartTimestmap()
+int CTrackRecord::GetStartTimestmap() const
 {
     return m_startTimestamp;
 }
 
-std::string CTrackRecord::GetStartLocation()
+std::string CTrackRecord::GetStartLocation() const
 {
     return m_startLocation;
 }
 
-int CTrackRecord::GetEndTimestamp()
+int CTrackRecord::GetEndTimestamp() const
 {
     return m_endTimestamp;
 }
 
-std::string CTrackRecord::GetEndLocation()
+std::string CTrackRecord::GetEndLocation() const
 {
     return m_endLocation;
 }
-int CTrackRecord::GetDistance()
+int CTrackRecord::GetDistance() const
 {
     return m_distance;
 }
 
-int CTrackRecord::GetManeouverAssessment()
+int CTrackRecord::GetManeouverAssessment() const
 {
     return m_maneouverAssessment;
 }

@@ -22,66 +22,66 @@ CUserRecord::CUserRecord(int id, std::string username, std::__cxx11::string name
     LogRecord();
 }
 
-CUserRecord::CUserRecord(CUserRecord &rec)
+CUserRecord::CUserRecord(const CUserRecord &rec)
 {
-    m_userId = rec.GetUserId();
-    m_username = rec.GetUserName();
-    m_name = rec.GetName();
-    m_surname = rec.GetSurname();
-    m_city = rec.GetCity();
-    m_street = rec.GetStreet();
-    m_homeNumber = rec.GetHomeNumber();
-    m_flatNumber = rec.GetFlatNumber();
-    m_postalCode = rec.GetPostalCode();
-    m_passwordHash = rec.GetPasswordHash();
+    this->m_userId = rec.GetUserId();
+    this->m_username = rec.GetUserName();
+    this->m_name = rec.GetName();
+    this->m_surname = rec.GetSurname();
+    this->m_city = rec.GetCity();
+    this->m_street = rec.GetStreet();
+    this->m_homeNumber = rec.GetHomeNumber();
+    this->m_flatNumber = rec.GetFlatNumber();
+    this->m_postalCode = rec.GetPostalCode();
+    this->m_passwordHash = rec.GetPasswordHash();
 }
 
-int CUserRecord::GetUserId()
+int CUserRecord::GetUserId() const
 {
     return m_userId;
 }
 
-std::string CUserRecord::GetUserName()
+std::string CUserRecord::GetUserName() const
 {
     return m_username;
 }
 
-std::string CUserRecord::GetName()
+std::string CUserRecord::GetName() const
 {
     return m_name;
 }
 
-std::string CUserRecord::GetSurname()
+std::string CUserRecord::GetSurname() const
 {
     return m_surname;
 }
 
-std::string CUserRecord::GetCity()
+std::string CUserRecord::GetCity() const
 {
     return m_city;
 }
 
-std::string CUserRecord::GetStreet()
+std::string CUserRecord::GetStreet() const
 {
     return m_street;
 }
 
-int CUserRecord::GetHomeNumber()
+int CUserRecord::GetHomeNumber() const
 {
     return m_homeNumber;
 }
 
-int CUserRecord::GetFlatNumber()
+int CUserRecord::GetFlatNumber() const
 {
     return m_flatNumber;
 }
 
-std::string CUserRecord::GetPostalCode()
+std::string CUserRecord::GetPostalCode() const
 {
     return m_postalCode;
 }
 
-std::string CUserRecord::GetPasswordHash()
+std::string CUserRecord::GetPasswordHash() const
 {
     return m_passwordHash;
 }

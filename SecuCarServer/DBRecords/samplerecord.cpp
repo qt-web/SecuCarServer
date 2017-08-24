@@ -19,7 +19,7 @@ CSampleRecord::CSampleRecord(int sampleId, int trackId, int timestamp, std::__cx
     LogRecord();
 }
 
-CSampleRecord::CSampleRecord(CSampleRecord &rec)
+CSampleRecord::CSampleRecord(const CSampleRecord &rec)
 {
     m_sampleId = rec.GetSampleId();
     m_trackId = rec.GetTrackId();
@@ -30,37 +30,37 @@ CSampleRecord::CSampleRecord(CSampleRecord &rec)
     m_azimuth = rec.GetAzimuth();
 }
 
-int CSampleRecord::GetSampleId()
+int CSampleRecord::GetSampleId() const
 {
     return m_sampleId;
 }
 
-int CSampleRecord::GetTrackId()
+int CSampleRecord::GetTrackId() const
 {
     return m_trackId;
 }
 
-int CSampleRecord::GetTimestamp()
+int CSampleRecord::GetTimestamp() const
 {
     return m_timestamp;
 }
 
-std::string CSampleRecord::GetCoordinates()
+std::string CSampleRecord::GetCoordinates() const
 {
     return m_coordinates;
 }
 
-int CSampleRecord::GetSpeed()
+int CSampleRecord::GetSpeed() const
 {
     return m_speed;
 }
 
-int CSampleRecord::GetAcceleration()
+int CSampleRecord::GetAcceleration() const
 {
     return m_acceleration;
 }
 
-int CSampleRecord::GetAzimuth()
+int CSampleRecord::GetAzimuth() const
 {
     return m_azimuth;
 }

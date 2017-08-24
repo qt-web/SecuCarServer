@@ -4,7 +4,10 @@
 class Record
 {
 public:
-    virtual void LogRecord() = 0;
+    virtual void LogRecord()
+    {
+
+    }
 };
 
 #endif // CRECORD_H

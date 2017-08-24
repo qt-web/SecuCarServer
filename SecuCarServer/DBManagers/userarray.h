@@ -11,13 +11,13 @@ class CUserArray : public IDBManager
 public:
     static CUserArray* GetInstance();
 
-    bool Insert(Record record);
+    bool Insert(Record &record);
 
     bool Delete(int recordId);
 
     QList<Record> Select(int recordId);
 
-    bool Update(Record record);
+    bool Update(Record& record);
 
     QList<CUserRecord> Select(std::string username);
 
