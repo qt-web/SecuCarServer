@@ -23,6 +23,18 @@ public:
 
     int GetFirmwareVersion() const;
 
+    void SetDeviceId(int id);
+
+    void SetUserId(int id);
+
+    void SetSerialNumber(int serialNumber);
+
+    void SetLastLocation(std::string lastLocation);
+
+    void SetDeviceName(std::string name);
+
+    void SetFirmwareVersion(int version);
+
     void LogRecord();
 
 private:

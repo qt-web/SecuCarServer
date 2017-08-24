@@ -25,6 +25,20 @@ public:
 
     int GetAzimuth() const;
 
+    void SetSampleId(int id);
+
+    void SetTrackId(int id);
+
+    void SetTimestamp(int timestamp);
+
+    void SetCoordinates(std::string coordinates);
+
+    void SetSpeed(int speed);
+
+    void SetAcceleration(int acceleration);
+
+    void SetAzimuth(int azimuth);
+
     void LogRecord();
 
 private:

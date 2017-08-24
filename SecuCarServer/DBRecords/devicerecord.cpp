@@ -58,6 +58,36 @@ int CDeviceRecord::GetFirmwareVersion() const
     return m_firmwareVersion;
 }
 
+void CDeviceRecord::SetDeviceId(int id)
+{
+    m_deviceId = id;
+}
+
+void CDeviceRecord::SetUserId(int id)
+{
+    m_userId = id;
+}
+
+void CDeviceRecord::SetSerialNumber(int serialNumber)
+{
+    m_serialNumber = serialNumber;
+}
+
+void CDeviceRecord::SetLastLocation(std::string lastLocation)
+{
+    m_lastLocation = lastLocation;
+}
+
+void CDeviceRecord::SetDeviceName(std::string name)
+{
+    m_deviceName = name;
+}
+
+void CDeviceRecord::SetFirmwareVersion(int version)
+{
+    m_firmwareVersion = version;
+}
+
 void CDeviceRecord::LogRecord()
 {
     LOG_INFO("Record: deviceId: %d, userId: %d, serialnumber: %d, last location: %s, device name: %s, firmware version %d",

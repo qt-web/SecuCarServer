@@ -65,6 +65,41 @@ int CSampleRecord::GetAzimuth() const
     return m_azimuth;
 }
 
+void CSampleRecord::SetSampleId(int id)
+{
+    m_sampleId = id;
+}
+
+void CSampleRecord::SetTrackId(int id)
+{
+    m_trackId = id;
+}
+
+void CSampleRecord::SetTimestamp(int timestamp)
+{
+    m_timestamp = timestamp;
+}
+
+void CSampleRecord::SetCoordinates(std::string coordinates)
+{
+    m_coordinates = coordinates;
+}
+
+void CSampleRecord::SetSpeed(int speed)
+{
+    m_speed = speed;
+}
+
+void CSampleRecord::SetAcceleration(int acceleration)
+{
+    m_acceleration = acceleration;
+}
+
+void CSampleRecord::SetAzimuth(int azimuth)
+{
+    m_azimuth = azimuth;
+}
+
 void CSampleRecord::LogRecord()
 {
     LOG_INFO("Record: sampleId: %d, trackId: %d, timestamp: %d, coordinates: %s, speed: %d(%f), acceleration: %d(%d), azimuth: %d",

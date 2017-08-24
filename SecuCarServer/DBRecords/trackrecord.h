@@ -28,6 +28,22 @@ public:
 
     int GetManeouverAssessment() const;
 
+    void SetTrackId(int id);
+
+    void SetDeviceId(int id);
+
+    void SetStartTimestamp(int timestamp);
+
+    void SetStartLocation(std::string location);
+
+    void SetEndTimestamp(int timestamp);
+
+    void SetEndLocation(std::string endLocation);
+
+    void SetDistance(int distance);
+
+    void SetManeouverAssessment(int assessment);
+
     void LogRecord();
 
 private:

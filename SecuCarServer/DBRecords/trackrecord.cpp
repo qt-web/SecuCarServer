@@ -71,6 +71,46 @@ int CTrackRecord::GetManeouverAssessment() const
     return m_maneouverAssessment;
 }
 
+void CTrackRecord::SetTrackId(int id)
+{
+    m_trackId = id;
+}
+
+void CTrackRecord::SetDeviceId(int id)
+{
+    m_deviceId = id;
+}
+
+void CTrackRecord::SetStartTimestamp(int timestamp)
+{
+    m_startTimestamp = timestamp;
+}
+
+void CTrackRecord::SetStartLocation(std::string location)
+{
+    m_startLocation = location;
+}
+
+void CTrackRecord::SetEndTimestamp(int timestamp)
+{
+    m_endTimestamp = timestamp;
+}
+
+void CTrackRecord::SetEndLocation(std::string endLocation)
+{
+    m_endLocation = endLocation;
+}
+
+void CTrackRecord::SetDistance(int distance)
+{
+    m_distance = distance;
+}
+
+void CTrackRecord::SetManeouverAssessment(int assessment)
+{
+    m_maneouverAssessment = assessment;
+}
+
 void CTrackRecord::LogRecord()
 {
     LOG_INFO("Record: trackId: %d, deviceId: %d, startDate: %d, startLocation: %s, endDate: %d, endLocation: %s, distance: %d, maneouver assessment: %d",
