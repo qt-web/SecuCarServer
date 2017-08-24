@@ -13,18 +13,18 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  main.cpp\
-            database.cpp\
             myhttpserver.cpp\
             logger.cpp\
             DBRecords/userrecord.cpp \
             DBRecords/devicerecord.cpp \
             DBRecords/samplerecord.cpp \
             DBRecords/trackrecord.cpp \
-    DBManagers/userarray.cpp
+    DBManagers/userarray.cpp \
+    databasedriver.cpp
 
 
 
-HEADERS +=  database.h\
+HEADERS += \
             myhttpserver.h\
             logger.h\
             DBRecords/userrecord.h \
@@ -33,7 +33,8 @@ HEADERS +=  database.h\
             DBRecords/trackrecord.h \
             DBRecords/crecord.h \
             DBManagers/dbmanager.h \
-    DBManagers/userarray.h
+    DBManagers/userarray.h \
+    databasedriver.h
 
 INCLUDEPATH += DBRecords
 INCLUDEPATH += DBManagers
@@ -94,8 +95,8 @@ SOURCES += ../QttpServer/src/fileutils.cpp
 SOURCES += ../QttpServer/src/httproute.cpp
 SOURCES += ../QttpServer/src/httpurl.cpp
 SOURCES += ../QttpServer/src/swagger.cpp
-SOURCES += ../QttpServer/lib/http/qttp/qttp.cc
 
+SOURCES += ../QttpServer/lib/http/qttp/qttp.cc
 SOURCES += ../QttpServer/lib/http/src/crypto.cc
 SOURCES += ../QttpServer/lib/http/src/fs.cc
 SOURCES += ../QttpServer/lib/http/src/handle.cc

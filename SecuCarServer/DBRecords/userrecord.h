@@ -31,6 +31,26 @@ public:
 
     std::string GetPasswordHash() const;
 
+    void SetUserId(int id);
+
+    void SetUserName(std::string username);
+
+    void SetName(std::string name);
+
+    void SetSurname(std::string surname);
+
+    void SetCity(std::__cxx11::string city);
+
+    void SetStreet(std::string street);
+
+    void SetHomeNumber(int number);
+
+    void SetFlatNumber(int number);
+
+    void SetPostalCode(std::string postalCode);
+
+    void SetPasswordHash(std::string passwordHash);
+
     void LogRecord();
 private:
     CUserRecord();

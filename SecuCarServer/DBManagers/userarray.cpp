@@ -1,5 +1,5 @@
 #include "userarray.h"
-#include "database.h"
+#include "databasedriver.h"
 #include "userrecord.h"
 #include "logger.h"
 #include <QSqlQuery>
@@ -25,36 +25,54 @@ bool CUserArray::Insert(Record& record)
         return false;
     }
 
-    QString qQuery =    "'" + QString::number(rec->GetUserId()) + "'" + "," +
-                        "'" + QString::fromStdString(rec->GetUserName()) + "'" + "," +
-                        "'" + QString::fromStdString(rec->GetName()) + "'" + "," +
-                        "'" + QString::fromStdString(rec->GetSurname()) + "'" + "," +
-                        "'" + QString::fromStdString(rec->GetCity()) + "'" + "," +
-                        "'" + QString::fromStdString(rec->GetStreet()) + "'" + "," +
-                        "'" + QString::number(rec->GetHomeNumber()) + "'" + "," +
-                        "'" + QString::number(rec->GetFlatNumber()) + "'" + "," +
-                        "'" + QString::fromStdString(rec->GetPostalCode()) + "'" + "," +
+    QString qQuery =    "'" + QString::number(rec->GetUserId()) + "'" + ", " +
+                        "'" + QString::fromStdString(rec->GetUserName()) + "'" + ", " +
+                        "'" + QString::fromStdString(rec->GetName()) + "'" + ", " +
+                        "'" + QString::fromStdString(rec->GetSurname()) + "'" + ", " +
+                        "'" + QString::fromStdString(rec->GetCity()) + "'" + ", " +
+                        "'" + QString::fromStdString(rec->GetStreet()) + "'" + ", " +
+                        "'" + QString::number(rec->GetHomeNumber()) + "'" + ", " +
+                        "'" + QString::number(rec->GetFlatNumber()) + "'" + ", " +
+                        "'" + QString::fromStdString(rec->GetPostalCode()) + "'" + ", " +
                         "'" + QString::fromStdString(rec->GetPasswordHash()) + "'" ;
 
-    return CDatabase::GetInstance()->Insert("USERS", qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("USERS", qQuery.toStdString());
 }
 
 
 bool CUserArray::Update(Record &record)
 {
+    CUserRecord* rec = dynamic_cast<CUserRecord*>(&record);
+    if (rec == nullptr)
+    {
+        LOG_ERROR("Wrong record type given. should be CUserRecord");
+        return false;
+    }
 
+    QString fieldsToUpdate =    "idUser='" + QString::number(rec->GetUserId()) + "', " +
+                                "userName='" + QString::fromStdString(rec->GetUserName()) + "', " +
+                                "name='" + QString::fromStdString(rec->GetName()) + "', " +
+                                "surname='" + QString::fromStdString(rec->GetSurname()) + "', " +
+                                "city='" + QString::fromStdString(rec->GetCity()) + "', " +
+                                "street='" + QString::fromStdString(rec->GetStreet()) + "', " +
+                                "homeNumber='" + QString::number(rec->GetHomeNumber()) + "', " +
+                                "flatNumber='" + QString::number(rec->GetFlatNumber()) + "', " +
+                                "postalCode='" + QString::fromStdString(rec->GetPostalCode()) + "', " +
+                                "passwordHash='" + QString::fromStdString(rec->GetPasswordHash()) + "'";
+
+    return CDatabaseDriver::GetInstance()->Update("USERS", fieldsToUpdate.toStdString(), QString("idUser='" + QString::number(rec->GetUserId()) + "'").toStdString());
 }
 
 bool CUserArray::Delete(int recordId)
 {
-    std::string where = "idUser=" + QString::number(recordId).toStdString();
-    return CDatabase::GetInstance()->Delete("USERS", where);
+    std::string where = "idUser='" + QString::number(recordId).toStdString() + "'";
+    return CDatabaseDriver::GetInstance()->Delete("USERS", where);
 }
 
 QList<Record> CUserArray::Select(int recordId)
 {
     std::string where = "idUser='" + QString::number(recordId).toStdString() + "'";
-    QSqlQuery ret = CDatabase::GetInstance()->Select("USERS", "*", where);
+    QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("USERS", "*", where);
     QList<Record> foundRecordsList;
 
     while (ret.next())
@@ -69,6 +87,7 @@ QList<Record> CUserArray::Select(int recordId)
                             ret.value("flatNumber").toInt(),
                             ret.value("postalCode").toString().toStdString(),
                             ret.value("passwordHash").toString().toStdString());
+
         foundRecordsList.append(record);
     }
 
@@ -78,7 +97,7 @@ QList<Record> CUserArray::Select(int recordId)
 QList<CUserRecord> CUserArray::Select(std::__cxx11::string username)
 {
     std::string where = "username='" + username + "'";
-    QSqlQuery ret = CDatabase::GetInstance()->Select("USERS", "*", where);
+    QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("USERS", "*", where);
     QList<CUserRecord> foundRecordsList;
 
     while (ret.next())
@@ -93,6 +112,7 @@ QList<CUserRecord> CUserArray::Select(std::__cxx11::string username)
                             ret.value("flatNumber").toInt(),
                             ret.value("postalCode").toString().toStdString(),
                             ret.value("passwordHash").toString().toStdString());
+
         foundRecordsList.push_back(record);
     }
 

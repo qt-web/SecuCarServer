@@ -86,6 +86,56 @@ std::string CUserRecord::GetPasswordHash() const
     return m_passwordHash;
 }
 
+void CUserRecord::SetUserId(int id)
+{
+    m_userId = id;
+}
+
+void CUserRecord::SetUserName(std::string username)
+{
+    m_username = username;
+}
+
+void CUserRecord::SetName(std::string name)
+{
+    m_name = name;
+}
+
+void CUserRecord::SetSurname(std::__cxx11::string surname)
+{
+    m_surname = surname;
+}
+
+void CUserRecord::SetCity(std::string city)
+{
+    m_city = city;
+}
+
+void CUserRecord::SetStreet(std::string street)
+{
+    m_street = street;
+}
+
+void CUserRecord::SetHomeNumber(int number)
+{
+    m_homeNumber = number;
+}
+
+void CUserRecord::SetFlatNumber(int number)
+{
+    m_flatNumber = number;
+}
+
+void CUserRecord::SetPostalCode(std::__cxx11::string postalCode)
+{
+    m_postalCode = postalCode;
+}
+
+void CUserRecord::SetPasswordHash(std::string passwordHash)
+{
+    m_passwordHash = passwordHash;
+}
+
 void CUserRecord::LogRecord()
 {
     LOG_INFO("Record: userId: %d, username: %s, name: %s, surname: %s, city: %s, street: %s, homeNumber: %d, flatNumber: %d, postalCode: %s, passwordHash: %s",
