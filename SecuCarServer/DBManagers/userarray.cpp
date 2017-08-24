@@ -71,7 +71,12 @@ bool CUserArray::Delete(int recordId)
 
 QList<Record> CUserArray::Select(int recordId)
 {
-    std::string where = "idUser='" + QString::number(recordId).toStdString() + "'";
+    std::string where = "";
+    if (recordId != -1)
+    {
+        where = "idUser='" + QString::number(recordId).toStdString() + "'";
+    }
+
     QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("USERS", "*", where);
     QList<Record> foundRecordsList;
 

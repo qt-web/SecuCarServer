@@ -15,7 +15,7 @@ public:
 
     bool Delete(int recordId);
 
-    QList<Record> Select(int recordId);
+    QList<Record> Select(int recordId = -1);
 
     bool Update(Record& record);
 
