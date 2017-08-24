@@ -35,6 +35,7 @@ public:
 
     void SetFirmwareVersion(int version);
 
+
     void LogRecord();
 
 private:

@@ -13,28 +13,34 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  main.cpp\
-            myhttpserver.cpp\
             logger.cpp\
+            myhttpserver.cpp\
+            databasedriver.cpp \
             DBRecords/userrecord.cpp \
             DBRecords/devicerecord.cpp \
             DBRecords/samplerecord.cpp \
             DBRecords/trackrecord.cpp \
-    DBManagers/userarray.cpp \
-    databasedriver.cpp
+            DBManagers/userarray.cpp \
+            DBManagers/devicearray.cpp \
+            DBManagers/samplearray.cpp \
+            DBManagers/trackarray.cpp
 
 
 
 HEADERS += \
-            myhttpserver.h\
             logger.h\
+            myhttpserver.h\
+            databasedriver.h \
             DBRecords/userrecord.h \
             DBRecords/devicerecord.h \
             DBRecords/samplerecord.h \
             DBRecords/trackrecord.h \
             DBRecords/crecord.h \
             DBManagers/dbmanager.h \
-    DBManagers/userarray.h \
-    databasedriver.h
+            DBManagers/userarray.h \
+            DBManagers/devicearray.h \
+            DBManagers/samplearray.h \
+            DBManagers/trackarray.h
 
 INCLUDEPATH += DBRecords
 INCLUDEPATH += DBManagers
