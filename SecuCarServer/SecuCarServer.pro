@@ -13,9 +13,10 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  main.cpp\
-            logger.cpp\
-            myhttpserver.cpp\
-            databasedriver.cpp \
+            Utils/logger.cpp\
+            HttpServer/myhttpserver.cpp\
+            Database/database.cpp \
+            Database/databasedriver.cpp \
             DBRecords/userrecord.cpp \
             DBRecords/devicerecord.cpp \
             DBRecords/samplerecord.cpp \
@@ -23,14 +24,13 @@ SOURCES +=  main.cpp\
             DBManagers/userarray.cpp \
             DBManagers/devicearray.cpp \
             DBManagers/samplearray.cpp \
-            DBManagers/trackarray.cpp
-
-
+            DBManagers/trackarray.cpp \
 
 HEADERS += \
-            logger.h\
-            myhttpserver.h\
-            databasedriver.h \
+            Utils/logger.h\
+            HttpServer/myhttpserver.h\
+            Database/database.h \
+            Database/databasedriver.h \
             DBRecords/userrecord.h \
             DBRecords/devicerecord.h \
             DBRecords/samplerecord.h \
@@ -40,10 +40,14 @@ HEADERS += \
             DBManagers/userarray.h \
             DBManagers/devicearray.h \
             DBManagers/samplearray.h \
-            DBManagers/trackarray.h
+            DBManagers/trackarray.h \
+
 
 INCLUDEPATH += DBRecords
 INCLUDEPATH += DBManagers
+INCLUDEPATH += Database
+INCLUDEPATH += HttpServer
+INCLUDEPATH += Utils
 INCLUDEPATH += ../QttpServer/src
 INCLUDEPATH += ../QttpServer/lib/http/qttp
 INCLUDEPATH += ../QttpServer/lib/http/include

@@ -61,63 +61,77 @@ void CHttpServer::m_addActionToLogin()
 void CHttpServer::m_addActionToRegisterUser()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("Register", m_onLogin);
+    action->createAction("Register", m_onRegisterUser);
     action->registerRoute("POST", "Register", "/register");
 }
 
 void CHttpServer::m_addActionToAddDevice()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("AddDevice", m_onLogin);
+    action->createAction("AddDevice", m_onAddDevice);
     action->registerRoute("GET", "AddDevice", "/add_device");
 }
 
 void CHttpServer::m_addActionToGetDeviceInfo()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("GetDeviceInfo", m_onLogin);
+    action->createAction("GetDeviceInfo", m_onGetDeviceInfo);
     action->registerRoute("GET", "GetDeviceInfo", "/get_device_info");
 }
 
 void CHttpServer::m_addActionToGetDeviceCurLocation()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("GetCurrentDevLocation", m_onLogin);
+    action->createAction("GetCurrentDevLocation", m_onGetDeviceCurLocation);
     action->registerRoute("GET", "GetCurrentDevLocation", "/get_dev_location");
 }
 
-void CHttpServer::m_addActionToGetTrack()
+void CHttpServer::m_addActionToGetTrackInfo()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("GetTrack", m_onLogin);
-    action->registerRoute("GET", "GetTrack", "/get_track");
+    action->createAction("GetTrack", m_onGetTrackInfo);
+    action->registerRoute("GET", "GetTrackInfo", "/get_track_info");
+}
+
+void CHttpServer::m_addActionToGetTrackDetails()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("GetTrack", m_onGetTrackDetails);
+    action->registerRoute("GET", "GetTrackDetails", "/get_track_details");
 }
 
 void CHttpServer::m_addActionToAddNewTrack()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("AddNewTrack", m_onLogin);
+    action->createAction("AddNewTrack", m_onAddNewTrack);
     action->registerRoute("GET", "AddNewTrack", "/add_track");
+}
+
+void CHttpServer::m_addActionToEndTrack()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("EndTrack", m_onEndTrack);
+    action->registerRoute("GET", "EndTrack", "/end_track");
 }
 
 void CHttpServer::m_addActionToAddNewTrackSample()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("AddNewTrackSample", m_onLogin);
+    action->createAction("AddNewTrackSample", m_onAddNewTrackSample);
     action->registerRoute("GET", "AddNewTrackSample", "/add_track_sample");
 }
 
 void CHttpServer::m_addActionToGetLatestFirmwareVersion()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("GetLatestFirmwareVersion", m_onLogin);
+    action->createAction("GetLatestFirmwareVersion", m_onGetLatestFirmareVersion);
     action->registerRoute("GET", "GetLatestFirmwareVersion", "/get_latest_firmware_version");
 }
 
 void CHttpServer::m_addActionToUpdateFirmware()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("UpdateFirmware", m_onLogin);
+    action->createAction("UpdateFirmware", m_onUpdateFirmware);
     action->registerRoute("GET", "UpdateFirmware", "/update_firmware");
 }
 
@@ -152,12 +166,12 @@ void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
 
 }
 
-void CHttpServer::m_onGetTrack(qttp::HttpData& request)
+void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
 {
     int userRequestingId = request.getRequest().getJson()["userId"].toInt();
     int requestedTrackId = request.getRequest().getJson()["trackId"].toInt();
     LOG_DBG("UserId: %d has requested track number: %d", userRequestingId, requestedTrackId);
-    QList<CTrackRecord> list = CTrackArray::GetInstance()->Select(requestedTrackId);
+    QList<CTrackRecord> list = (QList<Record>)CTrackArray::GetInstance()->Select(requestedTrackId);
 
     if (list.empty())
     {
@@ -181,7 +195,17 @@ void CHttpServer::m_onGetTrack(qttp::HttpData& request)
     }
 }
 
+void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
+{
+
+}
+
 void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
+{
+
+}
+
+void CHttpServer::m_onEndTrack(qttp::HttpData &request)
 {
 
 }

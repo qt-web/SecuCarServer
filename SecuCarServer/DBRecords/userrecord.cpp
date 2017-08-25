@@ -71,12 +71,12 @@ std::string CUserRecord::GetSurname() const
     return m_surname;
 }
 
-std::string CUserRecord::GetEmail()
+std::string CUserRecord::GetEmail() const
 {
     return m_email;
 }
 
-int CUserRecord::GetTelephone()
+int CUserRecord::GetTelephone() const
 {
     return m_telephone;
 }

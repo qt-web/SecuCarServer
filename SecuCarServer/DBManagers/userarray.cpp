@@ -86,7 +86,8 @@ QList<Record> CUserArray::Select(int recordId)
 
     while (ret.next())
     {
-        CUserRecord record( ret.value("idUser").toInt(),
+        CUserRecord record(
+                            ret.value("idUser").toInt(),
                             ret.value("userName").toString().toStdString(),
                             ret.value("name").toString().toStdString(),
                             ret.value("surname").toString().toStdString(),
@@ -97,7 +98,8 @@ QList<Record> CUserArray::Select(int recordId)
                             ret.value("homeNumber").toInt(),
                             ret.value("flatNumber").toInt(),
                             ret.value("postalCode").toString().toStdString(),
-                            ret.value("passwordHash").toString().toStdString());
+                            ret.value("passwordHash").toString().toStdString()
+                        );
 
         foundRecordsList.append(record);
     }
@@ -113,18 +115,20 @@ QList<CUserRecord> CUserArray::Select(std::__cxx11::string username)
 
     while (ret.next())
     {
-        const CUserRecord record( ret.value("idUser").toInt(),
-                            ret.value("userName").toString().toStdString(),
-                            ret.value("name").toString().toStdString(),
-                            ret.value("surname").toString().toStdString(),
-                            ret.value("email").toString().toStdString(),
-                            ret.value("telephone").toInt(),
-                            ret.value("city").toString().toStdString(),
-                            ret.value("street").toString().toStdString(),
-                            ret.value("homeNumber").toInt(),
-                            ret.value("flatNumber").toInt(),
-                            ret.value("postalCode").toString().toStdString(),
-                            ret.value("passwordHash").toString().toStdString());
+        const CUserRecord record(
+                                    ret.value("idUser").toInt(),
+                                    ret.value("userName").toString().toStdString(),
+                                    ret.value("name").toString().toStdString(),
+                                    ret.value("surname").toString().toStdString(),
+                                    ret.value("email").toString().toStdString(),
+                                    ret.value("telephone").toInt(),
+                                    ret.value("city").toString().toStdString(),
+                                    ret.value("street").toString().toStdString(),
+                                    ret.value("homeNumber").toInt(),
+                                    ret.value("flatNumber").toInt(),
+                                    ret.value("postalCode").toString().toStdString(),
+                                    ret.value("passwordHash").toString().toStdString()
+                                );
 
         foundRecordsList.push_back(record);
     }

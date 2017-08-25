@@ -62,14 +62,24 @@ private:
     void m_addActionToGetDeviceCurLocation();
 
     /**
-     * @brief CHttpServer::m_addActionToGetTrack - Add action to Get Track http request - returns all the location samples about the requested track
+     * @brief CHttpServer::m_addActionToGetTrackInfo - Add action to Get Track http request - returns the basinc info about the track
      */
-    void m_addActionToGetTrack();
+    void m_addActionToGetTrackInfo();
+
+    /**
+     * @brief m_addActionToGetTrackDetails - Add action to Get track samples
+     */
+    void m_addActionToGetTrackDetails();
 
     /**
      * @brief m_addActionToAddNewTrack - Add action to Add new track http request - request sent by device
      */
     void m_addActionToAddNewTrack();
+
+    /**
+     * @brief m_addActionToEndTrack - Add action to end of the track
+     */
+    void m_addActionToEndTrack();
 
     /**
      * @brief m_addActionToAddNewTrackSample - Add action to Add New Track Sample http request - request sent by the device
@@ -98,10 +108,14 @@ private:
 
     static void m_onGetDeviceCurLocation(qttp::HttpData& request);
 
-    static void m_onGetTrack(qttp::HttpData& request);
+    static void m_onGetTrackInfo(qttp::HttpData& request);
+
+    static void m_onGetTrackDetails(qttp::HttpData& request);
 
     /**         #### DEVICE SIDE REQUESTS ####    **/
     static void m_onAddNewTrack(qttp::HttpData& request);
+
+    static void m_onEndTrack(qttp::HttpData& request);
 
     static void m_onAddNewTrackSample(qttp::HttpData& request);
 
