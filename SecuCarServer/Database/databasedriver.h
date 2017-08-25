@@ -1,5 +1,5 @@
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef DATABASEDRIVER_H
+#define DATABASEDRIVER_H
 
 #include <QObject>
 #include <QSqlDatabase>
@@ -34,4 +34,4 @@ private:
     QSqlDatabase m_sqlDatabase;
 };
 
-#endif // DATABASE_H
+#endif // DATABASEDRIVER_H

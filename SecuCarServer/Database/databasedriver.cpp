@@ -49,11 +49,11 @@ bool CDatabaseDriver::Insert(std::__cxx11::string tableName, std::__cxx11::strin
 
     QList<QString> params = QString::fromStdString(record).split(',');
 
-    if (params.size() != fields.count())
-    {
-        LOG_ERROR("Wrong number of params");
-        return false;
-    }
+//    if (params.size() != fields.count())
+//    {
+//        LOG_ERROR("Wrong number of params");
+//        return false;
+//    }
 
     QString queryText = "INSERT INTO " + QString::fromStdString(tableName) + " VALUES (" + QString::fromStdString(record) +  ");";
     QSqlQuery query(m_sqlDatabase);

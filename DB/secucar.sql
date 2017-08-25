@@ -5,33 +5,33 @@ DROP TABLE IF EXISTS devices;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tracks;
 
-CREATE TABLE `users` (
-  `idUser` INTEGER NOT NULL,
+CREATE TABLE `users`(
+  `idUser` INTEGER PRIMARY KEY AUTOINCREMENT,
   `userName` TEXT NOT NULL,
   `name` TEXT NOT NULL,
   `surname` TEXT  NOT NULL,
+  `email` TEXT NOT NULL,
+  `telephone` INTEGER DEFAULT NULL,
   `city` TEXT NOT NULL,
   `street` TEXT NOT NULL,
   `homeNumber` TEXT NOT NULL,
   `flatNumber` TEXT DEFAULT NULL,
   `postalCode` TEXT DEFAULT NULL,
-  `passwordHash` TEXT NOT NULL,
-   PRIMARY KEY (idUser)
+  `passwordHash` TEXT NOT NULL
 );
 
-CREATE TABLE `devices` (
-  `idDevice` INTEGER NOT NULL,
+CREATE TABLE `devices`(
+  `idDevice` INTEGER PRIMARY KEY AUTOINCREMENT,
   `idUser`  INTEGER NOT NULL,
   `serialNumber` INTEGER NOT NULL,
   `currentLocation` TEXT NOT NULL,
   `deviceName` TEXT NULL,
-  `programVersion` INTEGER DEFAULT NULL,
-   PRIMARY KEY (idDevice),
+  `firmwareVersion` INTEGER DEFAULT NULL,
    FOREIGN KEY (idUser) REFERENCES users(idUser)
 );
 
-CREATE TABLE `tracks` (
-  `idTrack` INTEGER NOT NULL,
+CREATE TABLE `tracks`(
+  `idTrack` INTEGER PRIMARY KEY AUTOINCREMENT,
   `idDevice` INTEGER NOT NULL,
   `startDate` timestamp NOT NULL,
   `startLocation` TEXT  NOT NULL,
@@ -39,19 +39,17 @@ CREATE TABLE `tracks` (
   `endLocation` TEXT ,
   `distance` INTEGER ,
   `manouverAssessment` INTEGER, 
-   PRIMARY KEY (idTrack),
    FOREIGN KEY (idDevice) REFERENCES devices(idDevice)
 );
 
-CREATE TABLE `samples` (
-  `idSample` INTEGER NOT NULL,
+CREATE TABLE `samples`(
+  `idSample` INTEGER PRIMARY KEY AUTOINCREMENT,
   `idTrack` INTEGER NOT NULL,
   `timestamp` timestamp NOT NULL,
   `coordinates` TEXT NOT NULL,
   `speed` INTEGER NOT NULL,
   `acceleration` INTEGER  NOT NULL,
   `azimuth` INTEGER NOT NULL,
-   PRIMARY KEY (idSample),
    FOREIGN KEY (idTrack) REFERENCES tracks(idTrack)
 );
 

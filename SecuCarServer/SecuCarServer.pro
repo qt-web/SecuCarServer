@@ -4,7 +4,6 @@ QT += network
 QT -= gui
 
 CONFIG += c++11
-QTPLUGIN += qsqlmysql
 
 TARGET = SecuCarServer
 CONFIG += console
@@ -13,38 +12,37 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  main.cpp\
-            Utils/logger.cpp\
-            HttpServer/myhttpserver.cpp\
-            Database/database.cpp \
+            Utils/logger.cpp \
+            HttpServer/myhttpserver.cpp \
             Database/databasedriver.cpp \
-            DBRecords/userrecord.cpp \
-            DBRecords/devicerecord.cpp \
-            DBRecords/samplerecord.cpp \
-            DBRecords/trackrecord.cpp \
-            DBManagers/userarray.cpp \
-            DBManagers/devicearray.cpp \
-            DBManagers/samplearray.cpp \
-            DBManagers/trackarray.cpp \
+            Database/database.cpp \
+            DBTableRecords/userrecord.cpp \
+            DBTableRecords/devicerecord.cpp \
+            DBTableRecords/samplerecord.cpp \
+            DBTableRecords/trackrecord.cpp \
+            DBTableManagers/userarray.cpp \
+            DBTableManagers/devicearray.cpp \
+            DBTableManagers/samplearray.cpp \
+            DBTableManagers/trackarray.cpp \
 
 HEADERS += \
             Utils/logger.h\
             HttpServer/myhttpserver.h\
-            Database/database.h \
             Database/databasedriver.h \
-            DBRecords/userrecord.h \
-            DBRecords/devicerecord.h \
-            DBRecords/samplerecord.h \
-            DBRecords/trackrecord.h \
-            DBRecords/crecord.h \
-            DBManagers/dbmanager.h \
-            DBManagers/userarray.h \
-            DBManagers/devicearray.h \
-            DBManagers/samplearray.h \
-            DBManagers/trackarray.h \
+            Database/database.h \
+            DBTableRecords/userrecord.h \
+            DBTableRecords/devicerecord.h \
+            DBTableRecords/samplerecord.h \
+            DBTableRecords/trackrecord.h \
+            DBTableRecords/crecord.h \
+            DBTableManagers/dbmanager.h \
+            DBTableManagers/userarray.h \
+            DBTableManagers/devicearray.h \
+            DBTableManagers/samplearray.h \
+            DBTableManagers/trackarray.h
 
-
-INCLUDEPATH += DBRecords
-INCLUDEPATH += DBManagers
+INCLUDEPATH += DBTableRecords
+INCLUDEPATH += DBTableManagers
 INCLUDEPATH += Database
 INCLUDEPATH += HttpServer
 INCLUDEPATH += Utils
@@ -117,8 +115,6 @@ SOURCES += ../QttpServer/lib/http/src/stream.cc
 SOURCES += ../QttpServer/lib/http/src/tcp.cc
 
 SOURCES += ../QttpServer/lib/http-parser/http_parser.c
-
-
 
 HEADERS += ../QttpServer/lib/libuv/src/uv-common.h
 HEADERS += ../QttpServer/src/action.h
