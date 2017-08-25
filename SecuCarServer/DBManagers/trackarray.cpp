@@ -32,7 +32,7 @@ bool CTrackArray::Insert(Record& record)
                         "'" + QString::fromStdString(rec->GetStartLocation()) + "', " +
                         "'" + QString::number(rec->GetEndTimestamp()) + "', " +
                         "'" + QString::fromStdString(rec->GetEndLocation()) + "', " +
-                        "'" + QString::number(rec->GetDistance()) + "'" +
+                        "'" + QString::number(rec->GetDistance()) + "', " +
                         "'" + QString::number(rec->GetManeouverAssessment()) + "'";
 
 
@@ -55,8 +55,8 @@ bool CTrackArray::Update(Record &record)
                                     "startLocation='" + QString::fromStdString(rec->GetStartLocation()) + "', " +
                                     "endDate='" + QString::number(rec->GetEndTimestamp()) + "', " +
                                     "endLocation='" + QString::fromStdString(rec->GetEndLocation()) + "', " +
-                                    "distance='" + QString::number(rec->GetDistance()) + "'" +
-                                    "manouverAssessment'" + QString::number(rec->GetManeouverAssessment()) + "'";
+                                    "distance='" + QString::number(rec->GetDistance()) + "', " +
+                                    "manouverAssessment='" + QString::number(rec->GetManeouverAssessment()) + "'";
 
     return CDatabaseDriver::GetInstance()->Update("TRACKS", fieldsToUpdate.toStdString(), QString("idTrack='" + QString::number(rec->GetTrackId()) + "'").toStdString());
 }

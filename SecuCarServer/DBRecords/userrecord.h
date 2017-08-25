@@ -7,7 +7,18 @@
 class CUserRecord : public Record
 {
 public:
-    CUserRecord(int id, std::string username, std::string name, std::string surname, std::string city, std::string street, int homeNumber, int flatNumber, std::string postalCode, std::string passwordHash);
+    CUserRecord(int id,
+                std::string username,
+                std::__cxx11::string name,
+                std::__cxx11::string surname,
+                std::string email,
+                int telephoneNumber,
+                std::__cxx11::string city,
+                std::__cxx11::string street,
+                int homeNumber,
+                int flatNumber,
+                std::__cxx11::string postalCode,
+                std::__cxx11::string passwordHash);
 
     CUserRecord(const CUserRecord& rec);
 
@@ -18,6 +29,10 @@ public:
     std::string GetName() const;
 
     std::string GetSurname() const;
+
+    std::string GetEmail() const;
+
+    int GetTelephone() const;
 
     std::string GetCity() const;
 
@@ -38,6 +53,10 @@ public:
     void SetName(std::string name);
 
     void SetSurname(std::string surname);
+
+    void SetEmail(std::string email);
+
+    void SetTelephone(int phoneNumber);
 
     void SetCity(std::__cxx11::string city);
 
@@ -62,6 +81,10 @@ private:
     std::string m_name;
 
     std::string m_surname;
+
+    std::string m_email;
+
+    int m_telephone;
 
     std::string m_city;
 

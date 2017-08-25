@@ -5,22 +5,27 @@
 #include "userrecord.h"
 #include <QSqlQuery>
 #include "logger.h"
+#include "devicearray.h"
+#include "devicerecord.h"
+#include "trackarray.h"
+#include "trackrecord.h"
+#include "samplearray.h"
+#include "samplerecord.h"
+
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    CDatabaseDriver* db = CDatabaseDriver::GetInstance();
-    CUserArray* ua = CUserArray::GetInstance();
+    CDatabaseDriver* databaseDriver = CDatabaseDriver::GetInstance();
+    CUserArray* userArray = CUserArray::GetInstance();
+    CDeviceArray* deviceArray = CDeviceArray::GetInstance();
+    CTrackArray* trackArray = CTrackArray::GetInstance();
+    CSampleArray* sampleArray = CSampleArray::GetInstance();
 
-    CUserRecord record(0, "scyphio122", "Konrad", "Traczyk", "Warszawa", "Egejska", 10, 13, "02-764", "0");
-    ua->Insert(record);
-    ua->Select(0);
-    record.SetCity("Parzyce");
-    ua->Update(record);
-    ua->Select("scyphio122");
-    ua->Delete(0);
-    ua->Select(0);
+    CHttpServer* httpServer = CHttpServer::GetInstance();
+    httpServer->Initialize();
+    httpServer->Start();
 
     return a.exec();
 }

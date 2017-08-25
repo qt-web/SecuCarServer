@@ -53,7 +53,7 @@ bool CSampleArray::Update(Record &record)
                                 "timestamp='" + QString::number(rec->GetTimestamp()) + "', " +
                                 "coordinates='" + QString::fromStdString(rec->GetCoordinates()) + "', " +
                                 "speed='" + QString::number(rec->GetSpeed()) + "', " +
-                                "acceleration='" + QString::number(rec->GetAcceleration()) + "'" +
+                                "acceleration='" + QString::number(rec->GetAcceleration()) + "', " +
                                 "azimuth='" + QString::number(rec->GetAzimuth()) + "'" ;
 
     return CDatabaseDriver::GetInstance()->Update("SAMPLES", fieldsToUpdate.toStdString(), QString("idSample='" + QString::number(rec->GetSampleId()) + "'").toStdString());

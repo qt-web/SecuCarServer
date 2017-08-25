@@ -1,5 +1,17 @@
 #include "myhttpserver.h"
 #include <httpserver.h>
+#include <QJsonObject>
+#include <QList>
+#include "userarray.h"
+#include "devicearray.h"
+#include "trackarray.h"
+#include "samplearray.h"
+#include "userrecord.h"
+#include "devicerecord.h"
+#include "trackrecord.h"
+#include "samplerecord.h"
+#include "logger.h"
+#include <QDateTime>
 
 CHttpServer::CHttpServer(QObject *parent) : QObject(parent)
 {
@@ -43,7 +55,7 @@ void CHttpServer::m_addActionToLogin()
 {
     auto action = m_qttpServerGetInstance();
     action->createAction("Login", m_onLogin);
-    action->registerRoute("POST", "Login", "/login");
+//    action->registerRoute("GET", "Login", "/login");
 }
 
 void CHttpServer::m_addActionToRegisterUser()
@@ -112,6 +124,11 @@ void CHttpServer::m_addActionToUpdateFirmware()
 
 void CHttpServer::m_onLogin(qttp::HttpData& request)
 {
+    QJsonObject requestJSON = request.getRequest().getJson();
+
+    std::string username = requestJSON["username"].toString().toStdString();
+    std::string passwordHash = requestJSON["password"].toString().toStdString();
+
 
 }
 
@@ -137,7 +154,31 @@ void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
 
 void CHttpServer::m_onGetTrack(qttp::HttpData& request)
 {
+    int userRequestingId = request.getRequest().getJson()["userId"].toInt();
+    int requestedTrackId = request.getRequest().getJson()["trackId"].toInt();
+    LOG_DBG("UserId: %d has requested track number: %d", userRequestingId, requestedTrackId);
+    QList<CTrackRecord> list = CTrackArray::GetInstance()->Select(requestedTrackId);
 
+    if (list.empty())
+    {
+        LOG_ERROR("Track not found.");
+
+    }
+    else
+    {
+        CTrackRecord record  = list[0];
+        QJsonObject response = request.getResponse().getJson();
+        QString responseData =  QString::number(record.GetTrackId()) + ";" +
+                                QDateTime::fromSecsSinceEpoch(record.GetStartTimestmap()).toString("dd-MM-YYYY hh:mm:ss") + ";" +
+                                QString::fromStdString(record.GetStartLocation()) + ";" +
+                                QDateTime::fromSecsSinceEpoch(record.GetEndTimestamp()).toString("dd-MM-YYYY hh:mm:ss") + ";" +
+                                QString::fromStdString(record.GetEndLocation()) + ";" +
+                                QString::number(record.GetDistance()) + ";" +
+                                QString::number(record.GetManeouverAssessment()) + ";";
+
+        response["track"] = responseData;
+
+    }
 }
 
 void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)

@@ -6,12 +6,25 @@ CUserRecord::CUserRecord()
 
 }
 
-CUserRecord::CUserRecord(int id, std::string username, std::__cxx11::string name, std::__cxx11::string surname, std::__cxx11::string city, std::__cxx11::string street, int homeNumber, int flatNumber, std::__cxx11::string postalCode, std::__cxx11::string passwordHash)
+CUserRecord::CUserRecord(int id,
+                         std::string username,
+                         std::__cxx11::string name,
+                         std::__cxx11::string surname,
+                         std::string email,
+                         int telephoneNumber,
+                         std::__cxx11::string city,
+                         std::__cxx11::string street,
+                         int homeNumber,
+                         int flatNumber,
+                         std::__cxx11::string postalCode,
+                         std::__cxx11::string passwordHash)
 {
     m_userId = id;
     m_username = username;
     m_name = name;
     m_surname = surname;
+    m_email = email;
+    m_telephone = telephoneNumber;
     m_city = city;
     m_street = street;
     m_homeNumber = homeNumber;
@@ -28,6 +41,8 @@ CUserRecord::CUserRecord(const CUserRecord &rec)
     this->m_username = rec.GetUserName();
     this->m_name = rec.GetName();
     this->m_surname = rec.GetSurname();
+    this->m_email = rec.GetEmail();
+    this->m_telephone = rec.GetTelephone();
     this->m_city = rec.GetCity();
     this->m_street = rec.GetStreet();
     this->m_homeNumber = rec.GetHomeNumber();
@@ -54,6 +69,16 @@ std::string CUserRecord::GetName() const
 std::string CUserRecord::GetSurname() const
 {
     return m_surname;
+}
+
+std::string CUserRecord::GetEmail()
+{
+    return m_email;
+}
+
+int CUserRecord::GetTelephone()
+{
+    return m_telephone;
 }
 
 std::string CUserRecord::GetCity() const
@@ -106,6 +131,16 @@ void CUserRecord::SetSurname(std::__cxx11::string surname)
     m_surname = surname;
 }
 
+void CUserRecord::SetEmail(std::__cxx11::string email)
+{
+    m_email = email;
+}
+
+void CUserRecord::SetTelephone(int phoneNumber)
+{
+    m_telephone = phoneNumber;
+}
+
 void CUserRecord::SetCity(std::string city)
 {
     m_city = city;
@@ -138,6 +173,6 @@ void CUserRecord::SetPasswordHash(std::string passwordHash)
 
 void CUserRecord::LogRecord()
 {
-    LOG_INFO("Record: userId: %d, username: %s, name: %s, surname: %s, city: %s, street: %s, homeNumber: %d, flatNumber: %d, postalCode: %s, passwordHash: %s",
-             m_userId, m_username.c_str(), m_name.c_str(), m_surname.c_str(), m_city.c_str(), m_street.c_str(), m_homeNumber, m_flatNumber, m_postalCode.c_str(), m_passwordHash.c_str());
+    LOG_INFO("Record: userId: %d, username: %s, name: %s, surname: %s, email: %s, telephone: %d, city: %s, street: %s, homeNumber: %d, flatNumber: %d, postalCode: %s, passwordHash: %s",
+                      m_userId, m_username.c_str(), m_name.c_str(), m_surname.c_str(), m_email.c_str(), m_telephone, m_city.c_str(), m_street.c_str(), m_homeNumber, m_flatNumber, m_postalCode.c_str(), m_passwordHash.c_str());
 }

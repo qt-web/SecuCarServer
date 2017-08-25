@@ -29,6 +29,8 @@ bool CUserArray::Insert(Record& record)
                         "'" + QString::fromStdString(rec->GetUserName()) + "'" + ", " +
                         "'" + QString::fromStdString(rec->GetName()) + "'" + ", " +
                         "'" + QString::fromStdString(rec->GetSurname()) + "'" + ", " +
+                        "'" + QString::fromStdString(rec->GetEmail()) + "'" + ", " +
+                        "'" + QString::number(rec->GetTelephone()) + "'" + ", " +
                         "'" + QString::fromStdString(rec->GetCity()) + "'" + ", " +
                         "'" + QString::fromStdString(rec->GetStreet()) + "'" + ", " +
                         "'" + QString::number(rec->GetHomeNumber()) + "'" + ", " +
@@ -53,6 +55,8 @@ bool CUserArray::Update(Record &record)
                                 "userName='" + QString::fromStdString(rec->GetUserName()) + "', " +
                                 "name='" + QString::fromStdString(rec->GetName()) + "', " +
                                 "surname='" + QString::fromStdString(rec->GetSurname()) + "', " +
+                                "email='" + QString::fromStdString(rec->GetEmail()) + "', " +
+                                "telephone='" + QString::number(rec->GetTelephone()) + "', " +
                                 "city='" + QString::fromStdString(rec->GetCity()) + "', " +
                                 "street='" + QString::fromStdString(rec->GetStreet()) + "', " +
                                 "homeNumber='" + QString::number(rec->GetHomeNumber()) + "', " +
@@ -86,6 +90,8 @@ QList<Record> CUserArray::Select(int recordId)
                             ret.value("userName").toString().toStdString(),
                             ret.value("name").toString().toStdString(),
                             ret.value("surname").toString().toStdString(),
+                            ret.value("email").toString().toStdString(),
+                            ret.value("telephone").toInt(),
                             ret.value("city").toString().toStdString(),
                             ret.value("street").toString().toStdString(),
                             ret.value("homeNumber").toInt(),
@@ -111,6 +117,8 @@ QList<CUserRecord> CUserArray::Select(std::__cxx11::string username)
                             ret.value("userName").toString().toStdString(),
                             ret.value("name").toString().toStdString(),
                             ret.value("surname").toString().toStdString(),
+                            ret.value("email").toString().toStdString(),
+                            ret.value("telephone").toInt(),
                             ret.value("city").toString().toStdString(),
                             ret.value("street").toString().toStdString(),
                             ret.value("homeNumber").toInt(),
