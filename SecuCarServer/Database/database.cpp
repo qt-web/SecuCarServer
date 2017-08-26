@@ -146,6 +146,7 @@ int CDatabase::AddDevice(int idUser, int serialNumber, std::string currentLocati
         record.LogRecord();
         return 0;
     }
+
     LOG_DBG("Successfuly added device");
     return 1;
 }

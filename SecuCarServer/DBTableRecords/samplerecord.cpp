@@ -112,13 +112,13 @@ std::__cxx11::string CSampleRecord::Serialize()
 {
     std::ostringstream ss;
 
-    ss << "idSample: " << m_sampleId << ", " <<
-          "idTrack: " << m_trackId << ", " <<
-          "timestamp: " << m_timestamp << ", " <<
-          "coordinates: " << m_coordinates << ", " <<
-          "speed: " << m_speed << ", " <<
-          "acceleration: " << m_acceleration << ", " <<
-          "azimuth: " << m_azimuth;
+    ss << "idSample:" << m_sampleId << "," <<
+          "idTrack:" << m_trackId << "," <<
+          "timestamp:" << m_timestamp << "," <<
+          "coordinates:" << m_coordinates << "," <<
+          "speed:" << m_speed << "," <<
+          "acceleration:" << m_acceleration << "," <<
+          "azimuth:" << m_azimuth;
 
     return ss.str();
 }

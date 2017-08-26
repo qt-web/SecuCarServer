@@ -105,7 +105,7 @@ private:
     void m_addActionToUpdateFirmware();
 
     /**  <<< REQUEST CALLBACKS >>> **/
-    /**         #### USER SIDE REQUESTS ####    **/
+    /**    #### USER  REQUESTS ####    **/
     static void m_onOptions(qttp::HttpData& request);
 
     static void m_onLogin(qttp::HttpData& request);
@@ -118,6 +118,8 @@ private:
 
     static void m_onChangeUserPassword(qttp::HttpData& request);
 
+
+    /**    #### DEVICES REQUESTS ####    **/
     static void m_onAddDevice(qttp::HttpData& request);
 
     static void m_onListDevices(qttp::HttpData& request);
@@ -126,20 +128,24 @@ private:
 
     static void m_onGetDeviceCurLocation(qttp::HttpData& request);
 
+    static void m_onGetLatestFirmareVersion(qttp::HttpData& request);
+
+    static void m_onUpdateFirmware(qttp::HttpData& request);
+
+
+    /**    #### TRACKS REQUESTS ####    **/
+    static void m_onAddNewTrack(qttp::HttpData& request);
+
+    static void m_onListTracks(qttp::HttpData& request);
+
     static void m_onGetTrackInfo(qttp::HttpData& request);
 
     static void m_onGetTrackDetails(qttp::HttpData& request);
-
-    /**         #### DEVICE SIDE REQUESTS ####    **/
-    static void m_onAddNewTrack(qttp::HttpData& request);
 
     static void m_onEndTrack(qttp::HttpData& request);
 
     static void m_onAddNewTrackSample(qttp::HttpData& request);
 
-    static void m_onGetLatestFirmareVersion(qttp::HttpData& request);
-
-    static void m_onUpdateFirmware(qttp::HttpData& request);
 };
 
 #endif // HTTPSERVER_H

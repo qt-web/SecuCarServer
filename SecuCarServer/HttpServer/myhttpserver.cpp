@@ -212,11 +212,13 @@ void CHttpServer::m_onLogin(qttp::HttpData& request)
     if (ret >= 0)
     {
         LOG_DBG("User successfully %s logged in", username.c_str());
+        response["result"] = 1;
         response["idUser"] = ret;
     }
     else
     {
         LOG_ERROR("User %s login failure", username.c_str());
+        response["result"] = 0;
         response["idUser"] = -1;
     }
 }
@@ -265,23 +267,20 @@ void CHttpServer::m_onRegisterUser(qttp::HttpData& request)
 void CHttpServer::m_onGetUserData(qttp::HttpData &request)
 {
     const QJsonObject& requestJson = request.getRequest().getJson();
-    int idUser = requestJson["idUser"].toInt();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int idUser = requestJson["idUser"].toInt();
     CUserRecord rec = CDatabase::GetInstance()->GetUserData(idUser);
 
     if (rec.GetUserId() == -1)
     {
         LOG_ERROR("No user found with idUser: %d", idUser);
-
-    }
-    else
-    {
-        LOG_DBG("Request to read user data");
+        response["result"] = 0;
     }
 
+    LOG_DBG("Request to read user data");
 
-    QJsonObject& response = request.getResponse().getJson();
-
+    response["result"] = 1;
     response["username"]    = rec.GetUserName().c_str();
     response["name"]        = rec.GetName().c_str();
     response["surname"]     = rec.GetSurname().c_str();
@@ -297,16 +296,18 @@ void CHttpServer::m_onGetUserData(qttp::HttpData &request)
 void CHttpServer::m_onUserDataChange(qttp::HttpData &request)
 {
     const QJsonObject& requestJson = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
     int idUser = requestJson["idUser"].toString().toInt();
-    CUserRecord rec = CDatabase::GetInstance()->GetUserData(idUser);
-    if (rec.GetUserId() == -1)
+    CUserRecord record = CDatabase::GetInstance()->GetUserData(idUser);
+    if (record.GetUserId() == -1)
     {
         LOG_ERROR("User not found. idUser: %d", idUser);
+        response["result"] = 0;
         return;
     }
 
-    std::string username = rec.GetUserName();
+    std::string username = record.GetUserName();
     std::string name = requestJson["name"].toString().toStdString();
     std::string surname = requestJson["surname"].toString().toStdString();
     std::string email = requestJson["email"].toString().toStdString();
@@ -316,7 +317,7 @@ void CHttpServer::m_onUserDataChange(qttp::HttpData &request)
     int homeNumber = requestJson["homeNumber"].toString().toInt();
     int flatNumber = requestJson["flatNumber"].toString().toInt();
     std::string postalCode = requestJson["postalCode"].toString().toStdString();
-    std::string passwordHash = rec.GetPasswordHash();
+    std::string passwordHash = record.GetPasswordHash();
 
     int ret = CDatabase::GetInstance()->ChangeUserData(  idUser,
                                                          username,
@@ -331,7 +332,7 @@ void CHttpServer::m_onUserDataChange(qttp::HttpData &request)
                                                          postalCode,
                                                          passwordHash);
 
-    QJsonObject& response = request.getResponse().getJson();
+
     if (ret > 0)
     {
         LOG_DBG("Changing the user data succeeded");
@@ -376,14 +377,14 @@ void CHttpServer::m_onChangeUserPassword(qttp::HttpData &request)
 
 void CHttpServer::m_onAddDevice(qttp::HttpData& request)
 {
-    const QJsonObject& r = request.getRequest().getJson();
+    const QJsonObject& req = request.getRequest().getJson();
     QJsonObject& response = request.getResponse().getJson();
 
-    int idUser = r["idUser"].toString().toInt();
-    int serialNumber = r["serialNumber"].toString().toInt();
-    std::string currentLocation = r["currentLocation"].toString().toStdString();
-    std::string deviceName = r["deviceName"].toString().toStdString();
-    int firmwareVersion = r["firmwareVersion"].toString().toInt();
+    int idUser = req["idUser"].toString().toInt();
+    int serialNumber = req["serialNumber"].toString().toInt();
+    std::string currentLocation = req["currentLocation"].toString().toStdString();
+    std::string deviceName = req["deviceName"].toString().toStdString();
+    int firmwareVersion = req["firmwareVersion"].toString().toInt();
 
     int ret = CDatabase::GetInstance()->AddDevice(idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
     if (ret > 0)
@@ -408,6 +409,13 @@ void CHttpServer::m_onListDevices(qttp::HttpData &request)
 
     QList<CDeviceRecord> list = CDatabase::GetInstance()->GetRegisteredDevicesList(idUser);
 
+    if (list.empty())
+    {
+        LOG_ERROR("Could not find the requested user: %d", idUser);
+        response["result"] = 0;
+        return;
+    }
+
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
         QString deviceSerialized = QString::fromStdString((*iter).Serialize());
@@ -420,60 +428,151 @@ void CHttpServer::m_onListDevices(qttp::HttpData &request)
         }
         deviceArray.append(singleDevice);
     }
-
+    response["result"] = 1;
     response["devices"] = deviceArray;
 }
 
 void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
 {
-    const QJsonObject& r = request.getRequest().getJson();
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
-    int deviceId = r["idDevice"].toString().toInt();
-
+    int deviceId = req["idDevice"].toString().toInt();
     QList<Record> recordList = CDeviceArray::GetInstance()->Select(deviceId);
+
+    if (recordList.empty())
+    {
+        LOG_ERROR("Could not find requested device");
+        response["result"] = 0;
+    }
+    LOG_DBG("Received device info for idDevice: %d", deviceId);
     CDeviceRecord record = static_cast<CDeviceRecord&>(recordList[0]);
+
+    response["result"] = 1;
+    response["idDevice"] = record.GetDeviceId();
+    response["idUser"] = record.GetUserId();
+    response["serialNumber"] = record.GetSerialNumber();
+    response["currentLocation"] = record.GetLastLocation().c_str();
+    response["deviceName"] = record.GetDeviceName().c_str();
+    response["firmwareVersion"] = record.GetFirmwareVersion();
+
 }
 
 void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
 {
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int idDevice = req["idDevice"].toString().toInt();
+
+    QList<Record> recordlist = CDeviceArray::GetInstance()->Select(idDevice);
+
+    if (recordlist.empty())
+    {
+        LOG_ERROR("Could not find the requested device.");
+        response["result"] = 0;
+        return;
+    }
+
+    CDeviceRecord devRecord = static_cast<CDeviceRecord&>(recordlist[0]);
+    LOG_DBG("Requested device location is: %d", devRecord.GetLastLocation().c_str());
+
+
+    response["result"] = 1;
+    response["currentLocation"] = devRecord.GetLastLocation().c_str();
 }
+
+void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
+{
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
+
+    int idDevice = req["idDevice"].toString().toInt();
+    int startDate = req["startDate"].toString().toInt();
+    std::string startLocation = req["startLocation"].toString().toStdString();
+    int endDate = req["endDate"].toString().toInt();
+    std::string endLocation = req["endLocation"].toString().toStdString();
+    int distance = req["distance"].toString().toInt();
+    int manouverAssessment = req["manouverAssessment"].toString().toInt();
+
+    int result = CDatabase::AddTrack(idDevice, startDate, startLocation, endDate, endLocation, distance, manouverAssessment);
+
+    if (result > 0)
+    {
+        LOG_DBG("Track added to database. TrackId: %d, deviceId: %d, startDate, %d", result, idDevice, startDate);
+        response["result"] = 1;
+    }
+    else
+    {
+        LOG_ERROR("Track could not be added to the database");
+        response["result"] = 0;
+    }
+}
+
+void CHttpServer::m_onListTracks(qttp::HttpData &request)
+{
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
+
+    int idDevice = req["idDevice"].toString().toInt();
+
+    QList<CTrackRecord> trackList = CDatabase::GetTracksList(idDevice);
+    if (trackList.empty())
+    {
+        LOG_ERROR("Could not find the requested device.");
+        response["result"] = 0;
+        return;
+    }
+
+    QJsonArray trackArray;
+    for (auto iter = trackList.begin(); iter != trackList.end(); ++iter)
+    {
+        QString trackSerialized = QString::fromStdString((*iter).Serialize());
+        QList<QString> trackFields = trackSerialized.split(',');
+        QJsonObject singleTrack;
+        for(int i=0; i<trackFields.size(); ++i)
+        {
+            QList<QString> parts = trackFields[i].split(':');
+            singleTrack[parts[0]] = parts[1];
+        }
+        trackArray.append(singleTrack);
+    }
+
+    response["result"] = 1;
+    response["devices"] = trackArray;
+}
+
 
 void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
 {
-    int userRequestingId = request.getRequest().getJson()["userId"].toString().toInt();
-    int requestedTrackId = request.getRequest().getJson()["trackId"].toString().toInt();
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
+
+    int userRequestingId = req["userId"].toString().toInt();
+    int requestedTrackId = req["trackId"].toString().toInt();
+
     LOG_DBG("UserId: %d has requested track number: %d", userRequestingId, requestedTrackId);
     QList<Record> list = (QList<Record>)CTrackArray::GetInstance()->Select(requestedTrackId);
-
     if (list.empty())
     {
         LOG_ERROR("Track not found.");
-
+        response["result"] = 0;
     }
     else
     {
         CTrackRecord& record  = (CTrackRecord&)list[0];
-        QJsonObject response = request.getResponse().getJson();
-        QString responseData =  QString::number(record.GetTrackId()) + ";" +
-                                QDateTime::fromSecsSinceEpoch(record.GetStartTimestmap()).toString("dd-MM-YYYY hh:mm:ss") + ";" +
-                                QString::fromStdString(record.GetStartLocation()) + ";" +
-                                QDateTime::fromSecsSinceEpoch(record.GetEndTimestamp()).toString("dd-MM-YYYY hh:mm:ss") + ";" +
-                                QString::fromStdString(record.GetEndLocation()) + ";" +
-                                QString::number(record.GetDistance()) + ";" +
-                                QString::number(record.GetManeouverAssessment()) + ";";
-
-        response["track"] = responseData;
-
+        response["result"] = 1;
+        response["trackId"] = QString::number(record.GetTrackId());
+        response["startDate"] =    QDateTime::fromSecsSinceEpoch(record.GetStartTimestmap()).toString("dd-MM-YYYY hh:mm:ss");
+        response["startLocation"] = QString::fromStdString(record.GetStartLocation());
+        response["endDate"] = QDateTime::fromSecsSinceEpoch(record.GetEndTimestamp()).toString("dd-MM-YYYY hh:mm:ss");
+        response["endLocation"] = QString::fromStdString(record.GetEndLocation());
+        response["distance"] = QString::number(record.GetDistance());
+        response["manouverAssessment"] = QString::number(record.GetManeouverAssessment());
     }
 }
 
 void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
-{
-
-}
-
-void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
 {
 
 }

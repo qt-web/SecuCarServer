@@ -198,18 +198,18 @@ void CUserRecord::LogRecord()
 std::__cxx11::string CUserRecord::Serialize()
 {
     std::ostringstream ss;
-    ss << "idUser: " << m_userId << ", " <<
-          "username: " << m_username << ", " <<
-          "name: " << m_name << ", " <<
-          "surname: " << m_surname << ", " <<
-          "email: " << m_email << ", " <<
-          "telephone: " << m_telephone << ", " <<
-          "city: " << m_city << ", " <<
-          "street: " << m_street << ", " <<
-          "homeNumber: " << m_homeNumber << ", " <<
-          "flatNumber: " << m_flatNumber << ", " <<
-          "postalCode: " << m_postalCode << ", " <<
-          "passwordHash: " << m_passwordHash;
+    ss << "idUser:" << m_userId << "," <<
+          "username:" << m_username << "," <<
+          "name:" << m_name << "," <<
+          "surname:" << m_surname << "," <<
+          "email:" << m_email << "," <<
+          "telephone:" << m_telephone << "," <<
+          "city:" << m_city << "," <<
+          "street:" << m_street << "," <<
+          "homeNumber:" << m_homeNumber << "," <<
+          "flatNumber:" << m_flatNumber << "," <<
+          "postalCode:" << m_postalCode << "," <<
+          "passwordHash:" << m_passwordHash;
 
     return ss.str();
  }

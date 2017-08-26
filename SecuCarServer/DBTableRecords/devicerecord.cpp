@@ -100,12 +100,12 @@ std::string CDeviceRecord::Serialize()
 {
     std::ostringstream ss;
 
-    ss << "idDevice: " << m_deviceId << "," <<
-          "idUser: " << m_userId << "," <<
-          "serialNumber: " << m_serialNumber << "," <<
-          "lastLocation: " << m_lastLocation << "," <<
-          "deviceName: " << m_deviceName << "," <<
-          "firmwareVersion: " << m_firmwareVersion;
+    ss << "idDevice:" << m_deviceId << "," <<
+          "idUser:" << m_userId << "," <<
+          "serialNumber:" << m_serialNumber << "," <<
+          "lastLocation:" << m_lastLocation << "," <<
+          "deviceName:" << m_deviceName << "," <<
+          "firmwareVersion:" << m_firmwareVersion;
 
     return ss.str();
 }

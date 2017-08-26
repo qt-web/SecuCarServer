@@ -123,14 +123,14 @@ std::__cxx11::string CTrackRecord::Serialize()
 {
     std::ostringstream ss;
 
-    ss << "idTrack: " << m_trackId << ", " <<
-          "idDevice: " << m_deviceId << ", " <<
-          "startDate: " << m_startTimestamp << ", " <<
-          "startLocation: " << m_startLocation << ", " <<
-          "endDate: " << m_endTimestamp << ", " <<
-          "endLocation: " << m_endLocation << ", " <<
-          "distance: " << m_distance << ", " <<
-          "maneouverAssessment: " << m_maneouverAssessment;
+    ss << "idTrack:" << m_trackId << "," <<
+          "idDevice:" << m_deviceId << "," <<
+          "startDate:" << m_startTimestamp << "," <<
+          "startLocation:" << m_startLocation << "," <<
+          "endDate:" << m_endTimestamp << "," <<
+          "endLocation:" << m_endLocation << "," <<
+          "distance:" << m_distance << "," <<
+          "maneouverAssessment:" << m_maneouverAssessment;
 
     return ss.str();
 }
