@@ -61,9 +61,12 @@ int CDatabase::RegisterUser(std::__cxx11::string username,
     int insertedUserId = m_pUserArray->Insert(record);
 
     if (insertedUserId == -1)
+    {
+        LOG_ERROR("Could not register username: %s", username.c_str());
         return -1;
+    }
 
-    return 1;
+    return insertedUserId;
 }
 
 CUserRecord CDatabase::GetUserData(int idUser)
@@ -144,11 +147,11 @@ int CDatabase::AddDevice(int idUser, int serialNumber, std::string currentLocati
     {
         LOG_ERROR("Could not add device into database");
         record.LogRecord();
-        return 0;
+        return -1;
     }
 
     LOG_DBG("Successfuly added device");
-    return 1;
+    return insertedDevId;
 }
 
 QList<CDeviceRecord> CDatabase::GetRegisteredDevicesList(int idUser)
@@ -257,11 +260,11 @@ int CDatabase::AddTrack(
     if (insertedTrackId == -1)
     {
         LOG_ERROR("Could not add the track into the database");
-        return 0;
+        return -1;
     }
 
     LOG_DBG("Track successfully added");
-    return 1;
+    return insertedTrackId;
 }
 
 QList<Record> CDatabase::GetTracksList(int idDevice)
@@ -358,9 +361,9 @@ int CDatabase::AddTrackSample(int idTrack, int timestamp, std::__cxx11::string c
     if (insertedSampleId == -1)
     {
         LOG_ERROR("Could not add track sample to idTrack: %d", idTrack);
-        return 0;
+        return -1;
     }
 
     LOG_DBG("Sample added to idTrakck: %d", idTrack);
-    return 1;
+    return insertedSampleId;
 }
