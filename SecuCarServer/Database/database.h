@@ -15,83 +15,100 @@
 class CDatabase
 {
 public:
-    static CDatabase* GetInstance();
+    static CDatabase*       GetInstance();
 
-    int Login(std::string username, std::string passwordHash);
+    int                     Login(std::string username, std::string passwordHash);
 
-    int RegisterUser(
-                        std::string username,
-                        std::string name,
-                        std::string surname,
-                        std::string email,
-                        int telephoneNumber,
-                        std::string city,
-                        std::string street,
-                        int homeNumber,
-                        int flatNumber,
-                        std::string postalCode,
-                        std::string passwordHash
-                    );
+    int                     RegisterUser(
+                                std::string username,
+                                std::string name,
+                                std::string surname,
+                                std::string email,
+                                int telephoneNumber,
+                                std::string city,
+                                std::string street,
+                                int homeNumber,
+                                int flatNumber,
+                                std::string postalCode,
+                                std::string passwordHash
+                                );
 
-    CUserRecord GetUserData(int idUser);
+    CUserRecord             GetUserData(int idUser);
 
-    int ChangeUserData(
-                        int idUser,
-                        std::string username,
-                        std::string name,
-                        std::string surname,
-                        std::string email,
-                        int telephoneNumber,
-                        std::string city,
-                        std::string street,
-                        int homeNumber,
-                        int flatNumber,
-                        std::string postalCode,
-                        std::string passwordHash
-                        );
+    int                     ChangeUserData(
+                                int idUser,
+                                std::string username,
+                                std::string name,
+                                std::string surname,
+                                std::string email,
+                                int telephoneNumber,
+                                std::string city,
+                                std::string street,
+                                int homeNumber,
+                                int flatNumber,
+                                std::string postalCode,
+                                std::string passwordHash
+                                );
 
-    int ChangePassword(
-                        int idUser,
-                        std::string oldPasswordHash,
-                        std::string newPasswordHash
-                      );
+    int                     ChangePassword(
+                                int idUser,
+                                std::string oldPasswordHash,
+                                std::string newPasswordHash
+                                );
 
-    int AddDevice(
-                    int idUser,
-                    int serialNumber,
-                    std::string currentLocation,
-                    std::string deviceName,
-                    int firmwareVersion
-                 );
-
-    int ChangeDeviceName(
-                            int idDevice,
-                            std::string newName
-                        );
-
-    CDeviceRecord GetDeviceInfo(int idDevice);
-
-    int DeleteDevice(int idDevice);
-
-    int AddTrack(
-                int idDevice,
-                int startTimestamp,
-                std::string startLocation,
-                int endDate = 0,
-                std::string endLocation = "",
-                int distance = 0,
-                int manouverAssessment = 0
-                );
-
-    CTrackRecord GetTrackInfo(int idTrack);
-
-    QList<CSampleRecord> GetTrackDetails(int idTrack);
-
-    int DeleteTrack(int idTrack);
+    int                     AddDevice(
+                                int idUser,
+                                int serialNumber,
+                                std::string currentLocation,
+                                std::string deviceName,
+                                int firmwareVersion
+                                );
 
     QList<CDeviceRecord>    GetRegisteredDevicesList(int idUser);
 
+    int                     ChangeDeviceName(
+                                int idDevice,
+                                std::string newName
+                                );
+
+    int                     UpdateDeviceLocation(int idDevice, std::string newLocation);
+
+    CDeviceRecord           GetDeviceInfo(int idDevice);
+
+    int                     DeleteDevice(int idDevice);
+
+    int                     AddTrack(
+                                int idDevice,
+                                int startTimestamp,
+                                std::string startLocation,
+                                int endDate = 0,
+                                std::string endLocation = "",
+                                int distance = 0,
+                                int manouverAssessment = 0
+                                );
+
     QList<CTrackRecord>     GetTracksList(int idDevice);
+
+    CTrackRecord            GetTrackInfo(int idTrack);
+
+    QList<CSampleRecord>    GetTrackDetails(int idTrack);
+
+    int                     EndTrack(
+                                int idTrack,
+                                int endDate,
+                                std::string endLocation,
+                                int distance = 0,
+                                int manouverAssessment = 0);
+
+    int                     DeleteTrack(int idTrack);
+
+    int                     AddTrackSample(int idTrack,
+                                int timestamp,
+                                std::string coordinates,
+                                int speed,
+                                int acceleration,
+                                int azimuth
+                                );
 
 
 private:

@@ -438,16 +438,14 @@ void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
     QJsonObject& response = request.getResponse().getJson();
 
     int deviceId = req["idDevice"].toString().toInt();
-    QList<Record> recordList = CDeviceArray::GetInstance()->Select(deviceId);
 
-    if (recordList.empty())
+    CDeviceRecord record = CDatabase::GetInstance()->GetDeviceInfo(deviceId);
+
+    if (record.GetDeviceId() == -1)
     {
-        LOG_ERROR("Could not find requested device");
         response["result"] = 0;
+        return;
     }
-    LOG_DBG("Received device info for idDevice: %d", deviceId);
-    CDeviceRecord record = static_cast<CDeviceRecord&>(recordList[0]);
-
     response["result"] = 1;
     response["idDevice"] = record.GetDeviceId();
     response["idUser"] = record.GetUserId();
@@ -465,19 +463,15 @@ void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
 
     int idDevice = req["idDevice"].toString().toInt();
 
-    QList<Record> recordlist = CDeviceArray::GetInstance()->Select(idDevice);
-
-    if (recordlist.empty())
+    CDeviceRecord devRecord = CDatabase::GetInstance()->GetDeviceInfo(idDevice);
+    if (devRecord.GetDeviceId() == -1)
     {
-        LOG_ERROR("Could not find the requested device.");
+        LOG_ERROR("idDevice: %d not found", idDevice);
         response["result"] = 0;
         return;
     }
 
-    CDeviceRecord devRecord = static_cast<CDeviceRecord&>(recordlist[0]);
     LOG_DBG("Requested device location is: %d", devRecord.GetLastLocation().c_str());
-
-
     response["result"] = 1;
     response["currentLocation"] = devRecord.GetLastLocation().c_str();
 }
@@ -495,7 +489,7 @@ void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
     int distance = req["distance"].toString().toInt();
     int manouverAssessment = req["manouverAssessment"].toString().toInt();
 
-    int result = CDatabase::AddTrack(idDevice, startDate, startLocation, endDate, endLocation, distance, manouverAssessment);
+    int result = CDatabase::GetInstance()->AddTrack(idDevice, startDate, startLocation, endDate, endLocation, distance, manouverAssessment);
 
     if (result > 0)
     {
@@ -516,7 +510,7 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
 
     int idDevice = req["idDevice"].toString().toInt();
 
-    QList<CTrackRecord> trackList = CDatabase::GetTracksList(idDevice);
+    QList<CTrackRecord> trackList = CDatabase::GetInstance()->GetTracksList(idDevice);
     if (trackList.empty())
     {
         LOG_ERROR("Could not find the requested device.");
@@ -539,7 +533,7 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
     }
 
     response["result"] = 1;
-    response["devices"] = trackArray;
+    response["tracks"] = trackArray;
 }
 
 
@@ -552,10 +546,9 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
     int requestedTrackId = req["trackId"].toString().toInt();
 
     LOG_DBG("UserId: %d has requested track number: %d", userRequestingId, requestedTrackId);
-    QList<Record> list = (QList<Record>)CTrackArray::GetInstance()->Select(requestedTrackId);
+    QList<Record> list = CDatabase::GetInstance()->GetTrackInfo(requestedTrackId);
     if (list.empty())
     {
-        LOG_ERROR("Track not found.");
         response["result"] = 0;
     }
     else
@@ -574,16 +567,68 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
 
 void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
 {
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int requestedTrackId = req["trackId"].toString().toInt();
+
+    QList<CSampleRecord> sampleList = CDatabase::GetInstance()->GetTrackDetails(requestedTrackId);
+
+    if (sampleList.empty())
+    {
+        response["result"] = 0;
+        return;
+    }
+
+    QJsonArray sampleArray;
+    for (auto iter = sampleList.begin(); iter != sampleList.end(); ++iter)
+    {
+        QString sampleSerialized = QString::fromStdString((*iter).Serialize());
+        QList<QString> sampleFields = sampleSerialized.split(',');
+        QJsonObject singleSample;
+        for(int i=0; i<sampleFields.size(); ++i)
+        {
+            QList<QString> parts = sampleFields[i].split(':');
+            singleSample[parts[0]] = parts[1];
+        }
+        sampleArray.append(singleSample);
+    }
+
+    response["result"] = 1;
+    response["samples"] = sampleArray;
 }
 
 void CHttpServer::m_onEndTrack(qttp::HttpData &request)
 {
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int idTrack = req["idTrack"].toString().toInt();
+    int endDate = req["endDate"].toString().toInt();
+    std::string endLocation = req["endLocation"].toString().toStdString();
+    int distance = req["distance"].toString().toInt();
+    int manouverAssessment = req["manouverAssessment"].toString().toInt();
+
+    int ret = CDatabase::GetInstance()->EndTrack(idTrack, endDate, endLocation, distance, manouverAssessment);
+
+    if (ret)
+    {
+        response["result"] = 1;
+    }
+    else
+    {
+        response["result"] = 0;
+    }
 }
 
 void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
 {
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
+
+    int idTrack = req["idTrack"].toString().toInt();
+
+    //int ret = CDatabase::AddTrackSample();
 
 }
 

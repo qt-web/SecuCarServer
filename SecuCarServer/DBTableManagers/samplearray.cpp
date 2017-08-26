@@ -95,3 +95,33 @@ QList<Record> CSampleArray::Select(int recordId)
 
     return foundRecordsList;
 }
+
+QList<Record> CSampleArray::SelectAllByTrack(int idTrack)
+{
+    std::string where = "";
+    if (idTrack != -1)
+    {
+        where = "idTrack='" + QString::number(idTrack).toStdString() + "'";
+    }
+
+    QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("SAMPLES", "*", where);
+    QList<Record> foundRecordsList;
+
+    while (ret.next())
+    {
+        CSampleRecord record(
+                            ret.value("idSample").toInt(),
+                            ret.value("idTrack").toInt(),
+                            ret.value("timestamp").toInt(),
+                            ret.value("coordinates").toString().toStdString(),
+                            ret.value("speed").toInt(),
+                            ret.value("acceleration").toInt(),
+                            ret.value("azimuth").toInt()
+                            );
+
+
+        foundRecordsList.append(record);
+    }
+
+    return foundRecordsList;
+}

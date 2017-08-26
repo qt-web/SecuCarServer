@@ -18,6 +18,8 @@ public:
 
     QList<Record> Select(int recordId = -1);
 
+    QList<Record> SelectAllByTrack(int idTrack);
+
     bool Update(Record& record);
 
 private:

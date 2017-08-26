@@ -97,3 +97,34 @@ QList<Record> CTrackArray::Select(int recordId)
 
     return foundRecordsList;
 }
+
+QList<Record> CTrackArray::SelectAllByDevice(int idDevice)
+{
+    std::string where = "";
+    if (idDevice != -1)
+    {
+        where = "idDevice='" + QString::number(idDevice).toStdString() + "'";
+    }
+
+    QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("TRACKS", "*", where);
+    QList<Record> foundRecordsList;
+
+    while (ret.next())
+    {
+        CTrackRecord record(
+                            ret.value("idTrack").toInt(),
+                            ret.value("idDevice").toInt(),
+                            ret.value("startDate").toInt(),
+                            ret.value("startLocation").toString().toStdString(),
+                            ret.value("endDate").toInt(),
+                            ret.value("endLocation").toString().toStdString(),
+                            ret.value("distance").toInt(),
+                            ret.value("manouverAssessment").toInt()
+                            );
+
+
+        foundRecordsList.append(record);
+    }
+
+    return foundRecordsList;
+}

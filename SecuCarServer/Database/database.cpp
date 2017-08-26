@@ -157,9 +157,202 @@ QList<CDeviceRecord> CDatabase::GetRegisteredDevicesList(int idUser)
     return CDeviceArray::GetInstance()->SelectAllByUser(idUser);
 }
 
-CDeviceRecord CDatabase::GetDeviceInfo(int idDevice)
+int CDatabase::ChangeDeviceName(int idDevice, std::__cxx11::string newName)
 {
+    QList<CDeviceRecord> recordList = CDeviceArray::GetInstance()->Select(idDevice);
 
+    if (recordList.empty())
+    {
+        LOG_ERROR("Could not find idDevice: %d", idDevice);
+        return 0;
+    }
+
+    CDeviceRecord record = static_cast<CDeviceRecord>(recordList[0]);
+    record.SetDeviceName(newName);
+
+    bool ret = CDeviceArray::GetInstance()->Update(record);
+
+    if (!ret)
+    {
+        LOG_ERROR("Could not change idDevice: %d name", idDevice);
+        return 0;
+    }
+
+    LOG_DBG("idDevice: %d name has been changed to: %s", idDevice, newName.c_str());
+    return 1;
 }
 
+int CDatabase::UpdateDeviceLocation(int idDevice, std::__cxx11::string newLocation)
+{
+    CDeviceRecord record = CDeviceArray::GetInstance()->Select(idDevice);
 
+    if (record.GetDeviceId() == -1)
+    {
+        LOG_ERROR("Could not find the device");
+        return 0;
+    }
+
+    record.SetLastLocation(newLocation);
+
+    bool ret = CDeviceArray::GetInstance()->Update(record);
+
+    if (!ret)
+    {
+        LOG_ERROR("Could not update device's: %d location", idDevice);
+        return 0;
+    }
+
+    LOG_DBG("idDevice: %d location updated successfully", idDevice);
+    return 1;
+}
+
+CDeviceRecord CDatabase::GetDeviceInfo(int idDevice)
+{
+    QList<Record> recordList = CDeviceArray::GetInstance()->Select(idDevice);
+    if (recordList.empty())
+    {
+        LOG_ERROR("Could not find requested device");
+        return CDeviceRecord(-1, -1, -1, "", "", -1);
+    }
+
+    CDeviceRecord rec = static_cast<CDeviceRecord&>(recordList[0]);
+    return rec;
+}
+
+int CDatabase::DeleteDevice(int idDevice)
+{
+    bool ret = CDeviceArray::GetInstance()->Delete(idDevice);
+
+    if (!ret)
+    {
+        LOG_ERROR("Could not delete idDevice: %d", idDevice);
+        return 0;
+    }
+
+    LOG_DBG("idDevice: %d deleted successfully", idDevice);
+    return 1;
+}
+
+int CDatabase::AddTrack(
+                            int idDevice,
+                            int startTimestamp,
+                            std::string startLocation,
+                            int endDate,
+                            std::string endLocation,
+                            int distance,
+                            int manouverAssessment
+                            )
+{
+    CTrackRecord record(0, idDevice, startTimestamp, startLocation, endDate, endLocation, distance, manouverAssessment);
+
+    bool ret = CTrackArray::GetInstance()->Insert(record);
+
+    if (ret)
+    {
+        LOG_DBG("Track successfully added");
+        return 1;
+    }
+
+    LOG_ERROR("Could not add the track into the database");
+    return 0;
+}
+
+QList<CTrackRecord> CDatabase::GetTracksList(int idDevice)
+{
+    LOG_DBG(" ");
+    QList<Record> trackList = CTrackArray::GetInstance()->SelectAllByDevice(idDevice);
+
+    if (trackList.empty())
+    {
+        LOG_ERROR("Could not find tracks for deviceId: %d", idDevice);
+    }
+
+    return trackList;
+}
+
+CTrackRecord CDatabase::GetTrackInfo(int idTrack)
+{
+    LOG_DBG(" ");
+    QList<Record> trackList = CTrackArray::GetInstance()->Select(idTrack);
+
+    if (trackList.empty())
+    {
+        LOG_ERROR("Could not find tracks for idTrack: %d", idTrack);
+    }
+
+    CTrackRecord record = static_cast<CTrackRecord&>(trackList[0]);
+    return record;
+}
+
+QList<CSampleRecord> CDatabase::GetTrackDetails(int idTrack)
+{
+    LOG_DBG(" ");
+
+    QList<CSampleRecord> sampleList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
+
+    if (sampleList.empty())
+    {
+        LOG_ERROR("Could not find track with id: ", idTrack);
+    }
+    else
+    {
+        LOG_DBG("Returning location samples for idTrack: %d", idTrack);
+    }
+    return sampleList;
+}
+
+int CDatabase::EndTrack(int idTrack, int endDate, std::__cxx11::string endLocation, int distance, int manouverAssessment)
+{
+    CTrackRecord record = CTrackArray::GetInstance()->Select(idTrack);
+
+    if (record.GetTrackId() == -1)
+    {
+        LOG_ERROR("Track not found");
+        return 0;
+    }
+
+    record.SetEndTimestamp(endDate);
+    record.SetEndLocation(endLocation);
+    record.SetDistance(distance);
+    record.SetManeouverAssessment(manouverAssessment);
+    bool ret = CTrackArray::GetInstance()->Update(record);
+
+    if (ret)
+    {
+        LOG_DBG("idTrack: %d successfully ended.", idTrack);
+        return 1;
+    }
+
+    LOG_ERROR("Could not update idTrack: %d", idTrack);
+    return 0;
+}
+
+int CDatabase::DeleteTrack(int idTrack)
+{
+    bool ret = CTrackArray::GetInstance()->Delete(idTrack);
+
+    if (ret)
+    {
+        LOG_DBG("idTrack: %d deleted successfully", idTrack);
+        return 1;
+    }
+
+    LOG_ERROR("idTrack: %d deleting failure", idTrack);
+    return 0;
+}
+
+int CDatabase::AddTrackSample(int idTrack, int timestamp, std::__cxx11::string coordinates, int speed, int acceleration, int azimuth)
+{
+    CSampleRecord record(0, idTrack, timestamp, coordinates, speed, acceleration, azimuth);
+
+    bool ret = CSampleArray::GetInstance()->Insert(record);
+
+    if (!ret)
+    {
+        LOG_ERROR("Could not add track sample to idTrack: %d", idTrack);
+        return 0;
+    }
+
+    LOG_DBG("Sample added to idTrakck: %d", idTrack);
+    return 1;
+}

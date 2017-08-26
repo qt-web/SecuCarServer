@@ -18,6 +18,8 @@ public:
 
     QList<Record> Select(int recordId = -1);
 
+    QList<Record> SelectAllByDevice(int idDevice);
+
     bool Update(Record& record);
 
 private:
