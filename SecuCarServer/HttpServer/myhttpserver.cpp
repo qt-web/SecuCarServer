@@ -38,19 +38,24 @@ void CHttpServer::Initialize()
     m_addActionToGetUserData();
     m_addActionToChangeUserData();
     m_addActionToChangePassword();
+    m_addActionToDeleteUser();
 
     // Device's actions
     m_addActionToAddDevice();
     m_addActionToGetDevicesList();
     m_addActionToGetDeviceInfo();
     m_addActionToGetDeviceCurLocation();
-    m_addActionToGetTrackInfo();
-    m_addActionToGetTrackDetails();
-
-    m_addActionToAddNewTrack();
-    m_addActionToAddNewTrackSample();
     m_addActionToGetLatestFirmwareVersion();
     m_addActionToUpdateFirmware();
+    m_addActionToDeleteDevice();
+
+    m_addActionToAddNewTrack();
+    m_addActionToListTracks();
+    m_addActionToGetTrackInfo();
+    m_addActionToGetTrackDetails();
+    m_addActionToAddNewTrackSample();
+    m_addActionToEndTrack();
+    m_addActionToDeleteTrack();
 }
 
 void CHttpServer::Start()
@@ -105,6 +110,13 @@ void CHttpServer::m_addActionToChangePassword()
     action->registerRoute("POST", "ChangePassword", "/change_password");
 }
 
+void CHttpServer::m_addActionToDeleteUser()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("DeleteUser", m_onUserDelete);
+    action->registerRoute("GET", "DeleteUser", "/delete_user");
+}
+
 void CHttpServer::m_addActionToAddDevice()
 {
     auto action = m_qttpServerGetInstance();
@@ -133,6 +145,27 @@ void CHttpServer::m_addActionToGetDeviceCurLocation()
     action->registerRoute("GET", "GetCurrentDevLocation", "/get_dev_location");
 }
 
+void CHttpServer::m_addActionToGetLatestFirmwareVersion()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("GetLatestFirmwareVersion", m_onGetLatestFirmareVersion);
+    action->registerRoute("GET", "GetLatestFirmwareVersion", "/get_latest_firmware_version");
+}
+
+void CHttpServer::m_addActionToUpdateFirmware()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("UpdateFirmware", m_onUpdateFirmware);
+    action->registerRoute("GET", "UpdateFirmware", "/update_firmware");
+}
+
+void CHttpServer::m_addActionToDeleteDevice()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("DeleteDevice", m_onDeviceDelete);
+    action->registerRoute("GET", "DeleteDevice", "/delete_device");
+}
+
 void CHttpServer::m_addActionToGetTrackInfo()
 {
     auto action = m_qttpServerGetInstance();
@@ -154,6 +187,13 @@ void CHttpServer::m_addActionToAddNewTrack()
     action->registerRoute("GET", "AddNewTrack", "/add_track");
 }
 
+void CHttpServer::m_addActionToListTracks()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("ListTracks", m_onListTracks);
+    action->registerRoute("GET", "ListTracks", "/list_tracks");
+}
+
 void CHttpServer::m_addActionToEndTrack()
 {
     auto action = m_qttpServerGetInstance();
@@ -168,18 +208,11 @@ void CHttpServer::m_addActionToAddNewTrackSample()
     action->registerRoute("GET", "AddNewTrackSample", "/add_track_sample");
 }
 
-void CHttpServer::m_addActionToGetLatestFirmwareVersion()
+void CHttpServer::m_addActionToDeleteTrack()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("GetLatestFirmwareVersion", m_onGetLatestFirmareVersion);
-    action->registerRoute("GET", "GetLatestFirmwareVersion", "/get_latest_firmware_version");
-}
-
-void CHttpServer::m_addActionToUpdateFirmware()
-{
-    auto action = m_qttpServerGetInstance();
-    action->createAction("UpdateFirmware", m_onUpdateFirmware);
-    action->registerRoute("GET", "UpdateFirmware", "/update_firmware");
+    action->createAction("DeleteTrack", m_onTrackDelete);
+    action->registerRoute("GET", "DeleteTrack", "/delete_track");
 }
 
 void CHttpServer::m_onOptions(qttp::HttpData& request)
@@ -226,6 +259,7 @@ void CHttpServer::m_onLogin(qttp::HttpData& request)
 void CHttpServer::m_onRegisterUser(qttp::HttpData& request)
 {
     const QJsonObject& requestJSON = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
     std::string username = requestJSON["username"].toString().toStdString();
     std::string name = requestJSON["name"].toString().toStdString();
@@ -251,10 +285,10 @@ void CHttpServer::m_onRegisterUser(qttp::HttpData& request)
                                                      postalCode,
                                                      passwordHash);
 
-    QJsonObject& response = request.getResponse().getJson();
+
     if (ret >= 0)
     {
-        LOG_DBG("User successfully registered");
+        LOG_DBG("User successfully registered. idUser: %d", ret);
         response["result"] = 1;
     }
     else
@@ -375,6 +409,11 @@ void CHttpServer::m_onChangeUserPassword(qttp::HttpData &request)
     }
 }
 
+void CHttpServer::m_onUserDelete(qttp::HttpData &request)
+{
+
+}
+
 void CHttpServer::m_onAddDevice(qttp::HttpData& request)
 {
     const QJsonObject& req = request.getRequest().getJson();
@@ -389,7 +428,7 @@ void CHttpServer::m_onAddDevice(qttp::HttpData& request)
     int ret = CDatabase::GetInstance()->AddDevice(idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
     if (ret > 0)
     {
-        LOG_DBG("Adding device successful");
+        LOG_DBG("Adding device successful. idDev: %d", ret);
         response["result"] = 1;
     }
     else
@@ -476,6 +515,21 @@ void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
     response["currentLocation"] = devRecord.GetLastLocation().c_str();
 }
 
+void CHttpServer::m_onGetLatestFirmareVersion(qttp::HttpData& request)
+{
+
+}
+
+void CHttpServer::m_onUpdateFirmware(qttp::HttpData& request)
+{
+
+}
+
+void CHttpServer::m_onDeviceDelete(qttp::HttpData &request)
+{
+
+}
+
 void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
 {
     const QJsonObject& req = request.getRequest().getJson();
@@ -536,7 +590,6 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
     response["result"] = 1;
     response["tracks"] = trackArray;
 }
-
 
 void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
 {
@@ -628,17 +681,24 @@ void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
     QJsonObject& response = request.getResponse().getJson();
 
     int idTrack = req["idTrack"].toString().toInt();
+    int timestamp = req["timestamp"].toString().toInt();
+    std::string coordinates = req["coordinates"].toString().toStdString();
+    int speed = req["speed"].toString().toInt();
+    int acceleration = req["acceleration"].toString().toInt();
+    int azimuth = req["azimuth"].toString().toInt();
 
-    //int ret = CDatabase::AddTrackSample();
+    int ret = CDatabase::GetInstance()->AddTrackSample(idTrack, timestamp, coordinates, speed, acceleration, azimuth);
+
+    // If sample added correctly then update the last known location of the device
+    if (ret > 0)
+    {
+        CTrackRecord track = CDatabase::GetInstance()->GetTrackInfo(idTrack);
+        CDatabase::GetInstance()->UpdateDeviceLocation(track.GetDeviceId(), coordinates);
+    }
 
 }
 
-void CHttpServer::m_onGetLatestFirmareVersion(qttp::HttpData& request)
-{
-
-}
-
-void CHttpServer::m_onUpdateFirmware(qttp::HttpData& request)
+void CHttpServer::m_onTrackDelete(qttp::HttpData &request)
 {
 
 }

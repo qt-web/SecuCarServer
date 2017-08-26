@@ -53,6 +53,8 @@ private:
 
     void m_addActionToChangePassword();
 
+    void m_addActionToDeleteUser();
+
     /**
      * @brief CHttpServer::m_addActionToAddDevice - Add action to Add Device http request
      */
@@ -70,6 +72,24 @@ private:
     void m_addActionToGetDeviceCurLocation();
 
     /**
+     * @brief m_addActionToGetLatestFirmwareVersion - Add action to Get Latest Firmware Version http request - request sent by the device
+     */
+    void m_addActionToGetLatestFirmwareVersion();
+
+    /**
+     * @brief m_addActionToUpdateFirmware - Add action to Update Firmware http request - request sent by the device
+     */
+    void m_addActionToUpdateFirmware();
+
+    void m_addActionToDeleteDevice();
+
+    /**
+     * @brief m_addActionToAddNewTrack - Add action to Add new track http request - request sent by device
+     */
+    void m_addActionToAddNewTrack();
+
+    void m_addActionToListTracks();
+    /**
      * @brief CHttpServer::m_addActionToGetTrackInfo - Add action to Get Track http request - returns the basinc info about the track
      */
     void m_addActionToGetTrackInfo();
@@ -80,29 +100,16 @@ private:
     void m_addActionToGetTrackDetails();
 
     /**
-     * @brief m_addActionToAddNewTrack - Add action to Add new track http request - request sent by device
-     */
-    void m_addActionToAddNewTrack();
-
-    /**
      * @brief m_addActionToEndTrack - Add action to end of the track
      */
     void m_addActionToEndTrack();
 
+    void m_addActionToDeleteTrack();
     /**
      * @brief m_addActionToAddNewTrackSample - Add action to Add New Track Sample http request - request sent by the device
      */
     void m_addActionToAddNewTrackSample();
 
-    /**
-     * @brief m_addActionToGetLatestFirmwareVersion - Add action to Get Latest Firmware Version http request - request sent by the device
-     */
-    void m_addActionToGetLatestFirmwareVersion();
-
-    /**
-     * @brief m_addActionToUpdateFirmware - Add action to Update Firmware http request - request sent by the device
-     */
-    void m_addActionToUpdateFirmware();
 
     /**  <<< REQUEST CALLBACKS >>> **/
     /**    #### USER  REQUESTS ####    **/
@@ -118,6 +125,8 @@ private:
 
     static void m_onChangeUserPassword(qttp::HttpData& request);
 
+    static void m_onUserDelete(qttp::HttpData& request);
+
 
     /**    #### DEVICES REQUESTS ####    **/
     static void m_onAddDevice(qttp::HttpData& request);
@@ -132,6 +141,8 @@ private:
 
     static void m_onUpdateFirmware(qttp::HttpData& request);
 
+    static void m_onDeviceDelete(qttp::HttpData& request);
+
 
     /**    #### TRACKS REQUESTS ####    **/
     static void m_onAddNewTrack(qttp::HttpData& request);
@@ -144,7 +155,11 @@ private:
 
     static void m_onEndTrack(qttp::HttpData& request);
 
+    static void m_onTrackDelete(qttp::HttpData& request);
+
     static void m_onAddNewTrackSample(qttp::HttpData& request);
+
+
 
 };
 
