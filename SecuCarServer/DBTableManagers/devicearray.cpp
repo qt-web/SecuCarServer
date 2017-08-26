@@ -16,7 +16,7 @@ CDeviceArray* CDeviceArray::GetInstance()
     return &s_instance;
 }
 
-bool CDeviceArray::Insert(Record& record)
+int CDeviceArray::Insert(Record& record)
 {
     CDeviceRecord* rec = dynamic_cast<CDeviceRecord*>(&record);
 

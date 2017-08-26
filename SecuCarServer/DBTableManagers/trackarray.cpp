@@ -16,7 +16,7 @@ CTrackArray* CTrackArray::GetInstance()
     return &s_instance;
 }
 
-bool CTrackArray::Insert(Record& record)
+int CTrackArray::Insert(Record& record)
 {
     CTrackRecord* rec = dynamic_cast<CTrackRecord*>(&record);
 

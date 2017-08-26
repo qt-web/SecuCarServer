@@ -16,7 +16,7 @@ CSampleArray* CSampleArray::GetInstance()
     return &s_instance;
 }
 
-bool CSampleArray::Insert(Record& record)
+int CSampleArray::Insert(Record& record)
 {
     CSampleRecord* rec = dynamic_cast<CSampleRecord*>(&record);
 

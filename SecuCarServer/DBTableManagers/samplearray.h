@@ -12,7 +12,7 @@ public:
 
     static CSampleArray* GetInstance();
 
-    bool Insert(Record &record);
+    int Insert(Record &record);
 
     bool Delete(int recordId);
 

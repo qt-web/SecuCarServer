@@ -58,12 +58,12 @@ int CDatabase::RegisterUser(std::__cxx11::string username,
 {
     CUserRecord record(0, username, name, surname, email, telephoneNumber, city, street, homeNumber, flatNumber, postalCode, passwordHash);
 
-    bool retval = m_pUserArray->Insert(record);
+    int insertedUserId = m_pUserArray->Insert(record);
 
-    if (retval)
-        return 1;
+    if (insertedUserId == -1)
+        return -1;
 
-    return -1;
+    return 1;
 }
 
 CUserRecord CDatabase::GetUserData(int idUser)
@@ -138,9 +138,9 @@ int CDatabase::ChangePassword(int idUser, std::__cxx11::string oldPasswordHash, 
 int CDatabase::AddDevice(int idUser, int serialNumber, std::string currentLocation, std::__cxx11::string deviceName, int firmwareVersion)
 {
     CDeviceRecord record(0, idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
-    bool ret = CDeviceArray::GetInstance()->Insert(record);
+    int insertedDevId = CDeviceArray::GetInstance()->Insert(record);
 
-    if (!ret)
+    if (insertedDevId == -1)
     {
         LOG_ERROR("Could not add device into database");
         record.LogRecord();
@@ -252,16 +252,16 @@ int CDatabase::AddTrack(
 {
     CTrackRecord record(0, idDevice, startTimestamp, startLocation, endDate, endLocation, distance, manouverAssessment);
 
-    bool ret = CTrackArray::GetInstance()->Insert(record);
+    int insertedTrackId = CTrackArray::GetInstance()->Insert(record);
 
-    if (ret)
+    if (insertedTrackId == -1)
     {
-        LOG_DBG("Track successfully added");
-        return 1;
+        LOG_ERROR("Could not add the track into the database");
+        return 0;
     }
 
-    LOG_ERROR("Could not add the track into the database");
-    return 0;
+    LOG_DBG("Track successfully added");
+    return 1;
 }
 
 QList<Record> CDatabase::GetTracksList(int idDevice)
@@ -353,9 +353,9 @@ int CDatabase::AddTrackSample(int idTrack, int timestamp, std::__cxx11::string c
 {
     CSampleRecord record(0, idTrack, timestamp, coordinates, speed, acceleration, azimuth);
 
-    bool ret = CSampleArray::GetInstance()->Insert(record);
+    int insertedSampleId = CSampleArray::GetInstance()->Insert(record);
 
-    if (!ret)
+    if (insertedSampleId == -1)
     {
         LOG_ERROR("Could not add track sample to idTrack: %d", idTrack);
         return 0;

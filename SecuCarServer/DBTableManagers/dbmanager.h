@@ -7,7 +7,7 @@ class IDBManager
 {
 public:
 
-    virtual bool Insert(Record& record) = 0;
+    virtual int Insert(Record& record) = 0;
 
     virtual bool Delete(int recordId) = 0;
 

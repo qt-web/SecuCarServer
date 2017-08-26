@@ -11,7 +11,7 @@ class CUserArray : public IDBManager
 public:
     static CUserArray* GetInstance();
 
-    bool Insert(Record &record);
+    int Insert(Record &record);
 
     bool Delete(int recordId);
 

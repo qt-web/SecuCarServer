@@ -1,6 +1,8 @@
 #ifndef CRECORD_H
 #define CRECORD_H
 
+#include <string>
+
 class Record
 {
 public:
@@ -11,7 +13,7 @@ public:
 
     virtual std::string Serialize()
     {
-
+        return "";
     }
 
 protected:

@@ -43,18 +43,8 @@ CDatabaseDriver* CDatabaseDriver::GetInstance()
     return &s_instance;
 }
 
-bool CDatabaseDriver::Insert(std::__cxx11::string tableName, std::string columnNames, std::__cxx11::string record)
+int CDatabaseDriver::Insert(std::__cxx11::string tableName, std::string columnNames, std::__cxx11::string record)
 {
-    QSqlRecord fields = m_sqlDatabase.record(QString::fromStdString(tableName));
-
-    QList<QString> params = QString::fromStdString(record).split(',');
-
-//    if (params.size() != fields.count())
-//    {
-//        LOG_ERROR("Wrong number of params");
-//        return false;
-//    }
-
     QString queryText = "INSERT INTO " + QString::fromStdString(tableName) + "(" + QString::fromStdString(columnNames) + ")" + " VALUES (" + QString::fromStdString(record) +  ");";
     QSqlQuery query(m_sqlDatabase);
 
@@ -63,10 +53,10 @@ bool CDatabaseDriver::Insert(std::__cxx11::string tableName, std::string columnN
     if (!query.exec(queryText))
     {
         LOG_ERROR("Query did not succeed. Error message: %s", query.lastError().text().toStdString().c_str());
-        return false;
+        return -1;
     }
 
-    return true;
+    return query.lastInsertId().toInt();
 }
 
 bool CDatabaseDriver::Update(std::__cxx11::string tableName, std::__cxx11::string fields, std::__cxx11::string where)

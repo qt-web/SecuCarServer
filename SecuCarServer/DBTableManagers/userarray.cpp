@@ -15,7 +15,7 @@ CUserArray* CUserArray::GetInstance()
     return &s_instance;
 }
 
-bool CUserArray::Insert(Record& record)
+int CUserArray::Insert(Record& record)
 {
     CUserRecord* rec = dynamic_cast<CUserRecord*>(&record);
 
