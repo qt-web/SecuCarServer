@@ -7,7 +7,7 @@
 
 CSampleArray::CSampleArray()
 {
-
+    m_columnNames = "idTrack, timestamp, coordinates, speed, acceleration, azimuth";
 }
 
 CSampleArray* CSampleArray::GetInstance()
@@ -36,7 +36,7 @@ bool CSampleArray::Insert(Record& record)
                         "'" + QString::number(rec->GetAzimuth()) + "'";
 
 
-    return CDatabaseDriver::GetInstance()->Insert("SAMPLES (" + fields.toStdString() + ")", qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("SAMPLES (" + fields.toStdString() + ")", m_columnNames, qQuery.toStdString());
 }
 
 

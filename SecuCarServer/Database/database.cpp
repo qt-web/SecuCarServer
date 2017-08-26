@@ -152,7 +152,7 @@ int CDatabase::AddDevice(int idUser, int serialNumber, std::string currentLocati
 
 QList<CDeviceRecord> CDatabase::GetRegisteredDevicesList(int idUser)
 {
-    LOG_DBG("Get the devices list owned by idUser: %s", idUser);
+    LOG_DBG("Get the devices list owned by idUser: %d", idUser);
     return CDeviceArray::GetInstance()->SelectAllByUser(idUser);
 }
 

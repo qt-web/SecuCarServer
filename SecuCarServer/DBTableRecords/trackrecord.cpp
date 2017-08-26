@@ -119,9 +119,9 @@ void CTrackRecord::LogRecord()
              m_trackId, m_deviceId, m_startTimestamp, m_startLocation.c_str(), m_endTimestamp, m_endLocation.c_str(), m_distance, m_maneouverAssessment);
 }
 
-const char* CTrackRecord::Serialize()
+std::__cxx11::string CTrackRecord::Serialize()
 {
-    std::stringstream ss;
+    std::ostringstream ss;
 
     ss << "idTrack: " << m_trackId << ", " <<
           "idDevice: " << m_deviceId << ", " <<
@@ -132,5 +132,5 @@ const char* CTrackRecord::Serialize()
           "distance: " << m_distance << ", " <<
           "maneouverAssessment: " << m_maneouverAssessment;
 
-    return ss.str().c_str();
+    return ss.str();
 }

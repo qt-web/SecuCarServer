@@ -41,6 +41,7 @@ void CHttpServer::Initialize()
 
     // Device's actions
     m_addActionToAddDevice();
+    m_addActionToGetDevicesList();
     m_addActionToGetDeviceInfo();
     m_addActionToGetDeviceCurLocation();
     m_addActionToGetTrackInfo();
@@ -109,6 +110,13 @@ void CHttpServer::m_addActionToAddDevice()
     auto action = m_qttpServerGetInstance();
     action->createAction("AddDevice", m_onAddDevice);
     action->registerRoute("GET", "AddDevice", "/add_device");
+}
+
+void CHttpServer::m_addActionToGetDevicesList()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("GetDevicesList", m_onListDevices);
+    action->registerRoute("GET", "GetDevicesList", "/get_devices_list");
 }
 
 void CHttpServer::m_addActionToGetDeviceInfo()
@@ -394,6 +402,7 @@ void CHttpServer::m_onListDevices(qttp::HttpData &request)
 {
     const QJsonObject& req = request.getRequest().getJson();
     QJsonObject& response = request.getResponse().getJson();
+    QJsonArray deviceArray;
 
     int idUser = req["idUser"].toString().toInt();
 
@@ -401,8 +410,18 @@ void CHttpServer::m_onListDevices(qttp::HttpData &request)
 
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
-        //response
+        QString deviceSerialized = QString::fromStdString((*iter).Serialize());
+        QList<QString> deviceFields = deviceSerialized.split(',');
+        QJsonObject singleDevice;
+        for(int i=0; i<deviceFields.size(); ++i)
+        {
+            QList<QString> parts = deviceFields[i].split(':');
+            singleDevice[parts[0]] = parts[1];
+        }
+        deviceArray.append(singleDevice);
     }
+
+    response["devices"] = deviceArray;
 }
 
 void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)

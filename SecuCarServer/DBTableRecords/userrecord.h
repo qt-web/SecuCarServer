@@ -76,7 +76,7 @@ public:
 
     void LogRecord();
 
-    const char* Serialize();
+    std::string Serialize();
 private:
 
     int m_userId;

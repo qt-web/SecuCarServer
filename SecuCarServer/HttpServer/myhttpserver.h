@@ -58,6 +58,7 @@ private:
      */
     void m_addActionToAddDevice();
 
+    void m_addActionToGetDevicesList();
     /**
      * @brief CHttpServer::m_addActionToGetDeviceInfo - Add action to Get Device Info http request
      */

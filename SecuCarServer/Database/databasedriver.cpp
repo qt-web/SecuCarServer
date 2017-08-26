@@ -43,7 +43,7 @@ CDatabaseDriver* CDatabaseDriver::GetInstance()
     return &s_instance;
 }
 
-bool CDatabaseDriver::Insert(std::__cxx11::string tableName, std::__cxx11::string record)
+bool CDatabaseDriver::Insert(std::__cxx11::string tableName, std::string columnNames, std::__cxx11::string record)
 {
     QSqlRecord fields = m_sqlDatabase.record(QString::fromStdString(tableName));
 
@@ -55,7 +55,7 @@ bool CDatabaseDriver::Insert(std::__cxx11::string tableName, std::__cxx11::strin
 //        return false;
 //    }
 
-    QString queryText = "INSERT INTO " + QString::fromStdString(tableName) + " VALUES (" + QString::fromStdString(record) +  ");";
+    QString queryText = "INSERT INTO " + QString::fromStdString(tableName) + "(" + QString::fromStdString(columnNames) + ")" + " VALUES (" + QString::fromStdString(record) +  ");";
     QSqlQuery query(m_sqlDatabase);
 
     LOG_DBG("Querying: %s", queryText.toStdString().c_str());

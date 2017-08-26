@@ -19,6 +19,9 @@ public:
     QList<Record> Select(int recordId = -1);
 
     bool Update(Record& record);
+
+private:
+    std::string m_columnNames;
 };
 
 #endif // SAMPLEARRAY_H

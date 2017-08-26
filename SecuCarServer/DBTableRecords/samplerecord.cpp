@@ -108,9 +108,9 @@ void CSampleRecord::LogRecord()
              m_sampleId, m_trackId, m_timestamp, m_coordinates.c_str(), m_speed, (float)m_speed/100, m_acceleration, (float)m_acceleration/100, m_azimuth);
 }
 
-const char* CSampleRecord::Serialize()
+std::__cxx11::string CSampleRecord::Serialize()
 {
-    std::stringstream ss;
+    std::ostringstream ss;
 
     ss << "idSample: " << m_sampleId << ", " <<
           "idTrack: " << m_trackId << ", " <<
@@ -120,5 +120,5 @@ const char* CSampleRecord::Serialize()
           "acceleration: " << m_acceleration << ", " <<
           "azimuth: " << m_azimuth;
 
-    return ss.str().c_str();
+    return ss.str();
 }

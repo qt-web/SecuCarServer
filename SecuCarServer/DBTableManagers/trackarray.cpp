@@ -7,7 +7,7 @@
 
 CTrackArray::CTrackArray()
 {
-
+    m_columnNames = "idDevice, startDate, startLocation, endDate, endLocation, distance, manouverAssessment";
 }
 
 CTrackArray* CTrackArray::GetInstance()
@@ -36,7 +36,7 @@ bool CTrackArray::Insert(Record& record)
                         "'" + QString::number(rec->GetManeouverAssessment()) + "'";
 
 
-    return CDatabaseDriver::GetInstance()->Insert("TRACKS (" + fields.toStdString() + ")", qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("TRACKS (" + fields.toStdString() + ")", m_columnNames, qQuery.toStdString());
 }
 
 

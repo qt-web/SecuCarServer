@@ -46,7 +46,7 @@ public:
 
     void LogRecord();
 
-    const char* Serialize();
+    std::string Serialize();
 private:
 
     CTrackRecord();

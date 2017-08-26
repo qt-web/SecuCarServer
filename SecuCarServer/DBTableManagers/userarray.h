@@ -23,6 +23,8 @@ public:
 
 private:
     CUserArray();
+
+    std::string m_columnNames;
 };
 
 #endif // USERARRAY_H

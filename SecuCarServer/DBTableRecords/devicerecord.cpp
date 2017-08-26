@@ -96,16 +96,16 @@ void CDeviceRecord::LogRecord()
                 m_deviceId, m_userId, m_serialNumber, m_lastLocation.c_str(), m_deviceName.c_str(), m_firmwareVersion);
 }
 
-const char* CDeviceRecord::Serialize()
+std::string CDeviceRecord::Serialize()
 {
-    std::stringstream ss;
+    std::ostringstream ss;
 
-    ss << "idDevice: " << m_deviceId << ", " <<
-          "idUser: " << m_userId << ", " <<
-          "serialNumber: " << m_serialNumber << ", " <<
-          "lastLocation: " << m_lastLocation << ", " <<
-          "deviceName: " << m_deviceName << ", " <<
+    ss << "idDevice: " << m_deviceId << "," <<
+          "idUser: " << m_userId << "," <<
+          "serialNumber: " << m_serialNumber << "," <<
+          "lastLocation: " << m_lastLocation << "," <<
+          "deviceName: " << m_deviceName << "," <<
           "firmwareVersion: " << m_firmwareVersion;
 
-    return ss.str().c_str();
+    return ss.str();
 }

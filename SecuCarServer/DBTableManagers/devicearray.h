@@ -22,6 +22,9 @@ public:
     QList<CDeviceRecord> Select(std::string deviceName);
 
     QList<CDeviceRecord> SelectAllByUser(int idUser);
+
+private:
+    std::string m_columnNames;
 };
 
 #endif // DEVICEARRAY_H

@@ -14,7 +14,7 @@ public:
 
     static CDatabaseDriver* GetInstance();
 
-    bool Insert(std::string tableName, std::string record);
+    bool Insert(std::string tableName, std::__cxx11::string columnNames, std::string record);
 
     bool Update(std::string tableName, std::string fields, std::string where);
 

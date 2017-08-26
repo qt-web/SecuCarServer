@@ -20,6 +20,8 @@ public:
 
     bool Update(Record& record);
 
+private:
+    std::string m_columnNames;
 };
 
 #endif // TRACKARRAY_H

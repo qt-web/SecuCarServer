@@ -6,7 +6,7 @@
 
 CUserArray::CUserArray()
 {
-
+    m_columnNames = "userName, name, surname, email, telephone, city, street, homeNumber, flatNumber, postalCode, passwordHash";
 }
 
 CUserArray* CUserArray::GetInstance()
@@ -38,7 +38,7 @@ bool CUserArray::Insert(Record& record)
                         "'" + QString::fromStdString(rec->GetPostalCode()) + "'" + ", " +
                         "'" + QString::fromStdString(rec->GetPasswordHash()) + "'" ;
 
-    return CDatabaseDriver::GetInstance()->Insert("USERS (" + fields.toStdString() + ")", qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("USERS (" + fields.toStdString() + ")", m_columnNames, qQuery.toStdString());
 }
 
 

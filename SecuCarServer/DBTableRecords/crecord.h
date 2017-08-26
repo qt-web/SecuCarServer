@@ -9,7 +9,7 @@ public:
 
     }
 
-    virtual const char* Serialize()
+    virtual std::string Serialize()
     {
 
     }

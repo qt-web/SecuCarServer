@@ -7,7 +7,7 @@
 
 CDeviceArray::CDeviceArray()
 {
-
+    m_columnNames = "idUser, serialNumber, currentLocation, deviceName, firmwareVersion";
 }
 
 CDeviceArray* CDeviceArray::GetInstance()
@@ -34,7 +34,7 @@ bool CDeviceArray::Insert(Record& record)
                         "'" + QString::number(rec->GetFirmwareVersion()) + "'";
 
 
-    return CDatabaseDriver::GetInstance()->Insert("DEVICES", qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("DEVICES", m_columnNames, qQuery.toStdString());
 }
 
 
