@@ -510,7 +510,7 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
 
     int idDevice = req["idDevice"].toString().toInt();
 
-    QList<CTrackRecord> trackList = CDatabase::GetInstance()->GetTracksList(idDevice);
+    QList<Record> trackList = CDatabase::GetInstance()->GetTracksList(idDevice);
     if (trackList.empty())
     {
         LOG_ERROR("Could not find the requested device.");
@@ -521,7 +521,8 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
     QJsonArray trackArray;
     for (auto iter = trackList.begin(); iter != trackList.end(); ++iter)
     {
-        QString trackSerialized = QString::fromStdString((*iter).Serialize());
+        CTrackRecord& record = static_cast<CTrackRecord&>(*iter);
+        QString trackSerialized = QString::fromStdString(record.Serialize());
         QList<QString> trackFields = trackSerialized.split(',');
         QJsonObject singleTrack;
         for(int i=0; i<trackFields.size(); ++i)
@@ -546,14 +547,13 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
     int requestedTrackId = req["trackId"].toString().toInt();
 
     LOG_DBG("UserId: %d has requested track number: %d", userRequestingId, requestedTrackId);
-    QList<Record> list = CDatabase::GetInstance()->GetTrackInfo(requestedTrackId);
-    if (list.empty())
+    CTrackRecord record = CDatabase::GetInstance()->GetTrackInfo(requestedTrackId);
+    if (record.GetTrackId() == -1)
     {
         response["result"] = 0;
     }
     else
     {
-        CTrackRecord& record  = (CTrackRecord&)list[0];
         response["result"] = 1;
         response["trackId"] = QString::number(record.GetTrackId());
         response["startDate"] =    QDateTime::fromSecsSinceEpoch(record.GetStartTimestmap()).toString("dd-MM-YYYY hh:mm:ss");
@@ -572,7 +572,7 @@ void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
 
     int requestedTrackId = req["trackId"].toString().toInt();
 
-    QList<CSampleRecord> sampleList = CDatabase::GetInstance()->GetTrackDetails(requestedTrackId);
+    QList<Record> sampleList = CDatabase::GetInstance()->GetTrackDetails(requestedTrackId);
 
     if (sampleList.empty())
     {
@@ -583,7 +583,8 @@ void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
     QJsonArray sampleArray;
     for (auto iter = sampleList.begin(); iter != sampleList.end(); ++iter)
     {
-        QString sampleSerialized = QString::fromStdString((*iter).Serialize());
+        CSampleRecord& record = static_cast<CSampleRecord&>(*iter);
+        QString sampleSerialized = QString::fromStdString(record.Serialize());
         QList<QString> sampleFields = sampleSerialized.split(',');
         QJsonObject singleSample;
         for(int i=0; i<sampleFields.size(); ++i)

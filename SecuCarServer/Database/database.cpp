@@ -159,7 +159,7 @@ QList<CDeviceRecord> CDatabase::GetRegisteredDevicesList(int idUser)
 
 int CDatabase::ChangeDeviceName(int idDevice, std::__cxx11::string newName)
 {
-    QList<CDeviceRecord> recordList = CDeviceArray::GetInstance()->Select(idDevice);
+    QList<Record> recordList = CDeviceArray::GetInstance()->Select(idDevice);
 
     if (recordList.empty())
     {
@@ -167,7 +167,7 @@ int CDatabase::ChangeDeviceName(int idDevice, std::__cxx11::string newName)
         return 0;
     }
 
-    CDeviceRecord record = static_cast<CDeviceRecord>(recordList[0]);
+    CDeviceRecord record = static_cast<CDeviceRecord&>(recordList[0]);
     record.SetDeviceName(newName);
 
     bool ret = CDeviceArray::GetInstance()->Update(record);
@@ -184,13 +184,20 @@ int CDatabase::ChangeDeviceName(int idDevice, std::__cxx11::string newName)
 
 int CDatabase::UpdateDeviceLocation(int idDevice, std::__cxx11::string newLocation)
 {
-    CDeviceRecord record = CDeviceArray::GetInstance()->Select(idDevice);
+    QList<Record> recordList = CDeviceArray::GetInstance()->Select(idDevice);
 
+    if (recordList.empty())
+    {
+        LOG_ERROR("idDevice: %d not found", idDevice);
+        return false;
+    }
+    CDeviceRecord record = static_cast<CDeviceRecord&>(recordList[0]);
     if (record.GetDeviceId() == -1)
     {
         LOG_ERROR("Could not find the device");
         return 0;
     }
+
 
     record.SetLastLocation(newLocation);
 
@@ -257,7 +264,7 @@ int CDatabase::AddTrack(
     return 0;
 }
 
-QList<CTrackRecord> CDatabase::GetTracksList(int idDevice)
+QList<Record> CDatabase::GetTracksList(int idDevice)
 {
     LOG_DBG(" ");
     QList<Record> trackList = CTrackArray::GetInstance()->SelectAllByDevice(idDevice);
@@ -284,11 +291,11 @@ CTrackRecord CDatabase::GetTrackInfo(int idTrack)
     return record;
 }
 
-QList<CSampleRecord> CDatabase::GetTrackDetails(int idTrack)
+QList<Record> CDatabase::GetTrackDetails(int idTrack)
 {
     LOG_DBG(" ");
 
-    QList<CSampleRecord> sampleList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
+    QList<Record> sampleList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
 
     if (sampleList.empty())
     {
@@ -303,14 +310,15 @@ QList<CSampleRecord> CDatabase::GetTrackDetails(int idTrack)
 
 int CDatabase::EndTrack(int idTrack, int endDate, std::__cxx11::string endLocation, int distance, int manouverAssessment)
 {
-    CTrackRecord record = CTrackArray::GetInstance()->Select(idTrack);
+    QList<Record> recordList = CTrackArray::GetInstance()->Select(idTrack);
 
-    if (record.GetTrackId() == -1)
+    if (recordList.empty())
     {
         LOG_ERROR("Track not found");
         return 0;
     }
 
+    CTrackRecord record = static_cast<CTrackRecord&>(recordList[0]);
     record.SetEndTimestamp(endDate);
     record.SetEndLocation(endLocation);
     record.SetDistance(distance);
