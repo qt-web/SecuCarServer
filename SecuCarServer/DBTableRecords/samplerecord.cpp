@@ -1,5 +1,7 @@
 #include "samplerecord.h"
 #include "logger.h"
+#include <sstream>
+#include <string>
 
 CSampleRecord::CSampleRecord()
 {
@@ -102,6 +104,21 @@ void CSampleRecord::SetAzimuth(int azimuth)
 
 void CSampleRecord::LogRecord()
 {
-    LOG_INFO("Record: sampleId: %d, trackId: %d, timestamp: %d, coordinates: %s, speed: %d(%f), acceleration: %d(%d), azimuth: %d",
+    LOG_INFO("idSample: %d, idTrack: %d, timestamp: %d, coordinates: %s, speed: %d(%f), acceleration: %d(%d), azimuth: %d",
              m_sampleId, m_trackId, m_timestamp, m_coordinates.c_str(), m_speed, (float)m_speed/100, m_acceleration, (float)m_acceleration/100, m_azimuth);
+}
+
+const char* CSampleRecord::Serialize()
+{
+    std::stringstream ss;
+
+    ss << "idSample: " << m_sampleId << ", " <<
+          "idTrack: " << m_trackId << ", " <<
+          "timestamp: " << m_timestamp << ", " <<
+          "coordinates: " << m_coordinates << ", " <<
+          "speed: " << m_speed << ", " <<
+          "acceleration: " << m_acceleration << ", " <<
+          "azimuth: " << m_azimuth;
+
+    return ss.str().c_str();
 }

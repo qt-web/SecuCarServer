@@ -277,6 +277,7 @@ DIST          = ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/qt_config.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_post.prf \
+		../SecuCarServer/.qmake.stash \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/toolchain.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/default_pre.prf \
@@ -560,6 +561,7 @@ Makefile: ../SecuCarServer/SecuCarServer.pro ../../../IDEs/Qt/5.8/gcc_64/mkspecs
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/qt_config.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/toolchain.prf \
 		../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/default_pre.prf \
@@ -732,6 +734,7 @@ Makefile: ../SecuCarServer/SecuCarServer.pro ../../../IDEs/Qt/5.8/gcc_64/mkspecs
 ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/qt_config.prf:
 ../../../IDEs/Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/toolchain.prf:
 ../../../IDEs/Qt/5.8/gcc_64/mkspecs/features/default_pre.prf:
@@ -2032,7 +2035,24 @@ main.o: ../SecuCarServer/main.cpp ../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QCo
 		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qtsqlglobal.h \
 		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqldatabase.h \
 		../SecuCarServer/Utils/logger.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug \
+		../SecuCarServer/Database/database.h \
+		../SecuCarServer/Database/databasedriver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlDatabase \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlRecord \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlrecord.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlResult \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlresult.h \
+		../SecuCarServer/DBTableManagers/userarray.h \
+		../SecuCarServer/DBTableRecords/crecord.h \
+		../SecuCarServer/DBTableManagers/dbmanager.h \
+		../SecuCarServer/DBTableRecords/userrecord.h \
+		../SecuCarServer/DBTableManagers/devicearray.h \
+		../SecuCarServer/DBTableRecords/devicerecord.h \
+		../SecuCarServer/DBTableManagers/trackarray.h \
+		../SecuCarServer/DBTableRecords/trackrecord.h \
+		../SecuCarServer/DBTableManagers/samplearray.h \
+		../SecuCarServer/DBTableRecords/samplerecord.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SecuCarServer/main.cpp
 
 logger.o: ../SecuCarServer/Utils/logger.cpp ../SecuCarServer/Utils/logger.h \
@@ -2397,7 +2417,16 @@ myhttpserver.o: ../SecuCarServer/HttpServer/myhttpserver.cpp ../SecuCarServer/Ht
 		../SecuCarServer/DBTableManagers/samplearray.h \
 		../SecuCarServer/DBTableRecords/samplerecord.h \
 		../SecuCarServer/Utils/logger.h \
-		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug
+		../../../IDEs/Qt/5.8/gcc_64/include/QtCore/QDebug \
+		../SecuCarServer/Database/database.h \
+		../SecuCarServer/Database/databasedriver.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlDatabase \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqldatabase.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qtsqlglobal.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlRecord \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlrecord.h \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/QSqlResult \
+		../../../IDEs/Qt/5.8/gcc_64/include/QtSql/qsqlresult.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o myhttpserver.o ../SecuCarServer/HttpServer/myhttpserver.cpp
 
 databasedriver.o: ../SecuCarServer/Database/databasedriver.cpp ../SecuCarServer/Database/databasedriver.h \

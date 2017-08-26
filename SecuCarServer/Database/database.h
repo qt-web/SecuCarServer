@@ -59,7 +59,7 @@ public:
     int AddDevice(
                     int idUser,
                     int serialNumber,
-                    int currentLocation,
+                    std::string currentLocation,
                     std::string deviceName,
                     int firmwareVersion
                  );

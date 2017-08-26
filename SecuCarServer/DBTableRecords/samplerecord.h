@@ -41,6 +41,8 @@ public:
 
     void LogRecord();
 
+    const char* Serialize();
+
 private:
     CSampleRecord();
 

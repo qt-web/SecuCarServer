@@ -1,5 +1,7 @@
 #include "userrecord.h"
 #include "logger.h"
+#include <sstream>
+#include <string>
 
 CUserRecord::CUserRecord()
 {
@@ -189,6 +191,25 @@ void CUserRecord::SetPasswordHash(std::string passwordHash)
 
 void CUserRecord::LogRecord()
 {
-    LOG_INFO("Record: userId: %d, username: %s, name: %s, surname: %s, email: %s, telephone: %d, city: %s, street: %s, homeNumber: %d, flatNumber: %d, postalCode: %s, passwordHash: %s",
+    LOG_INFO("idUser: %d, username: %s, name: %s, surname: %s, email: %s, telephone: %d, city: %s, street: %s, homeNumber: %d, flatNumber: %d, postalCode: %s, passwordHash: %s",
                       m_userId, m_username.c_str(), m_name.c_str(), m_surname.c_str(), m_email.c_str(), m_telephone, m_city.c_str(), m_street.c_str(), m_homeNumber, m_flatNumber, m_postalCode.c_str(), m_passwordHash.c_str());
 }
+
+const char* CUserRecord::Serialize()
+{
+    std::stringstream ss;
+    ss << "idUser: " << m_userId << ", " <<
+          "username: " << m_username << ", " <<
+          "name: " << m_name << ", " <<
+          "surname: " << m_surname << ", " <<
+          "email: " << m_email << ", " <<
+          "telephone: " << m_telephone << ", " <<
+          "city: " << m_city << ", " <<
+          "street: " << m_street << ", " <<
+          "homeNumber: " << m_homeNumber << ", " <<
+          "flatNumber: " << m_flatNumber << ", " <<
+          "postalCode: " << m_postalCode << ", " <<
+          "passwordHash: " << m_passwordHash;
+
+    return ss.str().c_str();
+ }

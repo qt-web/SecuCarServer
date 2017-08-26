@@ -115,3 +115,26 @@ QList<CDeviceRecord> CDeviceArray::Select(std::__cxx11::string deviceName)
 
     return foundRecordsList;
 }
+
+QList<CDeviceRecord> CDeviceArray::SelectAllByUser(int idUser)
+{
+    std::string where = "idUser='" + QString::number(idUser).toStdString() + "'";
+    QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("DEVICES", "*", where);
+    QList<CDeviceRecord> foundRecordsList;
+
+    while (ret.next())
+    {
+        CDeviceRecord record(
+                            ret.value("idDevice").toInt(),
+                            ret.value("idUser").toInt(),
+                            ret.value("serialNumber").toInt(),
+                            ret.value("currentLocation").toString().toStdString(),
+                            ret.value("deviceName").toString().toStdString(),
+                            ret.value("firmwareVersion").toInt()
+                            );
+
+        foundRecordsList.push_back(record);
+    }
+
+    return foundRecordsList;
+}

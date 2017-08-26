@@ -1,5 +1,7 @@
 #include "devicerecord.h"
 #include "logger.h"
+#include <sstream>
+#include <string>
 
 CDeviceRecord::CDeviceRecord()
 {
@@ -90,6 +92,20 @@ void CDeviceRecord::SetFirmwareVersion(int version)
 
 void CDeviceRecord::LogRecord()
 {
-    LOG_INFO("Record: deviceId: %d, userId: %d, serialnumber: %d, last location: %s, device name: %s, firmware version %d",
+    LOG_INFO("idDevice: %d, idUser: %d, serialNumber: %d, lastLocation: %s, deviceName: %s, firmwareVersion %d",
                 m_deviceId, m_userId, m_serialNumber, m_lastLocation.c_str(), m_deviceName.c_str(), m_firmwareVersion);
+}
+
+const char* CDeviceRecord::Serialize()
+{
+    std::stringstream ss;
+
+    ss << "idDevice: " << m_deviceId << ", " <<
+          "idUser: " << m_userId << ", " <<
+          "serialNumber: " << m_serialNumber << ", " <<
+          "lastLocation: " << m_lastLocation << ", " <<
+          "deviceName: " << m_deviceName << ", " <<
+          "firmwareVersion: " << m_firmwareVersion;
+
+    return ss.str().c_str();
 }

@@ -75,6 +75,8 @@ public:
     void SetPasswordHash(std::string passwordHash);
 
     void LogRecord();
+
+    const char* Serialize();
 private:
 
     int m_userId;

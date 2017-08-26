@@ -36,6 +36,7 @@ private:
 
     /**  <<< ADDING ACTIONS >>> **/
 
+    void m_addActionToOptionsRequest();
     /**
      * @brief CHttpServer::m_addActionToLogin - Add action to login http request
      */
@@ -104,6 +105,8 @@ private:
 
     /**  <<< REQUEST CALLBACKS >>> **/
     /**         #### USER SIDE REQUESTS ####    **/
+    static void m_onOptions(qttp::HttpData& request);
+
     static void m_onLogin(qttp::HttpData& request);
 
     static void m_onRegisterUser(qttp::HttpData& request);
@@ -115,6 +118,8 @@ private:
     static void m_onChangeUserPassword(qttp::HttpData& request);
 
     static void m_onAddDevice(qttp::HttpData& request);
+
+    static void m_onListDevices(qttp::HttpData& request);
 
     static void m_onGetDeviceInfo(qttp::HttpData& request);
 

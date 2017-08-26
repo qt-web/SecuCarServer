@@ -20,6 +20,8 @@ public:
     bool Update(Record& record);
 
     QList<CDeviceRecord> Select(std::string deviceName);
+
+    QList<CDeviceRecord> SelectAllByUser(int idUser);
 };
 
 #endif // DEVICEARRAY_H

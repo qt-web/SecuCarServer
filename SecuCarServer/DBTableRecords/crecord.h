@@ -9,6 +9,11 @@ public:
 
     }
 
+    virtual const char* Serialize()
+    {
+
+    }
+
 protected:
     bool m_isValid = false;
 };

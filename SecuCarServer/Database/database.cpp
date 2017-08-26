@@ -134,3 +134,31 @@ int CDatabase::ChangePassword(int idUser, std::__cxx11::string oldPasswordHash, 
 
     return -1;
 }
+
+int CDatabase::AddDevice(int idUser, int serialNumber, std::string currentLocation, std::__cxx11::string deviceName, int firmwareVersion)
+{
+    CDeviceRecord record(0, idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
+    bool ret = CDeviceArray::GetInstance()->Insert(record);
+
+    if (!ret)
+    {
+        LOG_ERROR("Could not add device into database");
+        record.LogRecord();
+        return 0;
+    }
+    LOG_DBG("Successfuly added device");
+    return 1;
+}
+
+QList<CDeviceRecord> CDatabase::GetRegisteredDevicesList(int idUser)
+{
+    LOG_DBG("Get the devices list owned by idUser: %s", idUser);
+    return CDeviceArray::GetInstance()->SelectAllByUser(idUser);
+}
+
+CDeviceRecord CDatabase::GetDeviceInfo(int idDevice)
+{
+
+}
+
+

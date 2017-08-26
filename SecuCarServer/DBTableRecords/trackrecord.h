@@ -46,6 +46,7 @@ public:
 
     void LogRecord();
 
+    const char* Serialize();
 private:
 
     CTrackRecord();

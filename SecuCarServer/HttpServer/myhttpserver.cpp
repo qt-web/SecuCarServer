@@ -1,5 +1,6 @@
 #include "myhttpserver.h"
 #include <httpserver.h>
+#include <httpresponse.h>
 #include <QJsonObject>
 #include <QList>
 #include "userarray.h"
@@ -13,6 +14,7 @@
 #include "logger.h"
 #include "database.h"
 #include <QDateTime>
+#include <QJsonDocument>
 
 CHttpServer::CHttpServer(QObject *parent) : QObject(parent)
 {
@@ -30,6 +32,7 @@ void CHttpServer::Initialize()
     m_qttpServerGetInstance()->initialize();
 
     // User's actions
+    m_addActionToOptionsRequest();
     m_addActionToLogin();
     m_addActionToRegisterUser();
     m_addActionToGetUserData();
@@ -59,11 +62,18 @@ qttp::HttpServer* CHttpServer::m_qttpServerGetInstance()
     return qttp::HttpServer::getInstance();
 }
 
+void CHttpServer::m_addActionToOptionsRequest()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("Options", m_onOptions);
+    action->registerRoute("OPTIONS", "Options", "/login");
+}
+
 void CHttpServer::m_addActionToLogin()
 {
     auto action = m_qttpServerGetInstance();
     action->createAction("Login", m_onLogin);
-    action->registerRoute("GET", "Login", "/login");
+    action->registerRoute("POST", "Login", "/login");
 }
 
 void CHttpServer::m_addActionToRegisterUser()
@@ -164,11 +174,27 @@ void CHttpServer::m_addActionToUpdateFirmware()
     action->registerRoute("GET", "UpdateFirmware", "/update_firmware");
 }
 
+void CHttpServer::m_onOptions(qttp::HttpData& request)
+{
+    LOG_DBG("Login OPTIONS request received :%s", QString(QJsonDocument(request.getRequest().getJson()).toJson(QJsonDocument::Compact)).toStdString().c_str());
+    QList< std::pair<QString, QString>> headersList;
+    headersList.append(std::pair<QString, QString>("Access-Control-Allow-Origin", "*"));
+    headersList.append(std::pair<QString, QString>("Access-Control-Allow-Methods", "POST, GET, OPTIONS"));
+    headersList.append(std::pair<QString, QString>("Access-Control-Allow-Headers", "Content-Type"));
+    headersList.append(std::pair<QString, QString>("Content-Type", ""));
+    //request.getResponse().getJson()["result"] = 1;
+    request.getResponse().setHeader(headersList);
+    request.getResponse().removeHeader("Content-Type");
+    request.getResponse().finish();
+}
 
 void CHttpServer::m_onLogin(qttp::HttpData& request)
 {
+    LOG_DBG("Login actual request received");
     const QJsonObject& requestJSON = request.getRequest().getJson();
     QJsonObject& response = request.getResponse().getJson();
+
+    LOG_DBG("Login request: %s", QString(QJsonDocument(requestJSON).toJson(QJsonDocument::Compact)).toStdString().c_str());
 
     std::string username = requestJSON["username"].toString().toStdString();
     std::string passwordHash = requestJSON["password"].toString().toStdString();
@@ -342,12 +368,51 @@ void CHttpServer::m_onChangeUserPassword(qttp::HttpData &request)
 
 void CHttpServer::m_onAddDevice(qttp::HttpData& request)
 {
+    const QJsonObject& r = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int idUser = r["idUser"].toString().toInt();
+    int serialNumber = r["serialNumber"].toString().toInt();
+    std::string currentLocation = r["currentLocation"].toString().toStdString();
+    std::string deviceName = r["deviceName"].toString().toStdString();
+    int firmwareVersion = r["firmwareVersion"].toString().toInt();
+
+    int ret = CDatabase::GetInstance()->AddDevice(idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
+    if (ret > 0)
+    {
+        LOG_DBG("Adding device successful");
+        response["result"] = 1;
+    }
+    else
+    {
+        LOG_ERROR("Device could not be added");
+        response["result"] = 0;
+    }
+}
+
+void CHttpServer::m_onListDevices(qttp::HttpData &request)
+{
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
+
+    int idUser = req["idUser"].toString().toInt();
+
+    QList<CDeviceRecord> list = CDatabase::GetInstance()->GetRegisteredDevicesList(idUser);
+
+    for (auto iter = list.begin(); iter != list.end(); ++iter)
+    {
+        //response
+    }
 }
 
 void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
 {
+    const QJsonObject& r = request.getRequest().getJson();
 
+    int deviceId = r["idDevice"].toString().toInt();
+
+    QList<Record> recordList = CDeviceArray::GetInstance()->Select(deviceId);
+    CDeviceRecord record = static_cast<CDeviceRecord&>(recordList[0]);
 }
 
 void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)

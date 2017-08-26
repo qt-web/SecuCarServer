@@ -1,5 +1,7 @@
 #include "trackrecord.h"
 #include "logger.h"
+#include <sstream>
+#include <string>
 
 CTrackRecord::CTrackRecord()
 {
@@ -113,7 +115,22 @@ void CTrackRecord::SetManeouverAssessment(int assessment)
 
 void CTrackRecord::LogRecord()
 {
-    LOG_INFO("Record: trackId: %d, deviceId: %d, startDate: %d, startLocation: %s, endDate: %d, endLocation: %s, distance: %d, maneouver assessment: %d",
+    LOG_INFO("trackId: %d, idDevice: %d, startDate: %d, startLocation: %s, endDate: %d, endLocation: %s, distance: %d, maneouverAssessment: %d",
              m_trackId, m_deviceId, m_startTimestamp, m_startLocation.c_str(), m_endTimestamp, m_endLocation.c_str(), m_distance, m_maneouverAssessment);
 }
 
+const char* CTrackRecord::Serialize()
+{
+    std::stringstream ss;
+
+    ss << "idTrack: " << m_trackId << ", " <<
+          "idDevice: " << m_deviceId << ", " <<
+          "startDate: " << m_startTimestamp << ", " <<
+          "startLocation: " << m_startLocation << ", " <<
+          "endDate: " << m_endTimestamp << ", " <<
+          "endLocation: " << m_endLocation << ", " <<
+          "distance: " << m_distance << ", " <<
+          "maneouverAssessment: " << m_maneouverAssessment;
+
+    return ss.str().c_str();
+}
