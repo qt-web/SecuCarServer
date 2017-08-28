@@ -463,11 +463,13 @@ void CHttpServer::m_onAddDevice(qttp::HttpData& request)
     {
         LOG_DBG("Adding device successful. idDev: %d", ret);
         response["result"] = 1;
+        response["idDevice"] = ret;
     }
     else
     {
         LOG_ERROR("Device could not be added");
         response["result"] = 0;
+        response["idDevice"] = -1;
     }
 }
 
@@ -603,11 +605,13 @@ void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
     {
         LOG_DBG("Track added to database. TrackId: %d, deviceId: %d, startDate, %d", result, idDevice, startDate);
         response["result"] = 1;
+        response["idTrack"] = result;
     }
     else
     {
         LOG_ERROR("Track could not be added to the database");
         response["result"] = 0;
+        response["idTrack"] = -1;
     }
 }
 
