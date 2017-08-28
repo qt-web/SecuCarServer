@@ -3,6 +3,9 @@
 
 #include <string>
 
+/**
+ * @brief The Record class - The base class of all the records
+ */
 class Record
 {
 public:
