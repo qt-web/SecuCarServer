@@ -56,6 +56,8 @@ public:
                                 std::string newPasswordHash
                                 );
 
+    int                     DeleteUser(in idUser);
+
     int                     AddDevice(
                                 int idUser,
                                 int serialNumber,

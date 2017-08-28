@@ -138,6 +138,37 @@ int CDatabase::ChangePassword(int idUser, std::__cxx11::string oldPasswordHash, 
     return -1;
 }
 
+int CDatabase::DeleteUser(int idUser)
+{
+    QList<CDeviceRecord>devicesList = GetRegisteredDevicesList(idUser);
+    {
+        for (int i=0; i<devicesList.size(); ++i)
+        {
+            int idDevice = devicesList[i].GetDeviceId();
+            int ret = DeleteDevice(idDevice);
+            if (ret < 0)
+            {
+                LOG_ERROR("Could not delete idDevice: %d belonging to idUser: %d", idDevice, idUser);
+            }
+            else
+            {
+                LOG_DBG("Deleted idDevice: %d belonging to idUser: %d", idDevice, idUser);
+            }
+        }
+    }
+
+    bool ret = CUserArray::GetInstance()->Delete(idUser);
+
+    if (!ret)
+    {
+        LOG_ERROR("Could not delete idUser: %d", idUser);
+        return 0;
+    }
+
+    LOG_DBG("idUser: %d deleted successfully", idUser);
+    return 1;
+}
+
 int CDatabase::AddDevice(int idUser, int serialNumber, std::string currentLocation, std::__cxx11::string deviceName, int firmwareVersion)
 {
     CDeviceRecord record(0, idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
@@ -231,6 +262,22 @@ CDeviceRecord CDatabase::GetDeviceInfo(int idDevice)
 
 int CDatabase::DeleteDevice(int idDevice)
 {
+    //  Delete tracks belonging to the device which is being deleted
+    QList<Record>trackList = GetTracksList(idDevice);
+    for (int i=0; i<trackList.size(); ++i)
+    {
+        int idTrack = static_cast<CTrackRecord&>(trackList[i]).GetTrackId();
+        int ret = DeleteTrack(idTrack);
+        if (ret < 0)
+        {
+            LOG_ERROR("Could not delete idTrack: %d belonging to idDevice: %d", idTrack, idDevice);
+        }
+        else
+        {
+            LOG_DBG("Deleted idTrack: %d belonging to idDevice: %d", idTrack, idDevice);
+        }
+    }
+
     bool ret = CDeviceArray::GetInstance()->Delete(idDevice);
 
     if (!ret)
@@ -340,8 +387,19 @@ int CDatabase::EndTrack(int idTrack, int endDate, std::__cxx11::string endLocati
 
 int CDatabase::DeleteTrack(int idTrack)
 {
-    bool ret = CTrackArray::GetInstance()->Delete(idTrack);
+    QList<Record> samplesList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
+    for(int i=0; i<samplesList.size(); ++i)
+    {
+       int idSample = static_cast<CSampleRecord&>(samplesList[i]).GetSampleId();
+       bool ret = CSampleArray::GetInstance()->Delete(idSample);
+       if (!ret)
+       {
+           LOG_ERROR("Could not delete track sample idSample: %d belonging to idTrack: %d", idSample, idTrack);
+       }
+    }
+    LOG_DBG("Deleted: %d samples belonging to the idTrack: %d", samplesList.size(), idTrack);
 
+    bool ret = CTrackArray::GetInstance()->Delete(idTrack);
     if (ret)
     {
         LOG_DBG("idTrack: %d deleted successfully", idTrack);
