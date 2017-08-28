@@ -34,6 +34,7 @@ void CHttpServer::Initialize()
     // User's actions
     m_addActionToOptionsRequest();
     m_addActionToLogin();
+    m_addActionToLogout();
     m_addActionToRegisterUser();
     m_addActionToGetUserData();
     m_addActionToChangeUserData();
@@ -80,6 +81,13 @@ void CHttpServer::m_addActionToLogin()
     auto action = m_qttpServerGetInstance();
     action->createAction("Login", m_onLogin);
     action->registerRoute("POST", "Login", "/login");
+}
+
+void CHttpServer::m_addActionToLogout()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("Logout", m_onLogout);
+    action->registerRoute("GET", "Logout", "/logout");
 }
 
 void CHttpServer::m_addActionToRegisterUser()
@@ -231,7 +239,7 @@ void CHttpServer::m_onOptions(qttp::HttpData& request)
 
 void CHttpServer::m_onLogin(qttp::HttpData& request)
 {
-    LOG_DBG("Login actual request received");
+    LOG_DBG("Login request received");
     const QJsonObject& requestJSON = request.getRequest().getJson();
     QJsonObject& response = request.getResponse().getJson();
 
@@ -254,6 +262,16 @@ void CHttpServer::m_onLogin(qttp::HttpData& request)
         response["result"] = 0;
         response["idUser"] = -1;
     }
+}
+
+void CHttpServer::m_onLogout(qttp::HttpData &request)
+{
+    LOG_DBG("Logout request received");
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
+
+    response["result"] = 1;
+    response["idUser"] = -1;
 }
 
 void CHttpServer::m_onRegisterUser(qttp::HttpData& request)
@@ -411,7 +429,22 @@ void CHttpServer::m_onChangeUserPassword(qttp::HttpData &request)
 
 void CHttpServer::m_onUserDelete(qttp::HttpData &request)
 {
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int idUser = req["idUser"].toString().toInt();
+    LOG_DBG("Deleting user: %d", idUser);
+
+    int ret = CDatabase::GetInstance()->DeleteUser(idUser);
+    if (ret < 0)
+    {
+        LOG_ERROR("Could not delete user: %d", idUser);
+        response["result"] = 0;
+    }
+    else
+    {
+        response["result"] = 1;
+    }
 }
 
 void CHttpServer::m_onAddDevice(qttp::HttpData& request)
@@ -455,6 +488,7 @@ void CHttpServer::m_onListDevices(qttp::HttpData &request)
         return;
     }
 
+    LOG_DBG("Requested device list for idUser: %d. Found %d devices", idUser, list.size());
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
         QString deviceSerialized = QString::fromStdString((*iter).Serialize());
@@ -480,11 +514,16 @@ void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
 
     CDeviceRecord record = CDatabase::GetInstance()->GetDeviceInfo(deviceId);
 
+
     if (record.GetDeviceId() == -1)
     {
+        LOG_ERROR("Devicd: %d not found", deviceId);
         response["result"] = 0;
         return;
     }
+
+    LOG_DBG("Requested device info acquired");
+
     response["result"] = 1;
     response["idDevice"] = record.GetDeviceId();
     response["idUser"] = record.GetUserId();
@@ -510,7 +549,7 @@ void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
         return;
     }
 
-    LOG_DBG("Requested device location is: %d", devRecord.GetLastLocation().c_str());
+    LOG_DBG("Requested device location is (LAT, LNG): %s", devRecord.GetLastLocation().c_str());
     response["result"] = 1;
     response["currentLocation"] = devRecord.GetLastLocation().c_str();
 }
@@ -527,7 +566,22 @@ void CHttpServer::m_onUpdateFirmware(qttp::HttpData& request)
 
 void CHttpServer::m_onDeviceDelete(qttp::HttpData &request)
 {
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int idDevice = req["idDevice"].toString().toInt();
+    LOG_DBG("Deleting device: %d", idDevice);
+
+    int ret = CDatabase::GetInstance()->DeleteDevice(idDevice);
+    if (ret < 0)
+    {
+        LOG_ERROR("Could not delete device: %d", idDevice);
+        response["result"] = 0;
+    }
+    else
+    {
+        response["result"] = 1;
+    }
 }
 
 void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
@@ -565,6 +619,8 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
     int idDevice = req["idDevice"].toString().toInt();
 
     QList<Record> trackList = CDatabase::GetInstance()->GetTracksList(idDevice);
+    LOG_DBG("Requested track list for idDevice: %d. Found %d tracks", idDevice, trackList.size());
+
     if (trackList.empty())
     {
         LOG_ERROR("Could not find the requested device.");
@@ -603,6 +659,7 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
     CTrackRecord record = CDatabase::GetInstance()->GetTrackInfo(requestedTrackId);
     if (record.GetTrackId() == -1)
     {
+        LOG_ERROR("Track not found");
         response["result"] = 0;
     }
     else
@@ -700,6 +757,21 @@ void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
 
 void CHttpServer::m_onTrackDelete(qttp::HttpData &request)
 {
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
 
+    int idTrack = req["idTrack"].toString().toInt();
+    LOG_DBG("Deleting track: %d", idTrack);
+
+    int ret = CDatabase::GetInstance()->DeleteTrack(idTrack);
+    if (ret > 0)
+    {
+        response["result"] = 1;
+    }
+    else
+    {
+        LOG_ERROR("Could not delete track: %d", idTrack);
+        response["result"] = 0;
+    }
 }
 

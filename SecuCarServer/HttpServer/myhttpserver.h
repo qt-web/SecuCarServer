@@ -42,6 +42,8 @@ private:
      */
     void m_addActionToLogin();
 
+    void m_addActionToLogout();
+
     /**
      * @brief CHttpServer::m_addActionToRegisterUser - Add action to Register user http request
      */
@@ -116,6 +118,8 @@ private:
     static void m_onOptions(qttp::HttpData& request);
 
     static void m_onLogin(qttp::HttpData& request);
+
+    static void m_onLogout(qttp::HttpData& request);
 
     static void m_onRegisterUser(qttp::HttpData& request);
 
