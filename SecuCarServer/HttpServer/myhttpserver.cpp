@@ -350,7 +350,7 @@ void CHttpServer::m_onRegisterUser(qttp::HttpData& request)
     int homeNumber = requestJSON["homeNumber"].toString().toInt();
     int flatNumber = requestJSON["flatNumber"].toString().toInt();
     std::string postalCode = requestJSON["postalCode"].toString().toStdString();
-    std::string passwordHash = requestJSON["passwordHash"].toString().toStdString();
+    std::string passwordHash = requestJSON["password"].toString().toStdString();
 
     int ret = CDatabase::GetInstance()->RegisterUser(username,
                                                      name,
