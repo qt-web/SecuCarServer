@@ -58,6 +58,14 @@ int CDatabase::RegisterUser(std::__cxx11::string username,
 {
     CUserRecord record(0, username, name, surname, email, telephoneNumber, city, street, homeNumber, flatNumber, postalCode, passwordHash);
 
+    QList<CUserRecord> registeredUsersList = m_pUserArray->Select(username);
+
+    if (!registeredUsersList.empty())
+    {
+        LOG_DBG("User with provided username already exists");
+        return -1;
+    }
+
     int insertedUserId = m_pUserArray->Insert(record);
 
     if (insertedUserId == -1)
