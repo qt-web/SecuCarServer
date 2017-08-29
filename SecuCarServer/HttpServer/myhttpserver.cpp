@@ -262,6 +262,8 @@ void CHttpServer::m_onLogin(qttp::HttpData& request)
         response["result"] = 0;
         response["idUser"] = -1;
     }
+
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onLogout(qttp::HttpData &request)
@@ -272,6 +274,8 @@ void CHttpServer::m_onLogout(qttp::HttpData &request)
 
     response["result"] = 1;
     response["idUser"] = -1;
+
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onRegisterUser(qttp::HttpData& request)
@@ -314,6 +318,8 @@ void CHttpServer::m_onRegisterUser(qttp::HttpData& request)
         LOG_ERROR("User registration failure");
         response["result"] = 0;
     }
+
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onGetUserData(qttp::HttpData &request)
@@ -328,6 +334,8 @@ void CHttpServer::m_onGetUserData(qttp::HttpData &request)
     {
         LOG_ERROR("No user found with idUser: %d", idUser);
         response["result"] = 0;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
+        return;
     }
 
     LOG_DBG("Request to read user data");
@@ -343,6 +351,7 @@ void CHttpServer::m_onGetUserData(qttp::HttpData &request)
     response["homeNumber"]  = rec.GetHomeNumber();
     response["flatNumber"]  = rec.GetFlatNumber();
     response["postalCode"]  = rec.GetPostalCode().c_str();
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onUserDataChange(qttp::HttpData &request)
@@ -356,6 +365,7 @@ void CHttpServer::m_onUserDataChange(qttp::HttpData &request)
     {
         LOG_ERROR("User not found. idUser: %d", idUser);
         response["result"] = 0;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
@@ -395,6 +405,8 @@ void CHttpServer::m_onUserDataChange(qttp::HttpData &request)
         LOG_ERROR("Changing the user data failed");
         response["result"] = 0;
     }
+
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onChangeUserPassword(qttp::HttpData &request)
@@ -410,6 +422,7 @@ void CHttpServer::m_onChangeUserPassword(qttp::HttpData &request)
     {
         LOG_ERROR("New password is the same as the current one.");
         resultJson["result"] = -1;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
@@ -425,6 +438,7 @@ void CHttpServer::m_onChangeUserPassword(qttp::HttpData &request)
         LOG_ERROR("Changing the password failed");
         resultJson["result"] = 0;
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onUserDelete(qttp::HttpData &request)
@@ -445,6 +459,7 @@ void CHttpServer::m_onUserDelete(qttp::HttpData &request)
     {
         response["result"] = 1;
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onAddDevice(qttp::HttpData& request)
@@ -471,6 +486,7 @@ void CHttpServer::m_onAddDevice(qttp::HttpData& request)
         response["result"] = 0;
         response["idDevice"] = -1;
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onListDevices(qttp::HttpData &request)
@@ -487,6 +503,7 @@ void CHttpServer::m_onListDevices(qttp::HttpData &request)
     {
         LOG_ERROR("Could not find the requested user: %d", idUser);
         response["result"] = 0;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
@@ -505,6 +522,7 @@ void CHttpServer::m_onListDevices(qttp::HttpData &request)
     }
     response["result"] = 1;
     response["devices"] = deviceArray;
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
@@ -521,6 +539,7 @@ void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
     {
         LOG_ERROR("Devicd: %d not found", deviceId);
         response["result"] = 0;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
@@ -533,7 +552,7 @@ void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
     response["currentLocation"] = record.GetLastLocation().c_str();
     response["deviceName"] = record.GetDeviceName().c_str();
     response["firmwareVersion"] = record.GetFirmwareVersion();
-
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
@@ -548,22 +567,24 @@ void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
     {
         LOG_ERROR("idDevice: %d not found", idDevice);
         response["result"] = 0;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
     LOG_DBG("Requested device location is (LAT, LNG): %s", devRecord.GetLastLocation().c_str());
     response["result"] = 1;
     response["currentLocation"] = devRecord.GetLastLocation().c_str();
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onGetLatestFirmareVersion(qttp::HttpData& request)
 {
-
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onUpdateFirmware(qttp::HttpData& request)
 {
-
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onDeviceDelete(qttp::HttpData &request)
@@ -584,6 +605,7 @@ void CHttpServer::m_onDeviceDelete(qttp::HttpData &request)
     {
         response["result"] = 1;
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
@@ -613,6 +635,7 @@ void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
         response["result"] = 0;
         response["idTrack"] = -1;
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onListTracks(qttp::HttpData &request)
@@ -629,6 +652,7 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
     {
         LOG_ERROR("Could not find the requested device.");
         response["result"] = 0;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
@@ -649,6 +673,7 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
 
     response["result"] = 1;
     response["tracks"] = trackArray;
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
@@ -677,6 +702,7 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
         response["distance"] = QString::number(record.GetDistance());
         response["manouverAssessment"] = QString::number(record.GetManeouverAssessment());
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
@@ -691,6 +717,7 @@ void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
     if (sampleList.empty())
     {
         response["result"] = 0;
+        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
@@ -711,6 +738,7 @@ void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
 
     response["result"] = 1;
     response["samples"] = sampleArray;
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onEndTrack(qttp::HttpData &request)
@@ -734,6 +762,7 @@ void CHttpServer::m_onEndTrack(qttp::HttpData &request)
     {
         response["result"] = 0;
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
@@ -756,7 +785,6 @@ void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
         CTrackRecord track = CDatabase::GetInstance()->GetTrackInfo(idTrack);
         CDatabase::GetInstance()->UpdateDeviceLocation(track.GetDeviceId(), coordinates);
     }
-
 }
 
 void CHttpServer::m_onTrackDelete(qttp::HttpData &request)
@@ -777,5 +805,6 @@ void CHttpServer::m_onTrackDelete(qttp::HttpData &request)
         LOG_ERROR("Could not delete track: %d", idTrack);
         response["result"] = 0;
     }
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
