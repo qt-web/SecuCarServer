@@ -36,7 +36,7 @@ int CSampleArray::Insert(Record& record)
                         "'" + QString::number(rec->GetAzimuth()) + "'";
 
 
-    return CDatabaseDriver::GetInstance()->Insert("SAMPLES (" + fields.toStdString() + ")", m_columnNames, qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("SAMPLES", m_columnNames, qQuery.toStdString());
 }
 
 

@@ -36,7 +36,7 @@ int CTrackArray::Insert(Record& record)
                         "'" + QString::number(rec->GetManeouverAssessment()) + "'";
 
 
-    return CDatabaseDriver::GetInstance()->Insert("TRACKS (" + fields.toStdString() + ")", m_columnNames, qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("TRACKS", m_columnNames, qQuery.toStdString());
 }
 
 
