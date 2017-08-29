@@ -74,25 +74,63 @@ void CHttpServer::m_addActionToOptionsRequest()
     auto action = m_qttpServerGetInstance();
     action->createAction("Options", m_onOptions);
     action->registerRoute("OPTIONS", "Options", "/login");
-    action->registerRoute("OPTIONS", "Options", "/logout");
-    action->registerRoute("OPTIONS", "Options", "/register");
-    action->registerRoute("OPTIONS", "Options", "/get_user_data");
-    action->registerRoute("OPTIONS", "Options", "/change_user_data");
-    action->registerRoute("OPTIONS", "Options", "/change_password");
-    action->registerRoute("OPTIONS", "Options", "/delete_user");
-    action->registerRoute("OPTIONS", "Options", "/add_device");
-    action->registerRoute("OPTIONS", "Options", "/get_devices_list");
-    action->registerRoute("OPTIONS", "Options", "/get_device_info");
-    action->registerRoute("OPTIONS", "Options", "/get_latest_firmware_version");
-    action->registerRoute("OPTIONS", "Options", "/update_firmware");
-    action->registerRoute("OPTIONS", "Options", "/delete_device");
-    action->registerRoute("OPTIONS", "Options", "/get_track_info");
-    action->registerRoute("OPTIONS", "Options", "/get_track_details");
-    action->registerRoute("OPTIONS", "Options", "/add_track");
-    action->registerRoute("OPTIONS", "Options", "/list_tracks");
-    action->registerRoute("OPTIONS", "Options", "/end_track");
-    action->registerRoute("OPTIONS", "Options", "/add_track_sample");
-    action->registerRoute("OPTIONS", "Options", "/delete_track");
+
+    action->createAction("Options1", m_onOptions);
+    action->registerRoute("OPTIONS", "Options1", "/logout");
+
+    action->createAction("Options2", m_onOptions);
+    action->registerRoute("OPTIONS", "Options2", "/register");
+
+    action->createAction("Options3", m_onOptions);
+    action->registerRoute("OPTIONS", "Options3", "/get_user_data");
+
+    action->createAction("Options4", m_onOptions);
+    action->registerRoute("OPTIONS", "Options4", "/change_user_data");
+
+    action->createAction("Options5", m_onOptions);
+    action->registerRoute("OPTIONS", "Options5", "/change_password");
+
+    action->createAction("Options6", m_onOptions);
+    action->registerRoute("OPTIONS", "Options6", "/delete_user");
+
+    action->createAction("Options7", m_onOptions);
+    action->registerRoute("OPTIONS", "Options7", "/add_device");
+
+    action->createAction("Options8", m_onOptions);
+    action->registerRoute("OPTIONS", "Options8", "/get_devices_list");
+
+    action->createAction("Options9", m_onOptions);
+    action->registerRoute("OPTIONS", "Options9", "/get_device_info");
+
+    action->createAction("Options10", m_onOptions);
+    action->registerRoute("OPTIONS", "Options10", "/get_latest_firmware_version");
+
+    action->createAction("Options11", m_onOptions);
+    action->registerRoute("OPTIONS", "Options11", "/update_firmware");
+
+    action->createAction("Options12", m_onOptions);
+    action->registerRoute("OPTIONS", "Options12", "/delete_device");
+
+    action->createAction("Options13", m_onOptions);
+    action->registerRoute("OPTIONS", "Options13", "/get_track_info");
+
+    action->createAction("Options14", m_onOptions);
+    action->registerRoute("OPTIONS", "Options14", "/get_track_details");
+
+    action->createAction("Options15", m_onOptions);
+    action->registerRoute("OPTIONS", "Options15", "/add_track");
+
+    action->createAction("Options16", m_onOptions);
+    action->registerRoute("OPTIONS", "Options16", "/list_tracks");
+
+    action->createAction("Options17", m_onOptions);
+    action->registerRoute("OPTIONS", "Options17", "/end_track");
+
+    action->createAction("Options18", m_onOptions);
+    action->registerRoute("OPTIONS", "Options18", "/add_track_sample");
+
+    action->createAction("Options19", m_onOptions);
+    action->registerRoute("OPTIONS", "Options19", "/delete_track");
 }
 
 void CHttpServer::m_addActionToLogin()
@@ -113,7 +151,7 @@ void CHttpServer::m_addActionToRegisterUser()
 {
     auto action = m_qttpServerGetInstance();
     action->createAction("Register", m_onRegisterUser);
-    action->registerRoute("GET", "Register", "/register");
+    action->registerRoute("POST", "Register", "/register");
 }
 
 void CHttpServer::m_addActionToGetUserData()
@@ -244,7 +282,7 @@ void CHttpServer::m_addActionToDeleteTrack()
 
 void CHttpServer::m_onOptions(qttp::HttpData& request)
 {
-    LOG_DBG("Login OPTIONS request received :%s", QString(QJsonDocument(request.getRequest().getJson()).toJson(QJsonDocument::Compact)).toStdString().c_str());
+    LOG_DBG("OPTIONS request received :%s", QString(QJsonDocument(request.getRequest().getJson()).toJson(QJsonDocument::Compact)).toStdString().c_str());
     QList< std::pair<QString, QString>> headersList;
     headersList.append(std::pair<QString, QString>("Access-Control-Allow-Origin", "*"));
     headersList.append(std::pair<QString, QString>("Access-Control-Allow-Methods", "POST, GET, OPTIONS"));

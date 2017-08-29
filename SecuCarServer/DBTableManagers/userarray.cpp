@@ -38,7 +38,7 @@ int CUserArray::Insert(Record& record)
                         "'" + QString::fromStdString(rec->GetPostalCode()) + "'" + ", " +
                         "'" + QString::fromStdString(rec->GetPasswordHash()) + "'" ;
 
-    return CDatabaseDriver::GetInstance()->Insert("USERS (" + fields.toStdString() + ")", m_columnNames, qQuery.toStdString());
+    return CDatabaseDriver::GetInstance()->Insert("USERS", m_columnNames, qQuery.toStdString());
 }
 
 
