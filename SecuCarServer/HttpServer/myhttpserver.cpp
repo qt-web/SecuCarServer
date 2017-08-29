@@ -234,14 +234,14 @@ void CHttpServer::m_addActionToDeleteDevice()
 void CHttpServer::m_addActionToGetTrackInfo()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("GetTrack", m_onGetTrackInfo);
+    action->createAction("GetTrackInfo", m_onGetTrackInfo);
     action->registerRoute("GET", "GetTrackInfo", "/get_track_info");
 }
 
 void CHttpServer::m_addActionToGetTrackDetails()
 {
     auto action = m_qttpServerGetInstance();
-    action->createAction("GetTrack", m_onGetTrackDetails);
+    action->createAction("GetTrackDetails", m_onGetTrackDetails);
     action->registerRoute("GET", "GetTrackDetails", "/get_track_details");
 }
 
@@ -738,8 +738,8 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
     const QJsonObject& req = request.getRequest().getJson();
     QJsonObject& response = request.getResponse().getJson();
 
-    int userRequestingId = req["userId"].toString().toInt();
-    int requestedTrackId = req["trackId"].toString().toInt();
+    int userRequestingId = req["idUser"].toString().toInt();
+    int requestedTrackId = req["idTrack"].toString().toInt();
 
     LOG_DBG("UserId: %d has requested track number: %d", userRequestingId, requestedTrackId);
     CTrackRecord record = CDatabase::GetInstance()->GetTrackInfo(requestedTrackId);
@@ -767,7 +767,7 @@ void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
     const QJsonObject& req = request.getRequest().getJson();
     QJsonObject& response = request.getResponse().getJson();
 
-    int requestedTrackId = req["trackId"].toString().toInt();
+    int requestedTrackId = req["idTrack"].toString().toInt();
 
     QList<CSampleRecord> sampleList = CDatabase::GetInstance()->GetTrackDetails(requestedTrackId);
 
@@ -836,12 +836,13 @@ void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
 
     int ret = CDatabase::GetInstance()->AddTrackSample(idTrack, timestamp, coordinates, speed, acceleration, azimuth);
 
+    response["result"] = 1;
     // If sample added correctly then update the last known location of the device
-    if (ret > 0)
-    {
-        CTrackRecord track = CDatabase::GetInstance()->GetTrackInfo(idTrack);
-        CDatabase::GetInstance()->UpdateDeviceLocation(track.GetDeviceId(), coordinates);
-    }
+//    if (ret > 0)
+//    {
+//        CTrackRecord track = CDatabase::GetInstance()->GetTrackInfo(idTrack);
+//        CDatabase::GetInstance()->UpdateDeviceLocation(track.GetDeviceId(), coordinates);
+//    }
 }
 
 void CHttpServer::m_onTrackDelete(qttp::HttpData &request)

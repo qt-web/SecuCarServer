@@ -112,6 +112,12 @@ std::__cxx11::string CSampleRecord::Serialize()
 {
     std::ostringstream ss;
 
+    int pos = m_coordinates.find(',');
+    if (pos != std::string::npos)
+    {
+        m_coordinates[pos] = ';';
+    }
+
     ss << "idSample:" << m_sampleId << "," <<
           "idTrack:" << m_trackId << "," <<
           "timestamp:" << m_timestamp << "," <<
