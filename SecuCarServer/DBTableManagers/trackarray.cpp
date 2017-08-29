@@ -98,7 +98,7 @@ QList<Record> CTrackArray::Select(int recordId)
     return foundRecordsList;
 }
 
-QList<Record> CTrackArray::SelectAllByDevice(int idDevice)
+QList<CTrackRecord> CTrackArray::SelectAllByDevice(int idDevice)
 {
     std::string where = "";
     if (idDevice != -1)
@@ -107,7 +107,7 @@ QList<Record> CTrackArray::SelectAllByDevice(int idDevice)
     }
 
     QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("TRACKS", "*", where);
-    QList<Record> foundRecordsList;
+    QList<CTrackRecord> foundRecordsList;
 
     while (ret.next())
     {

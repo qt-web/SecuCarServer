@@ -89,11 +89,11 @@ public:
                                 int manouverAssessment = 0
                                 );
 
-    QList<Record>           GetTracksList(int idDevice);
+    QList<CTrackRecord>     GetTracksList(int idDevice);
 
     CTrackRecord            GetTrackInfo(int idTrack);
 
-    QList<Record>           GetTrackDetails(int idTrack);
+    QList<CSampleRecord>    GetTrackDetails(int idTrack);
 
     int                     EndTrack(
                                 int idTrack,

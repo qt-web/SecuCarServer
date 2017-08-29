@@ -96,7 +96,7 @@ QList<Record> CSampleArray::Select(int recordId)
     return foundRecordsList;
 }
 
-QList<Record> CSampleArray::SelectAllByTrack(int idTrack)
+QList<CSampleRecord> CSampleArray::SelectAllByTrack(int idTrack)
 {
     std::string where = "";
     if (idTrack != -1)
@@ -105,7 +105,7 @@ QList<Record> CSampleArray::SelectAllByTrack(int idTrack)
     }
 
     QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("SAMPLES", "*", where);
-    QList<Record> foundRecordsList;
+    QList<CSampleRecord> foundRecordsList;
 
     while (ret.next())
     {

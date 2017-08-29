@@ -271,7 +271,7 @@ CDeviceRecord CDatabase::GetDeviceInfo(int idDevice)
 int CDatabase::DeleteDevice(int idDevice)
 {
     //  Delete tracks belonging to the device which is being deleted
-    QList<Record>trackList = GetTracksList(idDevice);
+    QList<CTrackRecord>trackList = GetTracksList(idDevice);
     for (int i=0; i<trackList.size(); ++i)
     {
         int idTrack = static_cast<CTrackRecord&>(trackList[i]).GetTrackId();
@@ -322,10 +322,10 @@ int CDatabase::AddTrack(
     return insertedTrackId;
 }
 
-QList<Record> CDatabase::GetTracksList(int idDevice)
+QList<CTrackRecord> CDatabase::GetTracksList(int idDevice)
 {
     LOG_DBG(" ");
-    QList<Record> trackList = CTrackArray::GetInstance()->SelectAllByDevice(idDevice);
+    QList<CTrackRecord> trackList = CTrackArray::GetInstance()->SelectAllByDevice(idDevice);
 
     if (trackList.empty())
     {
@@ -349,11 +349,11 @@ CTrackRecord CDatabase::GetTrackInfo(int idTrack)
     return record;
 }
 
-QList<Record> CDatabase::GetTrackDetails(int idTrack)
+QList<CSampleRecord> CDatabase::GetTrackDetails(int idTrack)
 {
     LOG_DBG(" ");
 
-    QList<Record> sampleList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
+    QList<CSampleRecord> sampleList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
 
     if (sampleList.empty())
     {
@@ -395,7 +395,7 @@ int CDatabase::EndTrack(int idTrack, int endDate, std::__cxx11::string endLocati
 
 int CDatabase::DeleteTrack(int idTrack)
 {
-    QList<Record> samplesList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
+    QList<CSampleRecord> samplesList = CSampleArray::GetInstance()->SelectAllByTrack(idTrack);
     for(int i=0; i<samplesList.size(); ++i)
     {
        int idSample = static_cast<CSampleRecord&>(samplesList[i]).GetSampleId();
