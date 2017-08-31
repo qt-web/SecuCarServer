@@ -394,15 +394,15 @@ void CHttpServer::m_onGetUserData(qttp::HttpData &request)
 {
     const QJsonObject& requestJson = request.getRequest().getJson();
     QJsonObject& response = request.getResponse().getJson();
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 
-    int idUser = requestJson["idUser"].toInt();
+    int idUser = requestJson["idUser"].toString().toInt();
     CUserRecord rec = CDatabase::GetInstance()->GetUserData(idUser);
 
     if (rec.GetUserId() == -1)
     {
         LOG_ERROR("No user found with idUser: %d", idUser);
         response["result"] = 0;
-        request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
         return;
     }
 
@@ -419,7 +419,6 @@ void CHttpServer::m_onGetUserData(qttp::HttpData &request)
     response["homeNumber"]  = rec.GetHomeNumber();
     response["flatNumber"]  = rec.GetFlatNumber();
     response["postalCode"]  = rec.GetPostalCode().c_str();
-    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
 void CHttpServer::m_onUserDataChange(qttp::HttpData &request)

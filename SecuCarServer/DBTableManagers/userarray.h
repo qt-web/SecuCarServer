@@ -6,7 +6,7 @@
 #include "dbmanager.h"
 #include "userrecord.h"
 
-class CUserArray : public IDBManager
+class CUserArray
 {
 public:
     static CUserArray* GetInstance();
@@ -15,7 +15,7 @@ public:
 
     bool Delete(int recordId);
 
-    QList<Record> Select(int recordId = -1);
+    QList<CUserRecord> Select(int recordId = -1);
 
     bool Update(Record& record);
 

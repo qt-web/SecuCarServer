@@ -73,7 +73,7 @@ bool CUserArray::Delete(int recordId)
     return CDatabaseDriver::GetInstance()->Delete("USERS", where);
 }
 
-QList<Record> CUserArray::Select(int recordId)
+QList<CUserRecord> CUserArray::Select(int recordId)
 {
     std::string where = "";
     if (recordId != -1)
@@ -82,7 +82,7 @@ QList<Record> CUserArray::Select(int recordId)
     }
 
     QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("USERS", "*", where);
-    QList<Record> foundRecordsList;
+    QList<CUserRecord> foundRecordsList;
 
     while (ret.next())
     {

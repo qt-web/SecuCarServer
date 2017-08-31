@@ -79,15 +79,14 @@ int CDatabase::RegisterUser(std::__cxx11::string username,
 
 CUserRecord CDatabase::GetUserData(int idUser)
 {
-    QList<Record> recList = m_pUserArray->Select(idUser);
+    QList<CUserRecord> recList = m_pUserArray->Select(idUser);
     if (recList.empty())
     {
         LOG_ERROR("No user found with idUser: %d", idUser);
         return CUserRecord(-1, "", "", "", "", -1, "", "", -1, -1, "", "");
     }
 
-    CUserRecord c = static_cast<CUserRecord&>(recList[0]);
-    return c;
+    return recList[0];
 }
 
 int CDatabase::ChangeUserData(int idUser, std::__cxx11::string username, std::__cxx11::string name, std::__cxx11::string surname, std::__cxx11::string email, int telephoneNumber, std::__cxx11::string city, std::__cxx11::string street, int homeNumber, int flatNumber, std::__cxx11::string postalCode, std::__cxx11::string passwordHash)
@@ -121,7 +120,7 @@ int CDatabase::ChangePassword(int idUser, std::__cxx11::string oldPasswordHash, 
         return -1;
     }
 
-    QList<Record> _rec = m_pUserArray->Select(idUser);
+    QList<CUserRecord> _rec = m_pUserArray->Select(idUser);
     if (_rec.empty())
     {
         LOG_ERROR("No user found with idUser; %d", idUser);
