@@ -46,6 +46,7 @@ void CHttpServer::Initialize()
     m_addActionToGetDevicesList();
     m_addActionToGetDeviceInfo();
     m_addActionToGetDeviceCurLocation();
+    m_addActionToChangeDeviceName();
     m_addActionToGetLatestFirmwareVersion();
     m_addActionToUpdateFirmware();
     m_addActionToDeleteDevice();
@@ -131,6 +132,9 @@ void CHttpServer::m_addActionToOptionsRequest()
 
     action->createAction("Options19", m_onOptions);
     action->registerRoute("OPTIONS", "Options19", "/delete_track");
+
+    action->createAction("Options20", m_onOptions);
+    action->registerRoute("OPTIONS", "Options20", "/change_device_name");
 }
 
 void CHttpServer::m_addActionToLogin()
@@ -208,6 +212,13 @@ void CHttpServer::m_addActionToGetDeviceCurLocation()
     auto action = m_qttpServerGetInstance();
     action->createAction("GetCurrentDevLocation", m_onGetDeviceCurLocation);
     action->registerRoute("GET", "GetCurrentDevLocation", "/get_dev_location");
+}
+
+void CHttpServer::m_addActionToChangeDeviceName()
+{
+    auto action = m_qttpServerGetInstance();
+    action->createAction("ChangeDeviceName", m_onChangeDeviceName);
+    action->registerRoute("GET", "ChangeDeviceName", "/change_device_name");
 }
 
 void CHttpServer::m_addActionToGetLatestFirmwareVersion()
@@ -632,6 +643,27 @@ void CHttpServer::m_onGetDeviceCurLocation(qttp::HttpData& request)
     response["result"] = 1;
     response["currentLocation"] = devRecord.GetLastLocation().c_str();
     request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
+}
+
+void CHttpServer::m_onChangeDeviceName(qttp::HttpData& request)
+{
+    const QJsonObject& req = request.getRequest().getJson();
+    QJsonObject& response = request.getResponse().getJson();
+    request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
+
+    int idDevice = req["idDevice"].toString().toInt();
+    std::string devName = req["deviceName"].toString().toStdString();
+
+   int result =  CDatabase::GetInstance()->ChangeDeviceName(idDevice, devName);
+
+   if (!result)
+   {
+       response["result"] = 0;
+       return;
+   }
+
+   response["result"] = 1;
+
 }
 
 void CHttpServer::m_onGetLatestFirmareVersion(qttp::HttpData& request)

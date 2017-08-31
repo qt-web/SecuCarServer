@@ -201,7 +201,7 @@ QList<CDeviceRecord> CDatabase::GetRegisteredDevicesList(int idUser)
 
 int CDatabase::ChangeDeviceName(int idDevice, std::__cxx11::string newName)
 {
-    QList<Record> recordList = CDeviceArray::GetInstance()->Select(idDevice);
+    QList<CDeviceRecord> recordList = CDeviceArray::GetInstance()->Select(idDevice);
 
     if (recordList.empty())
     {
@@ -209,7 +209,7 @@ int CDatabase::ChangeDeviceName(int idDevice, std::__cxx11::string newName)
         return 0;
     }
 
-    CDeviceRecord record = static_cast<CDeviceRecord&>(recordList[0]);
+    CDeviceRecord& record = recordList[0];
     record.SetDeviceName(newName);
 
     bool ret = CDeviceArray::GetInstance()->Update(record);
@@ -226,14 +226,14 @@ int CDatabase::ChangeDeviceName(int idDevice, std::__cxx11::string newName)
 
 int CDatabase::UpdateDeviceLocation(int idDevice, std::__cxx11::string newLocation)
 {
-    QList<Record> recordList = CDeviceArray::GetInstance()->Select(idDevice);
+    QList<CDeviceRecord> recordList = CDeviceArray::GetInstance()->Select(idDevice);
 
     if (recordList.empty())
     {
         LOG_ERROR("idDevice: %d not found", idDevice);
         return false;
     }
-    CDeviceRecord record = static_cast<CDeviceRecord&>(recordList[0]);
+    CDeviceRecord record = recordList[0];
     if (record.GetDeviceId() == -1)
     {
         LOG_ERROR("Could not find the device");
@@ -257,7 +257,7 @@ int CDatabase::UpdateDeviceLocation(int idDevice, std::__cxx11::string newLocati
 
 CDeviceRecord CDatabase::GetDeviceInfo(int idDevice)
 {
-    QList<Record> recordList = CDeviceArray::GetInstance()->Select(idDevice);
+    QList<CDeviceRecord> recordList = CDeviceArray::GetInstance()->Select(idDevice);
     if (recordList.empty())
     {
         LOG_ERROR("Could not find requested device");

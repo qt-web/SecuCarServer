@@ -108,6 +108,11 @@ private:
     void m_addActionToUpdateFirmware();
 
     /**
+     * @brief m_addActionToChangeDeviceName - Adda ction to change device name
+     */
+    void m_addActionToChangeDeviceName();
+
+    /**
      * @brief m_addActionToDeleteDevice - Adds action to request for device deletion
      */
     void m_addActionToDeleteDevice();
@@ -220,6 +225,12 @@ private:
      * @param request
      */
     static void m_onGetDeviceCurLocation(qttp::HttpData& request);
+
+    /**
+     * @brief m_onChangeDeviceName - Callback for request to change device name
+     * @param request
+     */
+    static void m_onChangeDeviceName(qttp::HttpData& request);
 
     /**
      * @brief m_onGetLatestFirmareVersion - Callback for request for latest available firmware software

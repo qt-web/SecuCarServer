@@ -4,7 +4,7 @@
 #include "dbmanager.h"
 #include "devicerecord.h"
 
-class CDeviceArray : public IDBManager
+class CDeviceArray
 {
 public:
     CDeviceArray();
@@ -15,7 +15,7 @@ public:
 
     bool Delete(int recordId);
 
-    QList<Record> Select(int recordId = -1);
+    QList<CDeviceRecord> Select(int recordId = -1);
 
     bool Update(Record& record);
 

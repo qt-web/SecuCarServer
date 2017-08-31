@@ -55,7 +55,7 @@ bool CDeviceArray::Update(Record &record)
                                 "deviceName='" + QString::fromStdString(rec->GetDeviceName()) + "', " +
                                 "firmwareVersion='" + QString::number(rec->GetFirmwareVersion()) + "'";
 
-    return CDatabaseDriver::GetInstance()->Update("DEVICES (" + fields.toStdString() + ")", fieldsToUpdate.toStdString(), QString("idDevice='" + QString::number(rec->GetDeviceId()) + "'").toStdString());
+    return CDatabaseDriver::GetInstance()->Update("DEVICES", fieldsToUpdate.toStdString(), QString("idDevice='" + QString::number(rec->GetDeviceId()) + "'").toStdString());
 }
 
 bool CDeviceArray::Delete(int recordId)
@@ -64,7 +64,7 @@ bool CDeviceArray::Delete(int recordId)
     return CDatabaseDriver::GetInstance()->Delete("DEVICES", where);
 }
 
-QList<Record> CDeviceArray::Select(int recordId)
+QList<CDeviceRecord> CDeviceArray::Select(int recordId)
 {
     std::string where = "";
     if (recordId != -1)
@@ -73,7 +73,7 @@ QList<Record> CDeviceArray::Select(int recordId)
     }
 
     QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("DEVICES", "*", where);
-    QList<Record> foundRecordsList;
+    QList<CDeviceRecord> foundRecordsList;
 
     while (ret.next())
     {
