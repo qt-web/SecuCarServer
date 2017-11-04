@@ -704,16 +704,17 @@ void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
     int idDevice = req["idDevice"].toString().toInt();
     int startDate = req["startDate"].toString().toInt();
     std::string startLocation = req["startLocation"].toString().toStdString();
-    int endDate = req["endDate"].toString().toInt();
-    std::string endLocation = req["endLocation"].toString().toStdString();
-    int distance = req["distance"].toString().toInt();
-    int manouverAssessment = req["manouverAssessment"].toString().toInt();
+//    int endDate = req["endDate"].toString().toInt();
+//    std::string endLocation = req["endLocation"].toString().toStdString();
+//    int distance = req["distance"].toString().toInt();
+//    int manouverAssessment = req["manouverAssessment"].toString().toInt();
 
-    int result = CDatabase::GetInstance()->AddTrack(idDevice, startDate, startLocation, endDate, endLocation, distance, manouverAssessment);
+    int result = CDatabase::GetInstance()->AddTrack(idDevice, startDate, startLocation, 0, "", 0, 0);
 
+    int result = 1;
     if (result > 0)
     {
-        LOG_DBG("Track added to database. TrackId: %d, deviceId: %d, startDate, %d", result, idDevice, startDate);
+        LOG_DBG("Track added to database. TrackId: %d, deviceId: %d, startDate: %d, startLocation: %s", result, idDevice, startDate, startLocation.c_str());
         response["result"] = 1;
         response["idTrack"] = result;
     }
