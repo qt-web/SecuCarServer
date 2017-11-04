@@ -1,0 +1,3 @@
+[submodule "QttpServer"]
+	path =  QttpServer
+	url = https://github.com/supamii/QttpServer.git

@@ -301,7 +301,7 @@ void CHttpServer::m_onOptions(qttp::HttpData& request)
     headersList.append(std::pair<QString, QString>("Content-Type", ""));
     //request.getResponse().getJson()["result"] = 1;
     request.getResponse().setHeader(headersList);
-    request.getResponse().removeHeader("Content-Type");
+//    request.getResponse().removeHeader("Content-Type");
     request.getResponse().finish();
 }
 

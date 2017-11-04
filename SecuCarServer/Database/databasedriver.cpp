@@ -13,7 +13,7 @@ CDatabaseDriver::CDatabaseDriver(QObject *parent) : QObject(parent)
     m_sqlDatabase = QSqlDatabase::addDatabase("QSQLITE");
 
 //    m_sqlDatabase.setHostName(DATABASE_HOST);
-    m_sqlDatabase.setDatabaseName("/home/konrad/Qt_Workspace/SecuCarServer/DB/secucar.db");
+    m_sqlDatabase.setDatabaseName("../DB/secucar.db");
 //    m_sqlDatabase.setUserName("root");
 //    m_sqlDatabase.setPassword("");
 //    m_sqlDatabase.setPort(DATABASE_PORT);

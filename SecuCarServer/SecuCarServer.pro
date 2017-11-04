@@ -60,20 +60,20 @@ INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
 DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
 PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libqttpserver.a
 
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock_main
-INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock_main.a
+#LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock_main
+#INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
+#DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
+#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock_main.a
 
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock
-INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock.a
+#LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock
+#INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
+#DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
+#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock.a
 
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgtest
-INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgtest.a
+#LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgtest
+#INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
+#DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
+#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgtest.a
 
 LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lhttp_parser
 INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
