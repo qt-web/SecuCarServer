@@ -711,7 +711,6 @@ void CHttpServer::m_onAddNewTrack(qttp::HttpData& request)
 
     int result = CDatabase::GetInstance()->AddTrack(idDevice, startDate, startLocation, 0, "", 0, 0);
 
-    int result = 1;
     if (result > 0)
     {
         LOG_DBG("Track added to database. TrackId: %d, deviceId: %d, startDate: %d, startLocation: %s", result, idDevice, startDate, startLocation.c_str());
@@ -748,7 +747,7 @@ void CHttpServer::m_onListTracks(qttp::HttpData &request)
     QJsonArray trackArray;
     for (int iter = 0; iter < trackList.size(); ++iter)
     {
-        CTrackRecord& record = static_cast<CTrackRecord&>(trackList[0]);
+        CTrackRecord& record = static_cast<CTrackRecord&>(trackList[iter]);
         QString trackSerialized = QString::fromStdString(record.Serialize());
         QList<QString> trackFields = trackSerialized.split(',');
         QJsonObject singleTrack;
@@ -838,11 +837,12 @@ void CHttpServer::m_onEndTrack(qttp::HttpData &request)
     int idTrack = req["idTrack"].toString().toInt();
     int endDate = req["endDate"].toString().toInt();
     std::string endLocation = req["endLocation"].toString().toStdString();
-    int distance = req["distance"].toString().toInt();
+    int distance = 0;//req["distance"].toString().toInt();
     int manouverAssessment = req["manouverAssessment"].toString().toInt();
 
-    int ret = CDatabase::GetInstance()->EndTrack(idTrack, endDate, endLocation, distance, manouverAssessment);
+    LOG_DBG("Track Ended. TrackId: %d, endDate: %d, endLocation: %s, manouverAssessment: %d", idTrack, endDate, endLocation.c_str(), manouverAssessment);
 
+    int ret = CDatabase::GetInstance()->EndTrack(idTrack, endDate, endLocation, distance, manouverAssessment);
     if (ret)
     {
         response["result"] = 1;
@@ -866,15 +866,18 @@ void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
     int acceleration = req["acceleration"].toString().toInt();
     int azimuth = req["azimuth"].toString().toInt();
 
+    LOG_DBG("Track sample added. TrackId: %d, timestamp: %d, coordinates: %s, speed: %d, acceleration: %d, azimuth: %d",
+            idTrack, timestamp, coordinates.c_str(), speed, acceleration, azimuth);
+
     int ret = CDatabase::GetInstance()->AddTrackSample(idTrack, timestamp, coordinates, speed, acceleration, azimuth);
 
     response["result"] = 1;
     // If sample added correctly then update the last known location of the device
-//    if (ret > 0)
-//    {
+    if (ret > 0)
+    {
 //        CTrackRecord track = CDatabase::GetInstance()->GetTrackInfo(idTrack);
 //        CDatabase::GetInstance()->UpdateDeviceLocation(track.GetDeviceId(), coordinates);
-//    }
+    }
 }
 
 void CHttpServer::m_onTrackDelete(qttp::HttpData &request)
