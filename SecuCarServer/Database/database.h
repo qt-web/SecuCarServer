@@ -113,7 +113,7 @@ public:
                                 int azimuth,
                                 int numOfSattellites,
                                 int hdop,
-                                int manouverAssessment);
+                                int manouverAssessment, int fixStatus);
 
 
 private:

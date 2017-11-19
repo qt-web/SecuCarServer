@@ -1,4 +1,4 @@
-#ifndef SAMPLERECORD_H
+﻿#ifndef SAMPLERECORD_H
 #define SAMPLERECORD_H
 
 #include <string>
@@ -21,7 +21,7 @@ public:
      * @param acceleration
      * @param azimuth
      */
-    CSampleRecord(int sampleId, int trackId, int timestamp, std::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment);
+    CSampleRecord(int sampleId, int trackId, int timestamp, std::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment, int fixStatus);
 
     /**
      * @brief CSampleRecord
@@ -76,6 +76,8 @@ public:
     int GetHdop() const;
 
     int GetManouverAssessment() const;
+
+    int GetFixStatus() const;
 
     /**
      * @brief SetSampleId
@@ -171,6 +173,8 @@ private:
     int m_hdop;
 
     int m_manouverAssessment;
+
+    int m_fixStatus;
 };
 
 #endif // SAMPLERECORD_H

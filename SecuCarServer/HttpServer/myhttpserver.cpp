@@ -868,12 +868,13 @@ void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
     int azimuth = req["azimuth"].toString().toInt();
     int numOfSattelites = req["sats"].toString().toInt();
     int hdop =  req["hdop"].toString().toInt();
-    int manouverAssessment = req["mark"].toInt();
+    int manouverAssessment = req["mark"].toString().toInt();
+    int fixStatus = req["fix"].toString().toInt();
 
-    LOG_DBG("Track sample added. TrackId: %d, timestamp: %d, coordinates: %s, speed: %d, acceleration: %d, azimuth: %d, numOfSattellites: %d, hdop: %d, manouverAssessment: %d",
-            idTrack, timestamp, coordinates.c_str(), speed, acceleration, azimuth, numOfSattelites, hdop, manouverAssessment);
+    LOG_DBG("Track sample added. TrackId: %d, timestamp: %d, coordinates: %s, speed: %d, acceleration: %d, azimuth: %d, numOfSattellites: %d, hdop: %d, manouverAssessment: %d, fixStatus: %d",
+            idTrack, timestamp, coordinates.c_str(), speed, acceleration, azimuth, numOfSattelites, hdop, manouverAssessment, fixStatus);
 
-    int ret = CDatabase::GetInstance()->AddTrackSample(idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSattelites, hdop, manouverAssessment);
+    int ret = CDatabase::GetInstance()->AddTrackSample(idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSattelites, hdop, manouverAssessment, fixStatus);
 
     response["result"] = 1;
     // If sample added correctly then update the last known location of the device

@@ -417,9 +417,9 @@ int CDatabase::DeleteTrack(int idTrack)
     return 0;
 }
 
-int CDatabase::AddTrackSample(int idTrack, int timestamp, std::__cxx11::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment)
+int CDatabase::AddTrackSample(int idTrack, int timestamp, std::__cxx11::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment, int fixStatus)
 {
-    CSampleRecord record(0, idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSattellites, hdop, manouverAssessment);
+    CSampleRecord record(0, idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSattellites, hdop, manouverAssessment, fixStatus);
 
     int insertedSampleId = CSampleArray::GetInstance()->Insert(record);
 

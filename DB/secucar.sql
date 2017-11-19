@@ -54,6 +54,7 @@ CREATE TABLE `samples`(
   `numOfSats` INTEGER NOT NULL,
   `hdop` INTEGER NOT NULL,
   `manouverAssessment` INTEGER NOT NULL,
+  `fixStatus` INTEGER NOT NULL,
    FOREIGN KEY (idTrack) REFERENCES tracks(idTrack)
 );
 

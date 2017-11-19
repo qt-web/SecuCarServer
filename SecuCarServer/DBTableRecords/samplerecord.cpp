@@ -8,7 +8,7 @@ CSampleRecord::CSampleRecord()
 
 }
 
-CSampleRecord::CSampleRecord(int sampleId, int trackId, int timestamp, std::__cxx11::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment)
+CSampleRecord::CSampleRecord(int sampleId, int trackId, int timestamp, std::__cxx11::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment, int fixStatus)
 {
     m_sampleId = sampleId;
     m_trackId = trackId;
@@ -20,6 +20,7 @@ CSampleRecord::CSampleRecord(int sampleId, int trackId, int timestamp, std::__cx
     m_numOfSattelites = numOfSattellites;
     m_hdop = hdop;
     m_manouverAssessment = manouverAssessment;
+    m_fixStatus = fixStatus;
 
     LogRecord();
 }
@@ -36,6 +37,7 @@ CSampleRecord::CSampleRecord(const CSampleRecord &rec)
     m_numOfSattelites = rec.GetNumOfSattellites();
     m_hdop = rec.GetHdop();
     m_manouverAssessment = rec.GetManouverAssessment();
+    m_fixStatus = rec.GetFixStatus();
 }
 
 int CSampleRecord::GetSampleId() const
@@ -88,6 +90,11 @@ int CSampleRecord::GetManouverAssessment() const
     return m_manouverAssessment;
 }
 
+int CSampleRecord::GetFixStatus() const
+{
+    return m_fixStatus;
+}
+
 void CSampleRecord::SetSampleId(int id)
 {
     m_sampleId = id;
@@ -125,8 +132,8 @@ void CSampleRecord::SetAzimuth(int azimuth)
 
 void CSampleRecord::LogRecord()
 {
-    LOG_INFO("idSample: %d, idTrack: %d, timestamp: %d, coordinates: %s, speed: %d(%f), acceleration: %d(%f), azimuth: %d, numOfSattelites: %d, hdop: %f, manouverAssessment: %d",
-             m_sampleId, m_trackId, m_timestamp, m_coordinates.c_str(), m_speed, (float)m_speed/100.00, m_acceleration, (float)m_acceleration/100.00, m_azimuth, m_numOfSattelites, m_hdop/100.0, m_manouverAssessment);
+    LOG_INFO("idSample: %d, idTrack: %d, timestamp: %d, coordinates: %s, speed: %d(%f), acceleration: %d(%f), azimuth: %d, numOfSattelites: %d, hdop: %f, manouverAssessment: %d, fixStatus: %d",
+             m_sampleId, m_trackId, m_timestamp, m_coordinates.c_str(), m_speed, (float)m_speed/100.00, m_acceleration, (float)m_acceleration/100.00, m_azimuth, m_numOfSattelites, m_hdop/100.0, m_manouverAssessment, m_fixStatus);
 }
 
 std::__cxx11::string CSampleRecord::Serialize()
@@ -148,6 +155,7 @@ std::__cxx11::string CSampleRecord::Serialize()
           "azimuth:" << m_azimuth << "," <<
           "numOfSattellites: " << m_numOfSattelites << "," <<
           "hdop: " << m_hdop << "," <<
-          "manouverAssessment: " << m_manouverAssessment;
+          "manouverAssessment: " << m_manouverAssessment << "," <<
+          "fixStatus: " << m_fixStatus;
     return ss.str();
 }
