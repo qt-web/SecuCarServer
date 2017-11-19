@@ -19,7 +19,7 @@ public:
      * @param deviceName
      * @param firmwareVersion
      */
-    CDeviceRecord(int deviceId, int userId, int serialNumber, std::string lastLocation, std::string deviceName, int firmwareVersion);
+    CDeviceRecord(int deviceId, int userId, int serialNumber, std::string phoneNum, std::string lastLocation, std::string deviceName, std::string firmwareVersion);
 
     /**
      * @brief CDeviceRecord
@@ -51,6 +51,8 @@ public:
      */
     std::string GetLastLocation() const;
 
+    std::string GetDevicePhoneNum() const;
+
     /**
      * @brief GetDeviceName
      * @return
@@ -61,7 +63,7 @@ public:
      * @brief GetFirmwareVersion
      * @return
      */
-    int GetFirmwareVersion() const;
+    std::string GetFirmwareVersion() const;
 
     /**
      * @brief SetDeviceId
@@ -97,7 +99,7 @@ public:
      * @brief SetFirmwareVersion
      * @param version
      */
-    void SetFirmwareVersion(int version);
+    void SetFirmwareVersion(std::string version);
 
     /**
      * @brief LogRecord - Allows to print the record in the logs
@@ -131,6 +133,8 @@ private:
      */
     int m_serialNumber;
 
+    std::string m_devPhoneNumber;
+
     /**
      * @brief m_lastLocation - lastLocation database field - describes the last received location of the device
      */
@@ -144,7 +148,7 @@ private:
     /**
      * @brief m_firmwareVersion - firmwareVersion database field. Firmware version of the device's software
      */
-    int m_firmwareVersion;
+    std::string m_firmwareVersion;
 };
 
 #endif // DEVICERECORD_H

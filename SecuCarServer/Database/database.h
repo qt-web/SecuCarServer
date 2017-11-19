@@ -61,9 +61,10 @@ public:
     int                     AddDevice(
                                 int idUser,
                                 int serialNumber,
+                                std::string devicePhoneNum,
                                 std::string currentLocation,
                                 std::string deviceName,
-                                int firmwareVersion
+                                std::string firmwareVersion
                                 );
 
     QList<CDeviceRecord>    GetRegisteredDevicesList(int idUser);
@@ -109,8 +110,10 @@ public:
                                 std::string coordinates,
                                 int speed,
                                 int acceleration,
-                                int azimuth
-                                );
+                                int azimuth,
+                                int numOfSattellites,
+                                int hdop,
+                                int manouverAssessment);
 
 
 private:

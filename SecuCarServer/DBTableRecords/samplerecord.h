@@ -21,7 +21,7 @@ public:
      * @param acceleration
      * @param azimuth
      */
-    CSampleRecord(int sampleId, int trackId, int timestamp, std::string coordinates, int speed, int acceleration, int azimuth);
+    CSampleRecord(int sampleId, int trackId, int timestamp, std::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment);
 
     /**
      * @brief CSampleRecord
@@ -70,6 +70,12 @@ public:
      * @return
      */
     int GetAzimuth() const;
+
+    int GetNumOfSattellites() const;
+
+    int GetHdop() const;
+
+    int GetManouverAssessment() const;
 
     /**
      * @brief SetSampleId
@@ -159,6 +165,12 @@ private:
      * @brief m_azimuth - azimuth database field. Azimuth when the sample was gathered
      */
     int m_azimuth;
+
+    int m_numOfSattelites;
+
+    int m_hdop;
+
+    int m_manouverAssessment;
 };
 
 #endif // SAMPLERECORD_H

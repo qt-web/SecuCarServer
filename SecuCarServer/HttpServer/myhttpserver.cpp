@@ -536,11 +536,12 @@ void CHttpServer::m_onAddDevice(qttp::HttpData& request)
 
     int idUser = req["idUser"].toString().toInt();
     int serialNumber = req["serialNumber"].toString().toInt();
+    std::string phoneNumber = req["phoneNumber"].toString().toStdString();
     std::string currentLocation = req["currentLocation"].toString().toStdString();
     std::string deviceName = req["deviceName"].toString().toStdString();
-    int firmwareVersion = req["firmwareVersion"].toString().toInt();
+    std::string firmwareVersion = req["firmwareVersion"].toString().toStdString();
 
-    int ret = CDatabase::GetInstance()->AddDevice(idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
+    int ret = CDatabase::GetInstance()->AddDevice(idUser, serialNumber, phoneNumber, currentLocation, deviceName, firmwareVersion);
     if (ret > 0)
     {
         LOG_DBG("Adding device successful. idDev: %d", ret);
@@ -618,7 +619,7 @@ void CHttpServer::m_onGetDeviceInfo(qttp::HttpData& request)
     response["serialNumber"] = record.GetSerialNumber();
     response["currentLocation"] = record.GetLastLocation().c_str();
     response["deviceName"] = record.GetDeviceName().c_str();
-    response["firmwareVersion"] = record.GetFirmwareVersion();
+    response["firmwareVersion"] = record.GetFirmwareVersion().c_str();
     request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
@@ -788,7 +789,7 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
         response["endDate"] = QDateTime::fromSecsSinceEpoch(record.GetEndTimestamp()).toString("dd-MM-YYYY hh:mm:ss");
         response["endLocation"] = QString::fromStdString(record.GetEndLocation());
         response["distance"] = QString::number(record.GetDistance());
-        response["manouverAssessment"] = QString::number(record.GetManeouverAssessment());
+        response["trackAssessment"] = QString::number(record.GetTrackAssessment());
     }
     request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
@@ -865,11 +866,14 @@ void CHttpServer::m_onAddNewTrackSample(qttp::HttpData& request)
     int speed = req["speed"].toString().toInt();
     int acceleration = req["acceleration"].toString().toInt();
     int azimuth = req["azimuth"].toString().toInt();
+    int numOfSattelites = req["sats"].toString().toInt();
+    int hdop =  req["hdop"].toString().toInt();
+    int manouverAssessment = req["mark"].toInt();
 
-    LOG_DBG("Track sample added. TrackId: %d, timestamp: %d, coordinates: %s, speed: %d, acceleration: %d, azimuth: %d",
-            idTrack, timestamp, coordinates.c_str(), speed, acceleration, azimuth);
+    LOG_DBG("Track sample added. TrackId: %d, timestamp: %d, coordinates: %s, speed: %d, acceleration: %d, azimuth: %d, numOfSattellites: %d, hdop: %d, manouverAssessment: %d",
+            idTrack, timestamp, coordinates.c_str(), speed, acceleration, azimuth, numOfSattelites, hdop, manouverAssessment);
 
-    int ret = CDatabase::GetInstance()->AddTrackSample(idTrack, timestamp, coordinates, speed, acceleration, azimuth);
+    int ret = CDatabase::GetInstance()->AddTrackSample(idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSattelites, hdop, manouverAssessment);
 
     response["result"] = 1;
     // If sample added correctly then update the last known location of the device

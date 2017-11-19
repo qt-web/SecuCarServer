@@ -20,9 +20,9 @@ public:
      * @param endTimestamp
      * @param endLocation
      * @param distance
-     * @param maneouverAssessment
+     * @param trackAssessment
      */
-    CTrackRecord(int trackId, int deviceId, int startTimestmap, std::string startLocation, int endTimestamp, std::string endLocation, int distance, int maneouverAssessment);
+    CTrackRecord(int trackId, int deviceId, int startTimestmap, std::string startLocation, int endTimestamp, std::string endLocation, int distance, int trackAssessment);
 
     /**
      * @brief CTrackRecord - copy constructor
@@ -73,10 +73,10 @@ public:
     int GetDistance() const;
 
     /**
-     * @brief GetManeouverAssessment
+     * @brief GetTrackAssessment
      * @return
      */
-    int GetManeouverAssessment() const;
+    int GetTrackAssessment() const;
 
     /**
      * @brief SetTrackId
@@ -121,10 +121,10 @@ public:
     void SetDistance(int distance);
 
     /**
-     * @brief SetManeouverAssessment
+     * @brief SetTrackAssessment
      * @param assessment
      */
-    void SetManeouverAssessment(int assessment);
+    void SetTrackAssessment(int assessment);
 
     /// @class Record functions
     void LogRecord();
@@ -175,7 +175,7 @@ private:
     /**
      * @brief m_maneouverAssessment - manouverAssessment database field.
      */
-    int m_maneouverAssessment;
+    int m_trackAssessment;
 };
 
 #endif // TRACKRECORD_H

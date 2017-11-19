@@ -17,7 +17,7 @@ CTrackRecord::CTrackRecord(int trackId, int deviceId, int startTimestmap, std::_
     m_endTimestamp = endTimestamp;
     m_endLocation = endLocation;
     m_distance = distance;
-    m_maneouverAssessment = maneouverAssessment;
+    m_trackAssessment = maneouverAssessment;
 
     LogRecord();
 }
@@ -31,7 +31,7 @@ CTrackRecord::CTrackRecord(const CTrackRecord &rec)
     m_endTimestamp = rec.GetEndTimestamp();
     m_endLocation = rec.GetEndLocation();
     m_distance = rec.GetDistance();
-    m_maneouverAssessment = rec.GetManeouverAssessment();
+    m_trackAssessment = rec.GetTrackAssessment();
 }
 
 int CTrackRecord::GetTrackId() const
@@ -68,9 +68,9 @@ int CTrackRecord::GetDistance() const
     return m_distance;
 }
 
-int CTrackRecord::GetManeouverAssessment() const
+int CTrackRecord::GetTrackAssessment() const
 {
-    return m_maneouverAssessment;
+    return m_trackAssessment;
 }
 
 void CTrackRecord::SetTrackId(int id)
@@ -108,15 +108,15 @@ void CTrackRecord::SetDistance(int distance)
     m_distance = distance;
 }
 
-void CTrackRecord::SetManeouverAssessment(int assessment)
+void CTrackRecord::SetTrackAssessment(int assessment)
 {
-    m_maneouverAssessment = assessment;
+    m_trackAssessment = assessment;
 }
 
 void CTrackRecord::LogRecord()
 {
-    LOG_INFO("trackId: %d, idDevice: %d, startDate: %d, startLocation: %s, endDate: %d, endLocation: %s, distance: %d, maneouverAssessment: %d",
-             m_trackId, m_deviceId, m_startTimestamp, m_startLocation.c_str(), m_endTimestamp, m_endLocation.c_str(), m_distance, m_maneouverAssessment);
+    LOG_INFO("trackId: %d, idDevice: %d, startDate: %d, startLocation: %s, endDate: %d, endLocation: %s, distance: %d, trackAssessment: %d",
+             m_trackId, m_deviceId, m_startTimestamp, m_startLocation.c_str(), m_endTimestamp, m_endLocation.c_str(), m_distance, m_trackAssessment);
 }
 
 std::__cxx11::string CTrackRecord::Serialize()
@@ -130,7 +130,7 @@ std::__cxx11::string CTrackRecord::Serialize()
           "endDate:" << m_endTimestamp << "," <<
           "endLocation:" << m_endLocation << "," <<
           "distance:" << m_distance << "," <<
-          "maneouverAssessment:" << m_maneouverAssessment;
+          "trackAssessment:" << m_trackAssessment;
 
     return ss.str();
 }

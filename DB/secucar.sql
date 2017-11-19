@@ -24,9 +24,10 @@ CREATE TABLE `devices`(
   `idDevice` INTEGER PRIMARY KEY AUTOINCREMENT,
   `idUser`  INTEGER NOT NULL,
   `serialNumber` INTEGER NOT NULL,
+  `phoneNumber` INTEGER NOT NULL,
   `currentLocation` TEXT NOT NULL,
   `deviceName` TEXT NULL,
-  `firmwareVersion` INTEGER DEFAULT NULL,
+  `firmwareVersion` TEXT DEFAULT "1.0",
    FOREIGN KEY (idUser) REFERENCES users(idUser)
 );
 
@@ -38,7 +39,7 @@ CREATE TABLE `tracks`(
   `endDate` timestamp DEFAULT NULL,
   `endLocation` TEXT ,
   `distance` INTEGER ,
-  `manouverAssessment` INTEGER, 
+  `trackAssessment` INTEGER, 
    FOREIGN KEY (idDevice) REFERENCES devices(idDevice)
 );
 
@@ -50,6 +51,9 @@ CREATE TABLE `samples`(
   `speed` INTEGER NOT NULL,
   `acceleration` INTEGER  NOT NULL,
   `azimuth` INTEGER NOT NULL,
+  `numOfSats` INTEGER NOT NULL,
+  `hdop` INTEGER NOT NULL,
+  `manouverAssessment` INTEGER NOT NULL,
    FOREIGN KEY (idTrack) REFERENCES tracks(idTrack)
 );
 

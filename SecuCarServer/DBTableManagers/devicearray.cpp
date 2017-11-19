@@ -7,7 +7,7 @@
 
 CDeviceArray::CDeviceArray()
 {
-    m_columnNames = "idUser, serialNumber, currentLocation, deviceName, firmwareVersion";
+    m_columnNames = "idUser, serialNumber, phoneNumber, currentLocation, deviceName, firmwareVersion";
 }
 
 CDeviceArray* CDeviceArray::GetInstance()
@@ -29,9 +29,10 @@ int CDeviceArray::Insert(Record& record)
     QString qQuery =   // "'" + QString::number(rec->GetDeviceId()) + "', " +
                         "'" + QString::number(rec->GetUserId()) + "', " +
                         "'" + QString::number(rec->GetSerialNumber()) + "', " +
+                        "'" + QString::fromStdString(rec->GetDevicePhoneNum()) + "', " +
                         "'" + QString::fromStdString(rec->GetLastLocation()) + "', " +
                         "'" + QString::fromStdString(rec->GetDeviceName()) + "', " +
-                        "'" + QString::number(rec->GetFirmwareVersion()) + "'";
+                        "'" + QString::fromStdString(rec->GetFirmwareVersion()) + "'";
 
 
     return CDatabaseDriver::GetInstance()->Insert("DEVICES", m_columnNames, qQuery.toStdString());
@@ -47,13 +48,14 @@ bool CDeviceArray::Update(Record &record)
         return false;
     }
 
-    QString fields = "idUser, serialNumber, currentLocation, deviceName, firmwareVersion";
+    QString fields = "idUser, serialNumber, phoneNumber, currentLocation, deviceName, firmwareVersion";
     QString fieldsToUpdate =    //"idDevice='" + QString::number(rec->GetDeviceId()) + "', " +
                                 "idUser='" + QString::number(rec->GetUserId()) + "', " +
                                 "serialNumber='" + QString::number(rec->GetSerialNumber()) + "', " +
+                                "phoneNumber='" +  QString::fromStdString(rec->GetDevicePhoneNum()) + "', " +
                                 "currentLocation='" + QString::fromStdString(rec->GetLastLocation()) + "', " +
                                 "deviceName='" + QString::fromStdString(rec->GetDeviceName()) + "', " +
-                                "firmwareVersion='" + QString::number(rec->GetFirmwareVersion()) + "'";
+                                "firmwareVersion='" + QString::fromStdString(rec->GetFirmwareVersion()) + "'";
 
     return CDatabaseDriver::GetInstance()->Update("DEVICES", fieldsToUpdate.toStdString(), QString("idDevice='" + QString::number(rec->GetDeviceId()) + "'").toStdString());
 }
@@ -81,9 +83,10 @@ QList<CDeviceRecord> CDeviceArray::Select(int recordId)
                             ret.value("idDevice").toInt(),
                             ret.value("idUser").toInt(),
                             ret.value("serialNumber").toInt(),
+                            ret.value("phoneNumber").toString().toStdString(),
                             ret.value("currentLocation").toString().toStdString(),
                             ret.value("deviceName").toString().toStdString(),
-                            ret.value("firmwareVersion").toInt()
+                            ret.value("firmwareVersion").toString().toStdString()
                             );
 
 
@@ -105,9 +108,10 @@ QList<CDeviceRecord> CDeviceArray::Select(std::__cxx11::string deviceName)
                             ret.value("idDevice").toInt(),
                             ret.value("idUser").toInt(),
                             ret.value("serialNumber").toInt(),
+                            ret.value("phoneNumber").toString().toStdString(),
                             ret.value("currentLocation").toString().toStdString(),
                             ret.value("deviceName").toString().toStdString(),
-                            ret.value("firmwareVersion").toInt()
+                            ret.value("firmwareVersion").toString().toStdString()
                             );
 
         foundRecordsList.push_back(record);
@@ -128,9 +132,10 @@ QList<CDeviceRecord> CDeviceArray::SelectAllByUser(int idUser)
                             ret.value("idDevice").toInt(),
                             ret.value("idUser").toInt(),
                             ret.value("serialNumber").toInt(),
+                            ret.value("phoneNumber").toString().toStdString(),
                             ret.value("currentLocation").toString().toStdString(),
                             ret.value("deviceName").toString().toStdString(),
-                            ret.value("firmwareVersion").toInt()
+                            ret.value("firmwareVersion").toString().toStdString()
                             );
 
         foundRecordsList.push_back(record);

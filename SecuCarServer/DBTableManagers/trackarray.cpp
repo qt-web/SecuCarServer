@@ -7,7 +7,7 @@
 
 CTrackArray::CTrackArray()
 {
-    m_columnNames = "idDevice, startDate, startLocation, endDate, endLocation, distance, manouverAssessment";
+    m_columnNames = "idDevice, startDate, startLocation, endDate, endLocation, distance, trackAssessment";
 }
 
 CTrackArray* CTrackArray::GetInstance()
@@ -25,7 +25,7 @@ int CTrackArray::Insert(Record& record)
         LOG_ERROR("Wrong record type given. Should be CTrackRecord");
         return false;
     }
-    QString fields = "idDevice, startDate, startLocation, endDate, endLocation, distance, manouverAssessment";
+    QString fields = "idDevice, startDate, startLocation, endDate, endLocation, distance, trackAssessment";
     QString qQuery =    //"'" + QString::number(rec->GetTrackId()) + "', " +
                         "'" + QString::number(rec->GetDeviceId()) + "', " +
                         "'" + QString::number(rec->GetStartTimestmap()) + "', " +
@@ -33,7 +33,7 @@ int CTrackArray::Insert(Record& record)
                         "'" + QString::number(rec->GetEndTimestamp()) + "', " +
                         "'" + QString::fromStdString(rec->GetEndLocation()) + "', " +
                         "'" + QString::number(rec->GetDistance()) + "', " +
-                        "'" + QString::number(rec->GetManeouverAssessment()) + "'";
+                        "'" + QString::number(rec->GetTrackAssessment()) + "'";
 
 
     return CDatabaseDriver::GetInstance()->Insert("TRACKS", m_columnNames, qQuery.toStdString());
@@ -56,7 +56,7 @@ bool CTrackArray::Update(Record &record)
                                     "endDate='" + QString::number(rec->GetEndTimestamp()) + "', " +
                                     "endLocation='" + QString::fromStdString(rec->GetEndLocation()) + "', " +
                                     "distance='" + QString::number(rec->GetDistance()) + "', " +
-                                    "manouverAssessment='" + QString::number(rec->GetManeouverAssessment()) + "'";
+                                    "trackAssessment='" + QString::number(rec->GetTrackAssessment()) + "'";
 
     return CDatabaseDriver::GetInstance()->Update("TRACKS", fieldsToUpdate.toStdString(), QString("idTrack='" + QString::number(rec->GetTrackId()) + "'").toStdString());
 }
@@ -88,7 +88,7 @@ QList<Record> CTrackArray::Select(int recordId)
                             ret.value("endDate").toInt(),
                             ret.value("endLocation").toString().toStdString(),
                             ret.value("distance").toInt(),
-                            ret.value("manouverAssessment").toInt()
+                            ret.value("trackAssessment").toInt()
                             );
 
 
@@ -119,7 +119,7 @@ QList<CTrackRecord> CTrackArray::SelectAllByDevice(int idDevice)
                             ret.value("endDate").toInt(),
                             ret.value("endLocation").toString().toStdString(),
                             ret.value("distance").toInt(),
-                            ret.value("manouverAssessment").toInt()
+                            ret.value("trackAssessment").toInt()
                             );
 
 

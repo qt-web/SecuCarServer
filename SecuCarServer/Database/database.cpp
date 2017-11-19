@@ -176,9 +176,9 @@ int CDatabase::DeleteUser(int idUser)
     return 1;
 }
 
-int CDatabase::AddDevice(int idUser, int serialNumber, std::string currentLocation, std::__cxx11::string deviceName, int firmwareVersion)
+int CDatabase::AddDevice(int idUser, int serialNumber, std::string devPhoneNum, std::string currentLocation, std::__cxx11::string deviceName, std::string firmwareVersion)
 {
-    CDeviceRecord record(0, idUser, serialNumber, currentLocation, deviceName, firmwareVersion);
+    CDeviceRecord record(0, idUser, serialNumber, devPhoneNum, currentLocation, deviceName, firmwareVersion);
     int insertedDevId = CDeviceArray::GetInstance()->Insert(record);
 
     if (insertedDevId == -1)
@@ -260,7 +260,7 @@ CDeviceRecord CDatabase::GetDeviceInfo(int idDevice)
     if (recordList.empty())
     {
         LOG_ERROR("Could not find requested device");
-        return CDeviceRecord(-1, -1, -1, "", "", -1);
+        return CDeviceRecord(-1, -1, -1, "", "", "", "");
     }
 
     CDeviceRecord rec = static_cast<CDeviceRecord&>(recordList[0]);
@@ -379,7 +379,7 @@ int CDatabase::EndTrack(int idTrack, int endDate, std::__cxx11::string endLocati
     record.SetEndTimestamp(endDate);
     record.SetEndLocation(endLocation);
     record.SetDistance(distance);
-    record.SetManeouverAssessment(manouverAssessment);
+    record.SetTrackAssessment(manouverAssessment);
     bool ret = CTrackArray::GetInstance()->Update(record);
 
     if (ret)
@@ -417,9 +417,9 @@ int CDatabase::DeleteTrack(int idTrack)
     return 0;
 }
 
-int CDatabase::AddTrackSample(int idTrack, int timestamp, std::__cxx11::string coordinates, int speed, int acceleration, int azimuth)
+int CDatabase::AddTrackSample(int idTrack, int timestamp, std::__cxx11::string coordinates, int speed, int acceleration, int azimuth, int numOfSattellites, int hdop, int manouverAssessment)
 {
-    CSampleRecord record(0, idTrack, timestamp, coordinates, speed, acceleration, azimuth);
+    CSampleRecord record(0, idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSattellites, hdop, manouverAssessment);
 
     int insertedSampleId = CSampleArray::GetInstance()->Insert(record);
 

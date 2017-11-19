@@ -7,7 +7,7 @@
 
 CSampleArray::CSampleArray()
 {
-    m_columnNames = "idTrack, timestamp, coordinates, speed, acceleration, azimuth";
+    m_columnNames = "idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSats, hdop, manouverAssessment";
 }
 
 CSampleArray* CSampleArray::GetInstance()
@@ -26,14 +26,17 @@ int CSampleArray::Insert(Record& record)
         return false;
     }
 
-    QString fields = "idTrack, timestamp, coordinates, speed, acceleration, azimuth";
+    QString fields = "idTrack, timestamp, coordinates, speed, acceleration, azimuth, numOfSats, hdop, manouverAssessment";
     QString qQuery =    //"'" + QString::number(rec->GetSampleId()) + "', " +
                         "'" + QString::number(rec->GetTrackId()) + "', " +
                         "'" + QString::number(rec->GetTimestamp()) + "', " +
                         "'" + QString::fromStdString(rec->GetCoordinates()) + "', " +
                         "'" + QString::number(rec->GetSpeed()) + "', " +
                         "'" + QString::number(rec->GetAcceleration()) + "', " +
-                        "'" + QString::number(rec->GetAzimuth()) + "'";
+                        "'" + QString::number(rec->GetAzimuth()) + "', " +
+                        "'" + QString::number(rec->GetNumOfSattellites()) + "', " +
+                        "'" + QString::number(rec->GetHdop())  + "', " +
+                        "'" + QString::number(rec->GetManouverAssessment()) + "'";
 
 
     return CDatabaseDriver::GetInstance()->Insert("SAMPLES", m_columnNames, qQuery.toStdString());
@@ -55,7 +58,10 @@ bool CSampleArray::Update(Record &record)
                                 "coordinates='" + QString::fromStdString(rec->GetCoordinates()) + "', " +
                                 "speed='" + QString::number(rec->GetSpeed()) + "', " +
                                 "acceleration='" + QString::number(rec->GetAcceleration()) + "', " +
-                                "azimuth='" + QString::number(rec->GetAzimuth()) + "'" ;
+                                "azimuth='" + QString::number(rec->GetAzimuth()) + "', " +
+                                "numOfSats='" + QString::number(rec->GetNumOfSattellites()) + "', " +
+                                "hdop='" + QString::number(rec->GetHdop()) + "', " +
+                                "manouverAssessment='" + QString::number(rec->GetManouverAssessment())+ "'";
 
     return CDatabaseDriver::GetInstance()->Update("SAMPLES", fieldsToUpdate.toStdString(), QString("idSample='" + QString::number(rec->GetSampleId()) + "'").toStdString());
 }
@@ -86,7 +92,10 @@ QList<Record> CSampleArray::Select(int recordId)
                             ret.value("coordinates").toString().toStdString(),
                             ret.value("speed").toInt(),
                             ret.value("acceleration").toInt(),
-                            ret.value("azimuth").toInt()
+                            ret.value("azimuth").toInt(),
+                            ret.value("numOfSats").toInt(),
+                            ret.value("hdop").toInt(),
+                            ret.value("manouverAssessment").toInt()
                             );
 
 
@@ -116,7 +125,10 @@ QList<CSampleRecord> CSampleArray::SelectAllByTrack(int idTrack)
                             ret.value("coordinates").toString().toStdString(),
                             ret.value("speed").toInt(),
                             ret.value("acceleration").toInt(),
-                            ret.value("azimuth").toInt()
+                            ret.value("azimuth").toInt(),
+                            ret.value("numOfSats").toInt(),
+                            ret.value("hdop").toInt(),
+                            ret.value("manouverAssessment").toInt()
                             );
 
 
