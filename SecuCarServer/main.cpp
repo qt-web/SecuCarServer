@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include "logger.h"
 #include "database.h"
+#include "databasedriver.h"
 #include "userarray.h"
 #include "devicearray.h"
 #include "trackarray.h"
@@ -11,7 +12,8 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
+    
+    CDatabaseDriver::s_applicationStartPath = argv[0];
     CDatabase::GetInstance();
     CUserArray::GetInstance();
     CDeviceArray::GetInstance();

@@ -4,16 +4,22 @@
 #include <QSqlRecord>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <string>
 
 #define DATABASE_HOST   "localhost"
 #define DATABASE_PORT   3306
+
+std::string CDatabaseDriver::s_applicationStartPath = "";
 
 CDatabaseDriver::CDatabaseDriver(QObject *parent) : QObject(parent)
 {
     m_sqlDatabase = QSqlDatabase::addDatabase("QSQLITE");
 
 //    m_sqlDatabase.setHostName(DATABASE_HOST);
-    m_sqlDatabase.setDatabaseName("../DB/secucar.db");
+    s_applicationStartPath = s_applicationStartPath.substr(0, s_applicationStartPath.length() - 13);
+    std::string dbPath = s_applicationStartPath + "/../DB/secucar.db";
+    LOG_DBG("Database path is: %s", dbPath.c_str());
+    m_sqlDatabase.setDatabaseName(QString::fromStdString(dbPath));
 //    m_sqlDatabase.setUserName("root");
 //    m_sqlDatabase.setPassword("");
 //    m_sqlDatabase.setPort(DATABASE_PORT);

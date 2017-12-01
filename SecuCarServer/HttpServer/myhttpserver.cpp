@@ -784,9 +784,9 @@ void CHttpServer::m_onGetTrackInfo(qttp::HttpData& request)
     {
         response["result"] = 1;
         response["trackId"] = QString::number(record.GetTrackId());
-        response["startDate"] =    QDateTime::fromSecsSinceEpoch(record.GetStartTimestmap()).toString("dd-MM-YYYY hh:mm:ss");
+        response["startDate"] =    QDateTime::fromMSecsSinceEpoch(record.GetStartTimestmap()*(qint64)1000).toString("dd-MM-YYYY hh:mm:ss");
         response["startLocation"] = QString::fromStdString(record.GetStartLocation());
-        response["endDate"] = QDateTime::fromSecsSinceEpoch(record.GetEndTimestamp()).toString("dd-MM-YYYY hh:mm:ss");
+        response["endDate"] = QDateTime::fromMSecsSinceEpoch(record.GetEndTimestamp()*(qint64)1000).toString("dd-MM-YYYY hh:mm:ss");
         response["endLocation"] = QString::fromStdString(record.GetEndLocation());
         response["distance"] = QString::number(record.GetDistance());
         response["trackAssessment"] = QString::number(record.GetTrackAssessment());

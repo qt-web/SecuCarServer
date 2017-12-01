@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QSqlRecord>
 #include <QSqlResult>
+#include <string>
 
 /**
  * @brief The CDatabaseDriver class - This is a singleton class responsible for the lowest level communication with database.
@@ -17,6 +18,8 @@ public:
     explicit CDatabaseDriver(QObject *parent = 0);
 
     static CDatabaseDriver* GetInstance();
+
+    static std::string s_applicationStartPath;
 
     /**
      * @brief Insert - Inserts record in the database

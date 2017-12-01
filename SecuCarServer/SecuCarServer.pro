@@ -55,40 +55,40 @@ INCLUDEPATH += ../QttpServer/lib/libuv/include
 INCLUDEPATH += ../QttpServer/lib/libuv/src
 INCLUDEPATH += ../QttpServer/lib/libuv/src/unix/
 
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lqttpserver
-INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libqttpserver.a
+LIBS += -L$$PWD/../QttpServer/build/out/Release/ -lqttpserver
+INCLUDEPATH += $$PWD/../QttpServer/build/out/Release
+DEPENDPATH += $$PWD/../QttpServer/build/out/Release
+PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Release/libqttpserver.a
 
-#LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock_main
-#INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-#DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock_main.a
+#LIBS += -L$$PWD/../QttpServer/build/out/Release/ -lgmock_main
+#INCLUDEPATH += $$PWD/../QttpServer/build/out/Release
+#DEPENDPATH += $$PWD/../QttpServer/build/out/Release
+#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Release/libgmock_main.a
 
-#LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgmock
-#INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-#DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgmock.a
+#LIBS += -L$$PWD/../QttpServer/build/out/Release/ -lgmock
+#INCLUDEPATH += $$PWD/../QttpServer/build/out/Release
+#DEPENDPATH += $$PWD/../QttpServer/build/out/Release
+#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Release/libgmock.a
 
-#LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lgtest
-#INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-#DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libgtest.a
+#LIBS += -L$$PWD/../QttpServer/build/out/Release/ -lgtest
+#INCLUDEPATH += $$PWD/../QttpServer/build/out/Release
+#DEPENDPATH += $$PWD/../QttpServer/build/out/Release
+#PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Release/libgtest.a
 
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lhttp_parser
-INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libhttp_parser.a
+LIBS += -L$$PWD/../QttpServer/build/out/Release/ -lhttp_parser
+INCLUDEPATH += $$PWD/../QttpServer/build/out/Release
+DEPENDPATH += $$PWD/../QttpServer/build/out/Release
+PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Release/libhttp_parser.a
 
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -lnode_native
-INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libnode_native.a
+LIBS += -L$$PWD/../QttpServer/build/out/Release/ -lnode_native
+INCLUDEPATH += $$PWD/../QttpServer/build/out/Release
+DEPENDPATH += $$PWD/../QttpServer/build/out/Release
+PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Release/libnode_native.a
 
-LIBS += -L$$PWD/../QttpServer/build/out/Debug/ -luv
-INCLUDEPATH += $$PWD/../QttpServer/build/out/Debug
-DEPENDPATH += $$PWD/../QttpServer/build/out/Debug
-PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Debug/libuv.a
+LIBS += -L$$PWD/../QttpServer/build/out/Release/ -luv
+INCLUDEPATH += $$PWD/../QttpServer/build/out/Release
+DEPENDPATH += $$PWD/../QttpServer/build/out/Release
+PRE_TARGETDEPS += $$PWD/../QttpServer/build/out/Release/libuv.a
 
 SOURCES += ../QttpServer/src/action.cpp
 SOURCES += ../QttpServer/src/httpdata.cpp
