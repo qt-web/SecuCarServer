@@ -283,7 +283,7 @@ private:
 
     static double m_calculateTotalDistance(QList<CSampleRecord>& samples);
 
-    static int CHttpServer::m_calculateMeanAssessment(QList<CSampleRecord>& samples);
+    static int m_calculateMeanAssessment(QList<CSampleRecord>& samples);
 
     /**
      * @brief m_onEndTrack - Callback for request to end the specified track
