@@ -15,6 +15,10 @@
 #include "database.h"
 #include <QDateTime>
 #include <QJsonDocument>
+#include <cmath>
+#include <string>
+#include <cstdlib>
+
 
 CHttpServer::CHttpServer(QObject *parent) : QObject(parent)
 {
@@ -830,6 +834,90 @@ void CHttpServer::m_onGetTrackDetails(qttp::HttpData &request)
     request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 }
 
+void CHttpServer::m_splitCoordsToLatAndLong(std::string inCoords, std::string& outLatitude, std::string& outLongtitude)
+{
+    int delimiterIndex = inCoords.find(';');
+
+    if (delimiterIndex != std::string::npos)
+    {
+        outLatitude = inCoords.substr(0, delimiterIndex);
+        outLongtitude = inCoords.substr(delimiterIndex + 1, inCoords.size()-1);
+    }
+}
+
+double CHttpServer::m_splitCoordToDegrees(std::string coord)
+{
+    int delimiterIndex = coord.find('*');
+    double result = 0;
+
+    if (delimiterIndex != std::string::npos)
+    {
+        std::string deg = coord.substr(0, delimiterIndex);
+        std::string min = coord.substr(delimiterIndex + 1, coord.size());
+        result = std::strtod(deg.c_str(), NULL);
+        result += std::strtod(min.c_str(), NULL)/60;
+    }
+
+    return result;
+}
+
+
+double CHttpServer::m_calculateTotalDistance(QList<CSampleRecord>& samples)
+{
+    double distance = 0;
+    const int R_earth = 6371e3; // in meters
+    const double radianMultiplier = M_PI/180;
+    std::string latitude1_str = "";
+    std::string longtitude1_str = "";
+    std::string latitude2_str = "";
+    std::string longtitude2_str  = "";
+    double  latitude1 = 0;
+    double  latitude2 = 0;
+    double  longtitude1 = 0;
+    double  longtitude2 = 0;
+
+    for (auto iter = samples.begin(); iter != samples.end(); ++iter)
+    {
+        if (latitude1_str.empty() && longtitude1_str.empty())
+        {
+            m_splitCoordsToLatAndLong(iter->GetCoordinates(), latitude1_str, longtitude1_str);
+            latitude1 = m_splitCoordToDegrees(latitude1_str) * radianMultiplier;
+            longtitude1 = m_splitCoordToDegrees(longtitude1_str) * radianMultiplier;
+        }
+        else
+        {
+            m_splitCoordsToLatAndLong(iter->GetCoordinates(), latitude2_str, longtitude2_str);
+            latitude2 = m_splitCoordToDegrees(latitude2_str) * radianMultiplier;
+            longtitude2 = m_splitCoordToDegrees(longtitude2_str) * radianMultiplier;
+
+            double deltaPhi = latitude2 - latitude1;
+            double deltaLambda = longtitude2 - longtitude1;
+
+            double a = pow(sin(deltaPhi/2), 2) + (cos(latitude1) * cos(latitude2) * pow(sin(deltaLambda/2), 2));
+            double c = 2*atan2(sqrt(a), sqrt(1 - a));
+
+            distance += (R_earth * c);
+
+            latitude1 = latitude2;
+            longtitude1 = longtitude2;
+        }
+    }
+
+    return distance;
+}
+
+int CHttpServer::m_calculateMeanAssesmsent(QList<CSampleRecord>& samples)
+{
+    int result = 0;
+
+    for (auto iter = samples.begin(); iter != samples.end(); ++iter)
+    {
+        result += iter->GetManouverAssessment();
+    }
+
+    return result/samples.size();
+}
+
 void CHttpServer::m_onEndTrack(qttp::HttpData &request)
 {
     const QJsonObject& req = request.getRequest().getJson();
@@ -838,10 +926,14 @@ void CHttpServer::m_onEndTrack(qttp::HttpData &request)
     int idTrack = req["idTrack"].toString().toInt();
     int endDate = req["endDate"].toString().toInt();
     std::string endLocation = req["endLocation"].toString().toStdString();
-    int distance = 0;//req["distance"].toString().toInt();
-    int manouverAssessment = req["manouverAssessment"].toString().toInt();
 
-    LOG_DBG("Track Ended. TrackId: %d, endDate: %d, endLocation: %s, manouverAssessment: %d", idTrack, endDate, endLocation.c_str(), manouverAssessment);
+
+    QList<CSampleRecord> samples = CDatabase::GetInstance()->GetTrackDetails(idTrack);
+    int distance = m_calculateTotalDistance(samples);
+    int manouverAssessment = m_calculateMeanAssesmsent(samples);
+
+    LOG_DBG("Track Ended. TrackId: %d, endDate: %d, endLocation: %s, distance: %d, manouverAssessment: %d",
+            idTrack, endDate, endLocation.c_str(), distance, manouverAssessment);
 
     int ret = CDatabase::GetInstance()->EndTrack(idTrack, endDate, endLocation, distance, manouverAssessment);
     if (ret)

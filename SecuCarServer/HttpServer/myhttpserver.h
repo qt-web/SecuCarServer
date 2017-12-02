@@ -277,6 +277,12 @@ private:
      */
     static void m_onGetTrackDetails(qttp::HttpData& request);
 
+    static void m_splitCoordsToLatAndLong(std::string inCoords, std::string& outLatitude, std::string& outLongtitude);
+
+    static double m_splitCoordToDegrees(std::string coord);
+
+    static double m_calculateTotalDistance(QList<CSampleRecord>& samples);
+
     /**
      * @brief m_onEndTrack - Callback for request to end the specified track
      * @param request
