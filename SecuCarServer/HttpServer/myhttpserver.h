@@ -4,7 +4,7 @@
 #include <QObject>
 #include <vector>
 #include <qttpserver>
-
+#include <samplerecord.h>
 /**
  * @brief The CHttpServer class - This class is responsible for receiving requests from users and devices,
  *               taking actions and sending response to the requester
@@ -282,6 +282,8 @@ private:
     static double m_splitCoordToDegrees(std::string coord);
 
     static double m_calculateTotalDistance(QList<CSampleRecord>& samples);
+
+    static int CHttpServer::m_calculateMeanAssessment(QList<CSampleRecord>& samples);
 
     /**
      * @brief m_onEndTrack - Callback for request to end the specified track

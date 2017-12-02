@@ -906,7 +906,7 @@ double CHttpServer::m_calculateTotalDistance(QList<CSampleRecord>& samples)
     return distance;
 }
 
-int CHttpServer::m_calculateMeanAssesmsent(QList<CSampleRecord>& samples)
+int CHttpServer::m_calculateMeanAssessment(QList<CSampleRecord>& samples)
 {
     int result = 0;
 
@@ -930,7 +930,7 @@ void CHttpServer::m_onEndTrack(qttp::HttpData &request)
 
     QList<CSampleRecord> samples = CDatabase::GetInstance()->GetTrackDetails(idTrack);
     int distance = m_calculateTotalDistance(samples);
-    int manouverAssessment = m_calculateMeanAssesmsent(samples);
+    int manouverAssessment = m_calculateMeanAssessment(samples);
 
     LOG_DBG("Track Ended. TrackId: %d, endDate: %d, endLocation: %s, distance: %d, manouverAssessment: %d",
             idTrack, endDate, endLocation.c_str(), distance, manouverAssessment);
