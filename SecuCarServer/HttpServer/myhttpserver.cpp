@@ -848,14 +848,25 @@ void CHttpServer::m_splitCoordsToLatAndLong(std::string inCoords, std::string& o
 double CHttpServer::m_splitCoordToDegrees(std::string coord)
 {
     int delimiterIndex = coord.find('*');
+    int delimiterDotIndex = coord.find('.');
     double result = 0;
+
+    double degD = 0;
+    double minD = 0;
+    double minPartD = 0;
 
     if (delimiterIndex != std::string::npos)
     {
-        std::string deg = coord.substr(0, delimiterIndex);
-        std::string min = coord.substr(delimiterIndex + 1, coord.size());
-        result = std::strtod(deg.c_str(), NULL);
-        result += std::strtod(min.c_str(), NULL)/60;
+        std::string deg     = coord.substr(0, delimiterIndex);
+        std::string min     = coord.substr(delimiterIndex + 1, delimiterDotIndex - delimiterIndex - 1);
+        std::string minPart = coord.substr(delimiterDotIndex + 1, coord.size() - delimiterDotIndex - 2);
+
+        degD = std::strtod(deg.c_str(), NULL);
+        minD = std::strtod(min.c_str(), NULL);
+        minPartD = std::strtod(minPart.c_str(), NULL);
+
+        minPartD /= 10000;
+        result = degD + (minD + minPartD)/60;
     }
 
     return result;
@@ -890,16 +901,16 @@ double CHttpServer::m_calculateTotalDistance(QList<CSampleRecord>& samples)
             latitude2 = m_splitCoordToDegrees(latitude2_str) * radianMultiplier;
             longtitude2 = m_splitCoordToDegrees(longtitude2_str) * radianMultiplier;
 
-            double deltaPhi = latitude2 - latitude1;
-            double deltaLambda = longtitude2 - longtitude1;
+            double deltaPhi = (m_splitCoordToDegrees(latitude2_str) - m_splitCoordToDegrees(latitude1_str)) * radianMultiplier;
+            double deltaLambda = (m_splitCoordToDegrees(longtitude2_str) - m_splitCoordToDegrees(longtitude1_str)) * radianMultiplier;
 
-            double a = pow(sin(deltaPhi/2), 2) + (cos(latitude1) * cos(latitude2) * pow(sin(deltaLambda/2), 2));
+            double a = sin(deltaPhi/2)*sin(deltaPhi/2) + cos(latitude1) * cos(latitude2) * sin(deltaLambda/2)*sin(deltaLambda/2);
             double c = 2*atan2(sqrt(a), sqrt(1 - a));
 
             distance += (R_earth * c);
 
-            latitude1 = latitude2;
-            longtitude1 = longtitude2;
+            latitude1_str = latitude2_str;
+            longtitude1_str = longtitude2_str;
         }
     }
 
