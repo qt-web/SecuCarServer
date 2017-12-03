@@ -5,7 +5,7 @@
 #include <QList>
 #include "dbmanager.h"
 
-class CTrackArray : public IDBManager
+class CTrackArray
 {
 public:
     CTrackArray();
@@ -16,7 +16,7 @@ public:
 
     bool Delete(int recordId);
 
-    QList<Record> Select(int recordId = -1);
+    QList<CTrackRecord> Select(int recordId = -1);
 
     QList<CTrackRecord> SelectAllByDevice(int idDevice);
 

@@ -337,7 +337,7 @@ QList<CTrackRecord> CDatabase::GetTracksList(int idDevice)
 CTrackRecord CDatabase::GetTrackInfo(int idTrack)
 {
     LOG_DBG(" ");
-    QList<Record> trackList = CTrackArray::GetInstance()->Select(idTrack);
+    QList<CTrackRecord> trackList = CTrackArray::GetInstance()->Select(idTrack);
 
     if (trackList.empty())
     {
@@ -367,7 +367,7 @@ QList<CSampleRecord> CDatabase::GetTrackDetails(int idTrack)
 
 int CDatabase::EndTrack(int idTrack, int endDate, std::__cxx11::string endLocation, int distance, int manouverAssessment)
 {
-    QList<Record> recordList = CTrackArray::GetInstance()->Select(idTrack);
+    QList<CTrackRecord> recordList = CTrackArray::GetInstance()->Select(idTrack);
 
     if (recordList.empty())
     {
@@ -375,12 +375,12 @@ int CDatabase::EndTrack(int idTrack, int endDate, std::__cxx11::string endLocati
         return 0;
     }
 
-    CTrackRecord record = static_cast<CTrackRecord&>(recordList[0]);
-    record.SetEndTimestamp(endDate);
-    record.SetEndLocation(endLocation);
-    record.SetDistance(distance);
-    record.SetTrackAssessment(manouverAssessment);
-    bool ret = CTrackArray::GetInstance()->Update(record);
+    CTrackRecord* record = (&recordList[0]);
+    record->SetEndTimestamp(endDate);
+    record->SetEndLocation(endLocation);
+    record->SetDistance(distance);
+    record->SetTrackAssessment(manouverAssessment);
+    bool ret = CTrackArray::GetInstance()->Update(*record);
 
     if (ret)
     {

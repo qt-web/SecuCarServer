@@ -67,7 +67,7 @@ bool CTrackArray::Delete(int recordId)
     return CDatabaseDriver::GetInstance()->Delete("TRACKS", where);
 }
 
-QList<Record> CTrackArray::Select(int recordId)
+QList<CTrackRecord> CTrackArray::Select(int recordId)
 {
     std::string where = "";
     if (recordId != -1)
@@ -76,7 +76,7 @@ QList<Record> CTrackArray::Select(int recordId)
     }
 
     QSqlQuery ret = CDatabaseDriver::GetInstance()->Select("TRACKS", "*", where);
-    QList<Record> foundRecordsList;
+    QList<CTrackRecord> foundRecordsList;
 
     while (ret.next())
     {
