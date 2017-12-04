@@ -889,6 +889,9 @@ double CHttpServer::m_calculateTotalDistance(QList<CSampleRecord>& samples)
 
     for (auto iter = samples.begin(); iter != samples.end(); ++iter)
     {
+        if (iter->GetFixStatus() == '0')
+            continue;
+
         if (latitude1_str.empty() && longtitude1_str.empty())
         {
             m_splitCoordsToLatAndLong(iter->GetCoordinates(), latitude1_str, longtitude1_str);
@@ -923,6 +926,9 @@ int CHttpServer::m_calculateMeanAssessment(QList<CSampleRecord>& samples)
 
     for (auto iter = samples.begin(); iter != samples.end(); ++iter)
     {
+        if (iter->GetFixStatus() == '0')
+            continue;
+
         result += iter->GetManouverAssessment();
     }
 
