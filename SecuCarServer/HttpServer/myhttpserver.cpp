@@ -923,16 +923,27 @@ double CHttpServer::m_calculateTotalDistance(QList<CSampleRecord>& samples)
 int CHttpServer::m_calculateMeanAssessment(QList<CSampleRecord>& samples)
 {
     int result = 0;
-
+    int wagesSum = 0;
+    int sampleAssessment = 0;
     for (auto iter = samples.begin(); iter != samples.end(); ++iter)
     {
         if (iter->GetFixStatus() == '0')
             continue;
 
-        result += iter->GetManouverAssessment();
+        sampleAssessment = iter->GetManouverAssessment();
+        if (sampleAssessment >= 50)
+        {
+            result += iter->GetManouverAssessment();
+            wagesSum += 1;
+        }
+        else
+        {
+            result += 2 * iter->GetManouverAssessment();
+            wagesSum += 2;
+        }
     }
 
-    return result/samples.size();
+    return result/wagesSum;
 }
 
 void CHttpServer::m_onEndTrack(qttp::HttpData &request)
